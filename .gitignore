@@ -1,0 +1,4 @@
+.vscode
+build
+build-MSVC2019-Debug
+CMakeLists.txt.user
