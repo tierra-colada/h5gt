@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9.0)
 cmake_policy(SET CMP0074 NEW)
-cmake_policy(SET CMP0077 NEW)
+# cmake_policy(SET CMP0077 NEW)
 project(h5gt VERSION 0.1.0 LANGUAGES C CXX)
 
 if(CMAKE_CXX_COMPILER_IS_ICC)
@@ -20,12 +20,12 @@ option(H5GT_USE_OPENCV "Enable OpenCV testing" OFF)
 option(H5GT_UNIT_TESTS "Enable unit tests" ON)
 option(H5GT_EXAMPLES "Compile examples" ON)
 option(H5GT_PARALLEL_HDF5 "Enable Parallel HDF5 support" OFF)
-option(H5GT_USE_SHARED_HDF5 "Use shared hdf5 lib" ON)
 option(H5GT_BUILD_h5gtpy "Build python wrapper (uses shared hdf5 lib and Eigen)" ON)
+option(HDF5_USE_STATIC_LIBRARIES "Use static hdf5 lib" OFF)
 
 set(gtest_force_shared_crt ON CACHE BOOL "Always use msvcrt.dll") # needed for googletest
 
-find_package(HDF5 REQUIRED CONFIG)
+find_package(HDF5 REQUIRED)
 
 add_subdirectory(include)
 add_library(h5gt INTERFACE ${include_files})
@@ -35,7 +35,7 @@ target_include_directories(h5gt INTERFACE
 )
 install(TARGETS h5gt DESTINATION lib EXPORT h5gt-targets)
 
-if(H5GT_USE_SHARED_HDF5)
+if(NOT HDF5_USE_STATIC_LIBRARIES)
   if(TARGET hdf5-shared)
     target_link_libraries(h5gt INTERFACE hdf5-shared)
   elseif(TARGET hdf5::hdf5-shared)
