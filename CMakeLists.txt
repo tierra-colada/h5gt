@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 3.9.0)
-cmake_policy(SET CMP0074 NEW)
+
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12.0") 
+  cmake_policy(SET CMP0074 NEW)
+endif()
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.13.0") 
+  cmake_policy(SET CMP0077 NEW)
+endif()
+
 project(h5gt VERSION 0.1.0 LANGUAGES C CXX)
 
 if(CMAKE_CXX_COMPILER_IS_ICC)
