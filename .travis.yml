@@ -15,6 +15,7 @@ addons: &gcc7
       - libhdf5-openmpi-dev
       - libeigen3-dev
       - ninja-build
+      - cmake
     sources:
       - ubuntu-toolchain-r-test
 
@@ -26,6 +27,7 @@ addons: &clang6
       - libhdf5-openmpi-dev
       - libeigen3-dev
       - ninja-build
+      - cmake
     sources:
       - ubuntu-toolchain-r-test
       - llvm-toolchain-xenial-6.0
@@ -38,6 +40,7 @@ addons: &clang7
       - libhdf5-openmpi-dev
       - libeigen3-dev
       - ninja-build
+      - cmake
     sources:
       - ubuntu-toolchain-r-test
       - llvm-toolchain-xenial-7
