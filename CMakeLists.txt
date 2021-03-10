@@ -102,7 +102,7 @@ configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/h5gt-config.cma
   )
 
 install(EXPORT h5gt-targets DESTINATION "${LIB_INSTALL_DIR}/cmake/h5gt/")
-message("PROJECT_VERSION: ${PROJECT_VERSION}")
+
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/h5gt-config-version.cmake"
   VERSION ${PROJECT_VERSION}

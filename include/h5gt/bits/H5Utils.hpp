@@ -18,6 +18,9 @@
 #include <type_traits>
 #include <vector>
 
+#ifndef H5_MAX_PATH_LEN
+#define H5_MAX_PATH_LEN 255
+#endif
 #ifdef H5_USE_BOOST
 # include <boost/multi_array.hpp>
 # include <boost/numeric/ublas/matrix.hpp>
@@ -278,14 +281,13 @@ inline std::vector<std::size_t> to_vector_size_t(const std::vector<std::size_t>&
 // read name from a H5 object using the specified function
 template<typename T>
 inline std::string get_name(T fct) {
-  const size_t maxLength = 255;
-  char buffer[maxLength + 1];
-  ssize_t retcode = fct(buffer, static_cast<hsize_t>(maxLength) + 1);
+  char buffer[H5_MAX_PATH_LEN + 1];
+  ssize_t retcode = fct(buffer, static_cast<hsize_t>(H5_MAX_PATH_LEN) + 1);
   if (retcode < 0) {
     HDF5ErrMapper::ToException<GroupException>("Error accessing object name");
   }
   const size_t length = static_cast<std::size_t>(retcode);
-  if (length <= maxLength) {
+  if (length <= H5_MAX_PATH_LEN) {
     return std::string(buffer, length);
   }
   std::vector<char> bigBuffer(length + 1, 0);

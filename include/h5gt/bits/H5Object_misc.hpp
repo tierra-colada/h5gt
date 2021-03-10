@@ -138,16 +138,9 @@ inline hid_t Object::getFileId(const bool& increaseRefCount) const {
 }
 
 inline std::string Object::getFileName() const {
-  char name[256];
-  hid_t fileId = getFileId(true);
-  ssize_t st = H5Fget_name(fileId, name, 256);
-  H5Idec_ref(fileId);
-  if (st < 0) {
-    HDF5ErrMapper::ToException<ObjectException>(
-          std::string("Unable to retrieve filename"));
-    return std::string();
-  }
-  return std::string{name};
+  return details::get_name([&](char *buffer, hsize_t length) {
+    return H5Fget_name(_hid, buffer, length);
+  });
 }
 
 inline std::string Object::getPath() const {
