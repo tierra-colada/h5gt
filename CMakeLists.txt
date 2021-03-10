@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.9.0)
 
-if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12.0") 
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12.0")
   cmake_policy(SET CMP0074 NEW)
 endif()
-if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.13.0") 
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.13.0")
   cmake_policy(SET CMP0077 NEW)
 endif()
 
@@ -26,7 +26,7 @@ option(H5GT_USE_OPENCV "Enable OpenCV testing" OFF)
 option(H5GT_UNIT_TESTS "Enable unit tests" ON)
 option(H5GT_EXAMPLES "Compile examples" ON)
 option(H5GT_PARALLEL_HDF5 "Enable Parallel HDF5 support" OFF)
-option(H5GT_BUILD_h5gtpy "Build python wrapper (uses shared hdf5 lib and Eigen)" ON)
+option(H5GT_BUILD_h5gtpy "Build python wrapper (make sure to disable HDF5_USE_STATIC_LIBRARIES and enable H5GT_USE_EIGEN)" ON)
 option(HDF5_USE_STATIC_LIBRARIES "Use static hdf5 lib" OFF)
 
 set(gtest_force_shared_crt ON CACHE BOOL "Always use msvcrt.dll") # needed for googletest
@@ -35,29 +35,13 @@ find_package(HDF5 REQUIRED)
 
 add_subdirectory(include)
 add_library(h5gt INTERFACE ${include_files})
-target_include_directories(h5gt INTERFACE 
+target_include_directories(h5gt INTERFACE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
 install(TARGETS h5gt DESTINATION lib EXPORT h5gt-targets)
 
-if(NOT HDF5_USE_STATIC_LIBRARIES)
-  if(TARGET hdf5-shared)
-    target_link_libraries(h5gt INTERFACE hdf5-shared)
-  elseif(TARGET hdf5::hdf5-shared)
-    target_link_libraries(h5gt INTERFACE hdf5::hdf5-shared)
-  else()
-    message(FATAL_ERROR "Shared hdf5 lib was not found!")
-  endif()
-else()
-  if(TARGET hdf5-static)
-    target_link_libraries(h5gt INTERFACE hdf5-static)
-  elseif(TARGET hdf5::hdf5-static)
-    target_link_libraries(h5gt INTERFACE hdf5::hdf5-static)
-  else()
-    message(FATAL_ERROR "Static hdf5 lib was not found!")
-  endif()
-endif()
+target_link_libraries(h5gt INTERFACE HDF5)
 
 if(H5GT_BUILD_h5gtpy)
   # create h5py
@@ -67,7 +51,6 @@ endif()
 if(H5GT_USE_EIGEN)
   find_package(Eigen3 3.3 REQUIRED)
   target_include_directories(h5gt INTERFACE ${EIGEN3_INCLUDE_DIR})
-  target_include_directories(h5gtpy PRIVATE ${EIGEN3_INCLUDE_DIR})
   target_compile_definitions(h5gt INTERFACE H5_USE_EIGEN)
 endif()
 

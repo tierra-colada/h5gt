@@ -48,10 +48,5 @@ set(files
   )
 
 foreach(file ${files})
-  # file(REAL_PATH
-  #   ${file}
-  #   file
-  # )
-
   list(APPEND include_files ${file})
 endforeach()
