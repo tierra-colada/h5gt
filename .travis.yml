@@ -151,7 +151,7 @@ install:
       CMAKE_URL="http://www.cmake.org/files/v3.19/cmake-3.19.0-rc1-Linux-x86_64.tar.gz";
       mkdir cmake_dir; 
       travis_retry wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake_dir;
-      export PATH=`pwd`/cmake_dir/bin:${PATH};
+      export PATH=${DEPS_DIR}/cmake_dir/bin:${PATH};
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       if [ "$BREW_USE_LATEST" ]; then
         brew update;
@@ -194,13 +194,15 @@ before_script:
   - which $CXX
   - which $CC
   - $CXX --version
-  - `pwd`/cmake_dir/bin/cmake --version
+  - echo DEPS_DIR
+  - echo ${DEPS_DIR}
+  - ${DEPS_DIR}/cmake_dir/bin/cmake --version
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir -p build && pushd build
   - >
-    `pwd`/cmake_dir/bin/cmake --warn-uninitialized --debug-output
+    ${DEPS_DIR}/cmake_dir/bin/cmake --warn-uninitialized --debug-output
     -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
     -DH5GT_TEST_SINGLE_INCLUDES:BOOL=ON
     -DH5GT_PARALLEL_HDF5:BOOL=${H5GT_PARALLEL_HDF5}
