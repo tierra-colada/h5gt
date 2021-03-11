@@ -194,13 +194,13 @@ before_script:
   - which $CXX
   - which $CC
   - $CXX --version
-  - cmake --version
+  - ${DEPS_DIR}/cmake_dir/bin/cmake --version
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir -p build && pushd build
   - >
-    cmake --warn-uninitialized --debug-output
+    ${DEPS_DIR}/cmake_dir/bin/cmake --warn-uninitialized --debug-output
     -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
     -DH5GT_TEST_SINGLE_INCLUDES:BOOL=ON
     -DH5GT_PARALLEL_HDF5:BOOL=${H5GT_PARALLEL_HDF5}
@@ -208,8 +208,8 @@ script:
     -DH5GT_USE_XTENSOR:BOOL=${H5GT_USE_XTENSOR}
     -DH5GT_USE_OPENCV:BOOL=${H5GT_USE_OPENCV}
     -G "${CMAKE_GENERATOR}" ../
-  - cmake --build .
-  - CTEST_OUTPUT_ON_FAILURE=1 cmake --build . --target ${TESTS_TARGET}
+  - ${DEPS_DIR}/cmake_dir/bin/cmake --build .
+  - CTEST_OUTPUT_ON_FAILURE=1 ${DEPS_DIR}/cmake_dir/bin/cmake --build . --target ${TESTS_TARGET}
   - popd
   - if [ $IS_BASE_ENVIRON ]; then
       bash tests/test_project_integration.sh;
