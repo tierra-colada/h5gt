@@ -41,9 +41,8 @@ target_include_directories(h5gt INTERFACE
 )
 install(TARGETS h5gt DESTINATION lib EXPORT h5gt-targets)
 
-#target_link_libraries(h5gt INTERFACE HDF5)
-target_include_directories(h5gt INTERFACE ${HDF5_INCLUDE_DIRS})
 target_link_libraries(h5gt INTERFACE ${HDF5_C_LIBRARIES})
+target_include_directories(h5gt INTERFACE ${HDF5_INCLUDE_DIRS})
 target_compile_definitions(h5gt INTERFACE ${HDF5_DEFINITIONS})
 
 if(H5GT_BUILD_h5gtpy)
@@ -68,6 +67,12 @@ if(H5GT_USE_OPENCV)
   target_include_directories(h5gt INTERFACE ${OpenCV_INCLUDE_DIRS})
   target_link_libraries(h5gt INTERFACE ${OpenCV_LIBS})
   target_compile_definitions(h5gt INTERFACE H5_USE_OPENCV)
+endif()
+
+if(H5GT_PARALLEL_HDF5)
+  find_package(MPI REQUIRED)
+  target_include_directories(h5gt INTERFACE ${MPI_CXX_INCLUDE_PATH})
+  target_link_libraries(h5gt INTERFACE ${MPI_CXX_LIBRARIES})
 endif()
 
 if(H5GT_EXAMPLES)

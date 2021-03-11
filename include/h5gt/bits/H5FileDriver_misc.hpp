@@ -18,33 +18,18 @@
 
 namespace h5gt {
 
-namespace {
-
-template <typename Comm, typename Info>
-class MPIOFileAccess
-{
-public:
-  MPIOFileAccess(Comm comm, Info info)
-    : _comm(comm)
-    , _info(info)
-  {}
-
-  void apply(const hid_t list) const {
-    if (H5Pset_fapl_mpio(list, _comm, _info) < 0) {
-      HDF5ErrMapper::ToException<FileException>(
-            "Unable to set-up MPIO Driver configuration");
-    }
+inline MPIOFileDriver::MPIOFileDriver(MPI_Comm comm, MPI_Info info) {
+  if (H5Pset_fapl_mpio(_hid, comm, info) < 0) {
+    HDF5ErrMapper::ToException<FileException>(
+          "Unable to set-up MPIO Driver configuration");
   }
-private:
-  Comm _comm;
-  Info _info;
-};
+}
 
-}  //namespace
-
-template <typename Comm, typename Info>
-inline MPIOFileDriver::MPIOFileDriver(Comm comm, Info info) {
-  add(MPIOFileAccess<Comm, Info>(comm, info));
+inline void MPIOFileDriver::getFaplMPIO(MPI_Comm *comm, MPI_Info *info) {
+  if (H5Pget_fapl_mpio(_hid, comm, info) < 0) {
+    HDF5ErrMapper::ToException<FileException>(
+          "Unable to get MPIO comm and info");
+  }
 }
 
 } // namespace h5gt

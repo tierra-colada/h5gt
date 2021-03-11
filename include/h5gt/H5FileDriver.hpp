@@ -23,10 +23,9 @@ class FileDriver : public FileAccessProps {};
 ///
 class MPIOFileDriver : public FileDriver {
 public:
-  template <typename Comm, typename Info>
-  inline MPIOFileDriver(Comm mpi_comm, Info mpi_info);
+  explicit MPIOFileDriver(MPI_Comm comm, MPI_Info info);
 
-private:
+  void getFaplMPIO(MPI_Comm *comm, MPI_Info *info);
 };
 
 }  // namespace h5gt

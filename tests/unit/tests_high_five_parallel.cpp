@@ -13,29 +13,17 @@
 #include <typeinfo>
 #include <vector>
 
-#include <highfive/H5File.hpp>
-#include <highfive/H5DataSet.hpp>
-#include <highfive/H5DataSpace.hpp>
-#include <highfive/H5Group.hpp>
+#include <h5gt/H5File.hpp>
+#include <h5gt/H5DataSet.hpp>
+#include <h5gt/H5DataSpace.hpp>
+#include <h5gt/H5Group.hpp>
 
-#define BOOST_TEST_MAIN HighFiveTestParallel
-#include <boost/test/unit_test.hpp>
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 #include "tests_high_five.hpp"
 
-using namespace HighFive;
-
-
-static int argc = boost::unit_test::framework::master_test_suite().argc;
-static char** argv = boost::unit_test::framework::master_test_suite().argv;
-
-struct MpiFixture {
-    MpiFixture() { MPI_Init(&argc, &argv); }
-    ~MpiFixture() { MPI_Finalize(); }
-};
-
-BOOST_GLOBAL_FIXTURE(MpiFixture)
-BOOST_GLOBAL_FIXTURE_END
+using namespace h5gt;
 
 template <typename T>
 void selectionArraySimpleTestParallel() {
@@ -80,20 +68,26 @@ void selectionArraySimpleTestParallel() {
 
     Selection slice = dataset.select(offset, size);
 
-    BOOST_CHECK_EQUAL(slice.getSpace().getDimensions()[0], size_x);
-    BOOST_CHECK_EQUAL(slice.getMemSpace().getDimensions()[0], count_x);
+    EXPECT_EQ(slice.getSpace().getDimensions()[0], size_x);
+    EXPECT_EQ(slice.getMemSpace().getDimensions()[0], count_x);
 
     slice.read(result);
 
-    BOOST_CHECK_EQUAL(result.size(), count_x);
+    EXPECT_EQ(result.size(), count_x);
 
     for (size_t i = offset_x; i < count_x; ++i) {
         // std::cout << result[i] << " ";
-        BOOST_CHECK_EQUAL(values[i + offset_x], result[i]);
+        EXPECT_EQ(values[i + offset_x], result[i]);
     }
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(selectionArraySimple, T, numerical_test_types) {
-
-    selectionArraySimpleTestParallel<T>();
+TEST(H5GTParallel, selectionArraySimple) {
+  selectionArraySimpleTestParallel<std::string>();
+  selectionArraySimpleTestParallel<int>();
+  selectionArraySimpleTestParallel<unsigned>();
+  selectionArraySimpleTestParallel<size_t>();
+  selectionArraySimpleTestParallel<ptrdiff_t>();
+  selectionArraySimpleTestParallel<float>();
+  selectionArraySimpleTestParallel<double>();
+  selectionArraySimpleTestParallel<std::complex<double> >();
 }
