@@ -41,7 +41,10 @@ target_include_directories(h5gt INTERFACE
 )
 install(TARGETS h5gt DESTINATION lib EXPORT h5gt-targets)
 
-target_link_libraries(h5gt INTERFACE HDF5)
+#target_link_libraries(h5gt INTERFACE HDF5)
+target_include_directories(h5gt INTERFACE ${HDF5_INCLUDE_DIRS})
+target_link_libraries(h5gt INTERFACE ${HDF5_C_LIBRARIES})
+target_compile_definitions(h5gt INTERFACE ${HDF5_DEFINITIONS})
 
 if(H5GT_BUILD_h5gtpy)
   # create h5py
