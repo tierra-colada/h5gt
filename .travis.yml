@@ -122,9 +122,11 @@ env:
     - MINCONDA_LINUX="Linux-x86_64"
     - MINCONDA_OSX="MacOSX-x86_64"
     - CMAKE_DIR=$HOME/cmake
+    - Eigen3_ROOT=$HOME/eigen
 
 install:
   - export HOMEBREW_NO_AUTO_UPDATE=1  # for reproducibility, dont autoupdate
+  - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $HOME
 
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       MINCONDA_OS=$MINCONDA_LINUX;
@@ -189,6 +191,7 @@ script:
     -DH5GT_USE_EIGEN:BOOL=ON
     -DH5GT_USE_XTENSOR:BOOL=${H5GT_USE_XTENSOR}
     -DH5GT_USE_OPENCV:BOOL=${H5GT_USE_OPENCV}
+    -DEigen3_ROOT:PATH=${Eigen3_ROOT}
     -G "${CMAKE_GENERATOR}" ../
   - $CMAKE_DIR/bin/cmake --build .
   - CTEST_OUTPUT_ON_FAILURE=1 $CMAKE_DIR/bin/cmake --build . --target ${TESTS_TARGET}

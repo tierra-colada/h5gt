@@ -49,7 +49,7 @@ if(H5GT_BUILD_h5gtpy)
 endif()
 
 if(H5GT_USE_EIGEN)
-  find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+  find_package(Eigen3 3.3 REQUIRED)
   target_include_directories(h5gt INTERFACE ${EIGEN3_INCLUDE_DIR})
   target_compile_definitions(h5gt INTERFACE H5_USE_EIGEN)
 endif()
