@@ -198,7 +198,7 @@ before_script:
   - which $CXX
   - which $CC
   - $CXX --version
-  - echo DEPS_DIR
+  - echo CMAKE_DIR
   - ${CMAKE_DIR}
   - ${CMAKE_DIR}/bin/cmake --version
 
