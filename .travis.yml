@@ -7,10 +7,6 @@
 sudo: required
 language: cpp
 
-env:
-  global:
-    - CMAKE_DIR=${HOME}/cmake_dir
-
 addons: &gcc7
   apt:
     packages:
@@ -125,6 +121,7 @@ env:
     - MINCONDA_VERSION="latest"
     - MINCONDA_LINUX="Linux-x86_64"
     - MINCONDA_OSX="MacOSX-x86_64"
+    - CMAKE_DIR=$HOME/cmake
 
 install:
   - export HOMEBREW_NO_AUTO_UPDATE=1  # for reproducibility, dont autoupdate
@@ -132,9 +129,9 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       MINCONDA_OS=$MINCONDA_LINUX;
       CMAKE_URL="http://www.cmake.org/files/v3.19/cmake-3.19.0-rc1-Linux-x86_64.tar.gz";
-      mkdir ${HOME}/cmake_dir; 
-      travis_retry wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C ${HOME}/cmake_dir;
-      export PATH=${HOME}/cmake_dir/bin:${PATH};
+      mkdir $CMAKE_DIR; 
+      travis_retry wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C $CMAKE_DIR;
+      export PATH=$CMAKE_DIR/bin:${PATH};
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       if [ "$BREW_USE_LATEST" ]; then
         brew update;
@@ -179,13 +176,13 @@ before_script:
   - $CXX --version
   # - $HOME
   # - ${HOME}
-  - ${HOME}/cmake_dir/bin/cmake --version
+  - $CMAKE_DIR/bin/cmake --version
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir -p build && pushd build
   - >
-    ${HOME}/cmake_dir/bin/cmake --warn-uninitialized --debug-output
+    $CMAKE_DIR/bin/cmake --warn-uninitialized --debug-output
     -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
     -DH5GT_TEST_SINGLE_INCLUDES:BOOL=ON
     -DH5GT_PARALLEL_HDF5:BOOL=${H5GT_PARALLEL_HDF5}
@@ -193,8 +190,8 @@ script:
     -DH5GT_USE_XTENSOR:BOOL=${H5GT_USE_XTENSOR}
     -DH5GT_USE_OPENCV:BOOL=${H5GT_USE_OPENCV}
     -G "${CMAKE_GENERATOR}" ../
-  - ${HOME}/cmake_dir/bin/cmake --build .
-  - CTEST_OUTPUT_ON_FAILURE=1 ${HOME}/cmake_dir/bin/cmake --build . --target ${TESTS_TARGET}
+  - $CMAKE_DIR/bin/cmake --build .
+  - CTEST_OUTPUT_ON_FAILURE=1 $CMAKE_DIR/bin/cmake --build . --target ${TESTS_TARGET}
   - popd
   - if [ $IS_BASE_ENVIRON ]; then
       bash tests/test_project_integration.sh;
