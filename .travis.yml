@@ -126,7 +126,7 @@ env:
 
 install:
   - export HOMEBREW_NO_AUTO_UPDATE=1  # for reproducibility, dont autoupdate
-  - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $HOME
+  - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $Eigen3_ROOT
 
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       MINCONDA_OS=$MINCONDA_LINUX;
