@@ -177,8 +177,8 @@ before_script:
   - which $CXX
   - which $CC
   - $CXX --version
-  - $HOME
-  - ${HOME}
+  # - $HOME
+  # - ${HOME}
   - ${HOME}/cmake_dir/bin/cmake --version
 
 script:
