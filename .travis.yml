@@ -9,8 +9,8 @@ language: cpp
 
 # the install step will take care of deploying a newer cmake version
 install:
-  CMAKE_URL="http://www.cmake.org/files/v3.19/cmake-3.19.0-rc1-Linux-x86_64.tar.gz"
-  mkdir cmake_dir && travis_retry wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake_dir
+  CMAKE_URL="http://www.cmake.org/files/v3.19/cmake-3.19.0-rc1-Linux-x86_64.tar.gz" &&
+  mkdir cmake_dir && travis_retry wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake_dir &&
   export PATH=${DEPS_DIR}/cmake_dir/bin:${PATH}
 
 before_script:
