@@ -13,9 +13,9 @@
 #define H5GT_USE_BOOST
 
 #include <boost/multi_array.hpp>
-#include <highfive/H5DataSet.hpp>
-#include <highfive/H5DataSpace.hpp>
-#include <highfive/H5File.hpp>
+#include <h5gt/H5DataSet.hpp>
+#include <h5gt/H5DataSpace.hpp>
+#include <h5gt/H5File.hpp>
 
 typedef std::complex<double> complex_t;
 

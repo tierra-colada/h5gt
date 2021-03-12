@@ -10,7 +10,7 @@ if(NOT DEFINED CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
-option(USE_BUNDLED_HIGHFIVE "Use highfive from deps folder. Otherwise must be installed" ON)
+option(USE_BUNDLED_HIGHFIVE "Use h5gt from deps folder. Otherwise must be installed" ON)
 
 if(USE_BUNDLED_HIGHFIVE)
     add_subdirectory("deps/HighFive" EXCLUDE_FROM_ALL)

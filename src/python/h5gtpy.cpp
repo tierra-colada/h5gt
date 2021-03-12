@@ -2,10 +2,10 @@
 #define H5GT_USE_EIGEN // should be defined before including h5gt
 #endif
 
-#include "../../include/h5gt/H5Object.hpp"
-#include "../../include/h5gt/H5File.hpp"
-#include "../../include/h5gt/H5DataSet.hpp"
-#include "../../include/h5gt/H5DataSpace.hpp"
+#include <h5gt/H5Object.hpp>
+#include <h5gt/H5File.hpp>
+#include <h5gt/H5DataSet.hpp>
+#include <h5gt/H5DataSpace.hpp>
 
 #include <Eigen/Dense>
 

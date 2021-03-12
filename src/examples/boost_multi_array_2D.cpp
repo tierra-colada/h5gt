@@ -12,7 +12,7 @@
 #define H5GT_USE_BOOST
 
 #include <boost/multi_array.hpp>
-#include <highfive/H5File.hpp>
+#include <h5gt/H5File.hpp>
 
 using namespace HighFive;
 

@@ -16,7 +16,7 @@
 
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
-#include <highfive/H5File.hpp>
+#include <h5gt/H5File.hpp>
 
 using namespace HighFive;
 

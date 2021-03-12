@@ -6,6 +6,7 @@ dist: focal
 
 compiler:
   - clang
+  - gcc
 
 env:
   global:
@@ -17,23 +18,22 @@ before_install:
   - sudo apt-get update
   - sudo apt-get -y install libhdf5-dev
   - sudo apt-get -y install ninja-build
-  - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $Eigen3_ROOT
-  - mkdir $CMAKE_DIR
-  - wget http://www.cmake.org/files/v3.19/cmake-3.19.0-rc1-Linux-x86_64.tar.gz
-  - tar -xzf cmake-3.19.0-rc1-Linux-x86_64.tar.gz -C $CMAKE_DIR --strip-components=1
-  - export PATH=$CMAKE_DIR/bin/:$PATH
+  # - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $Eigen3_ROOT
+  # - mkdir $CMAKE_DIR
+  # - wget http://www.cmake.org/files/v3.19/cmake-3.19.0-rc1-Linux-x86_64.tar.gz
+  # - tar -xzf cmake-3.19.0-rc1-Linux-x86_64.tar.gz -C $CMAKE_DIR --strip-components=1
+  # - export PATH=$CMAKE_DIR/bin/:$PATH
 
 before_script:
   - clang --version
+  - gcc --version
   - cmake --version
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
-  - clang --version
-  - cmake --version
   - mkdir -p build && pushd build
   - >
-    cmake --warn-uninitialized --debug-output
+    cmake 
     -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
     -DH5GT_PARALLEL_HDF5:BOOL=OFF
     -DH5GT_USE_EIGEN:BOOL=ON
@@ -43,5 +43,5 @@ script:
     -G "Ninja" ../
   - $CMAKE_DIR/bin/cmake --build .
   - CTEST_OUTPUT_ON_FAILURE=1 $CMAKE_DIR/bin/cmake --build . --target ${TESTS_TARGET}
-  - popd
-  - bash tests/test_project_integration.sh;
+  # - popd
+  # - bash tests/test_project_integration.sh;
