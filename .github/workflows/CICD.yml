@@ -8,7 +8,6 @@ on:
 
 env:
   Eigen3_ROOT: $HOME/eigen
-  CMAKE_GENERATOR: Ninja
 
 jobs:
 
@@ -17,33 +16,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: ls
-      run: ls && cd .. && ls
+    - name: echo $HOME
+      run: echo $HOME
+
+    - name: Install Ninja
+      run: sudo apt-get -y install ninja-build
     
-#     - name: Install Ninja
-#       run: sudo apt-get -y install ninja-build && echo $PWD && ls
+    - name: Install HDF5
+      run: sudo apt-get -y install libhdf5-dev
     
-#     - name: Install HDF5
-#       run: sudo apt-get -y install libhdf5-dev && echo $PWD && ls
-    
-#     - name: Install Eigen3
-#       run: git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $Eigen3_ROOT && echo $PWD && ls
+    - name: Install Eigen3
+      run: git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $Eigen3_ROOT
       
-#     - name: CMake version
-#       run: cmake --version
+    - name: CMake version
+      run: cmake --version
       
-#     - name: Make dir "build" and cd
-#       run: mkdir -p build && cd build
+    - name: Make dir "build" and cd
+      run: mkdir -p build && cd build
       
-#     - name: echo $PWD
-#       run: echo $PWD
-      
-#     - name: Run CMake
-#       run: cmake --warn-uninitialized --debug-output \
-#         -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
-#         -DH5GT_PARALLEL_HDF5:BOOL=OFF \
-#         -DH5GT_USE_EIGEN:BOOL=ON \ 
-#         -DH5GT_USE_XTENSOR:BOOL=OFF \
-#         -DH5GT_USE_OPENCV:BOOL=OFF \
-#         -DEigen3_ROOT:PATH=$Eigen3_ROOT \
-#         -G "${CMAKE_GENERATOR}" ..
+    - name: Run CMake
+      run: cmake --warn-uninitialized --debug-output \
+        -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
+        -DH5GT_PARALLEL_HDF5:BOOL=OFF \
+        -DH5GT_USE_EIGEN:BOOL=ON \ 
+        -DH5GT_USE_XTENSOR:BOOL=OFF \
+        -DH5GT_USE_OPENCV:BOOL=OFF \
+        -DEigen3_ROOT:PATH=$Eigen3_ROOT \
+        -G "Ninja" \
+        -S ..
