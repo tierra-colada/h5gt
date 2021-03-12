@@ -42,4 +42,4 @@ jobs:
         -DH5GT_USE_XTENSOR:BOOL=OFF \
         -DH5GT_USE_OPENCV:BOOL=OFF \
         -DEigen3_ROOT:PATH=$Eigen3_ROOT \
-        -G "Ninja"
+        -G "Ninja" ../
