@@ -18,10 +18,10 @@ before_install:
   - sudo apt-get -y install libhdf5-dev
   - sudo apt-get -y install libeigen3-dev
   - mkdir $CMAKE_DIR
-  - $CMAKE_DIR
   - wget http://www.cmake.org/files/v3.19/cmake-3.19.0-rc1-Linux-x86_64.tar.gz
   - tar -xzf cmake-3.19.0-rc1-Linux-x86_64.tar.gz -C $CMAKE_DIR --strip-components=1
   - export PATH=$CMAKE_DIR/bin/:$PATH
+  - $CMAKE_DIR
 
 before_script:
   - clang --version
