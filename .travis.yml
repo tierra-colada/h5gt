@@ -19,8 +19,9 @@ before_install:
   - sudo apt-get -y install libeigen3-dev
   - mkdir $CMAKE_DIR
   - $CMAKE_DIR
-  # - travis_retry wget http://www.cmake.org/files/v3.19/cmake-3.19.0-rc1-Linux-x86_64.tar.gz | tar --strip-components=1 -xz -C $CMAKE_DIR cmake-3.19.0-rc1-Linux-x86_64.tar.gz
-  # - export PATH=$CMAKE_DIR/bin/:$PATH
+  - wget http://www.cmake.org/files/v3.19/cmake-3.19.0-rc1-Linux-x86_64.tar.gz
+  - tar -xzf cmake-3.19.0-rc1-Linux-x86_64.tar.gz -C $CMAKE_DIR --strip-components=1
+  - export PATH=$CMAKE_DIR/bin/:$PATH
 
 before_script:
   - clang --version
