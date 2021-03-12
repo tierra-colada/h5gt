@@ -7,10 +7,10 @@
 sudo: required
 language: cpp
 
-addons: &gcc7
+addons: &gcc9
   apt:
     packages:
-      - g++-7
+      - g++-9
       - libboost-all-dev
       - libhdf5-openmpi-dev
       - libeigen3-dev
@@ -18,29 +18,29 @@ addons: &gcc7
     sources:
       - ubuntu-toolchain-r-test
 
-addons: &clang6
+addons: &clang8
   apt:
     packages:
-      - clang-6.0
+      - clang-8.0
       - libboost-all-dev
       - libhdf5-openmpi-dev
       - libeigen3-dev
       - ninja-build
     sources:
       - ubuntu-toolchain-r-test
-      - llvm-toolchain-xenial-6.0
+      - llvm-toolchain-xenial-8
 
-addons: &clang7
+addons: &clang9
   apt:
     packages:
-      - clang-7
+      - clang-9
       - libboost-all-dev
       - libhdf5-openmpi-dev
       - libeigen3-dev
       - ninja-build
     sources:
       - ubuntu-toolchain-r-test
-      - llvm-toolchain-xenial-7
+      - llvm-toolchain-xenial-9
 
 matrix:
   include:
@@ -61,36 +61,36 @@ matrix:
             - libhdf5-serial-dev
             - ninja-build
 
-    # Linux gcc-7
+    # Linux gcc-9
     # Install parallel hdf5 + build parallel
     - os: linux
       dist: xenial
       env:
-        - GCC_VERSION=7
+        - GCC_VERSION=9
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=False
         - H5GT_PARALLEL_HDF5=True
-      addons: *gcc7
+      addons: *gcc9
 
-    # Linux clang-6.0
+    # Linux clang-8.0
     # Install parallel hdf5 + build serial
     - os: linux
       dist: xenial
       env:
-        - CLANG_VERSION=6.0
+        - CLANG_VERSION=8.0
         - H5GT_PARALLEL_HDF5=False
-      addons: *clang6
+      addons: *clang8
 
-    # Linux clang-7
+    # Linux clang-9
     # Install parallel hdf5, build parallel
     - os: linux
       dist: xenial
       env:
-        - CLANG_VERSION=7
+        - CLANG_VERSION=9
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=False
         - H5GT_PARALLEL_HDF5=True
-      addons: *clang7
+      addons: *clang9
 
     # Mac OSX XCode 10
     - os: osx
