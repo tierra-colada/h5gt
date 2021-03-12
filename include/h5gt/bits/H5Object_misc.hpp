@@ -113,9 +113,11 @@ inline bool Object::isValid() const noexcept {
   return (_hid != H5I_INVALID_HID) && (H5Iis_valid(_hid) != false);
 }
 
+#if (H5_VERS_MAJOR >= 1 && H5_VERS_MINOR >= 10)
 inline bool Object::refresh() const noexcept {
   return (H5Orefresh(_hid) < 0) ? false : true;
 }
+#endif
 
 inline hid_t Object::getId(const bool& increaseRefCount) const noexcept {
   if (increaseRefCount)

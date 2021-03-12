@@ -56,12 +56,14 @@ public:
   ///
   bool isValid() const noexcept;
 
+#if (H5_VERS_MAJOR >= 1 && H5_VERS_MINOR >= 10)
   ///
   /// \brief refresh usually you don't need to use it.
   /// Close and reopen the object
   /// \return
   ///
   bool refresh() const noexcept;
+#endif
 
   ///
   /// \brief getId
