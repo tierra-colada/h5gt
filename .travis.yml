@@ -1,16 +1,22 @@
 language: cpp
 
-os:
-  - linux
-
 matrix:
   include:
-    - dist: focal
-    - dist: bionic
+    - os: linux
+      dist: focal
+      compiler: gcc
 
-compiler:
-  - clang
-  - gcc
+    - os: linux
+      dist: focal
+      compiler: clang
+
+    - os: linux
+      dist: bionic
+      compiler: gcc
+
+    - os: linux
+      dist: bionic
+      compiler: clang
 
 env:
   global:
