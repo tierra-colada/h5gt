@@ -35,12 +35,11 @@ jobs:
       run: mkdir -p build && cd build
       
     - name: Run CMake
-      run: cmake --warn-uninitialized --debug-output \
+      run: echo $PWD && cmake --warn-uninitialized --debug-output \
         -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
         -DH5GT_PARALLEL_HDF5:BOOL=OFF \
         -DH5GT_USE_EIGEN:BOOL=ON \ 
         -DH5GT_USE_XTENSOR:BOOL=OFF \
         -DH5GT_USE_OPENCV:BOOL=OFF \
         -DEigen3_ROOT:PATH=$Eigen3_ROOT \
-        -G "Ninja" \
-        -S ..
+        -G "Ninja"
