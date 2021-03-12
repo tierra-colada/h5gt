@@ -1,8 +1,10 @@
 language: cpp
 
-jobs:
+os:
+  - linux
+
+matrix:
   include:
-    - os: linux
     - dist: focal
     - dist: bionic
 
