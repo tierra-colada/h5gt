@@ -1,8 +1,10 @@
 language: cpp
 
-os: linux
-
-dist: focal
+jobs:
+  include:
+    - os: linux
+    - dist: focal
+    - dist: bionic
 
 compiler:
   - clang
