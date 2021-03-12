@@ -26,6 +26,8 @@ before_script:
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
+  - clang --version
+  - cmake --version
   - mkdir -p build && pushd build
   - >
     cmake --warn-uninitialized --debug-output
