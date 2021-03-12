@@ -20,12 +20,12 @@ test_install() {
     popd
 }
 
-rm -rf "${BUILDDIR}/highfive"
-mkdir -p "${BUILDDIR}/highfive"
-pushd "${BUILDDIR}/highfive"
+rm -rf "${BUILDDIR}/h5gt"
+mkdir -p "${BUILDDIR}/h5gt"
+pushd "${BUILDDIR}/h5gt"
 cmake "${ROOT}" \
-    -DHIGHFIVE_EXAMPLES=OFF \
-    -DHIGHFIVE_UNIT_TESTS=OFF \
+    -DH5GT_EXAMPLES=OFF \
+    -DH5GT_UNIT_TESTS=OFF \
     -DCMAKE_INSTALL_PREFIX="${PWD}/install"
 make install
 popd
@@ -35,15 +35,15 @@ for project in test_project test_dependent_library; do
     test_install "${project}" subdir
 
     # Case 2. We use an install dir and all deps configuration
-    # Install highfive (no tests required)
+    # Install h5gt (no tests required)
     test_install "${project}" reuse_deps \
-        -DUSE_BUNDLED_HIGHFIVE=NO \
-        -DHIGHFIVE_USE_INSTALL_DEPS=YES \
-        -DCMAKE_PREFIX_PATH="${BUILDDIR}/highfive/install"
+        -DUSE_BUNDLED_H5GT=NO \
+        -DH5GT_USE_INSTALL_DEPS=YES \
+        -DCMAKE_PREFIX_PATH="${BUILDDIR}/h5gt/install"
             #
     # Case 3. We redetect-dependencies
     test_install "${project}" install_new_deps \
-        -DUSE_BUNDLED_HIGHFIVE=NO \
-        -DHIGHFIVE_USE_INSTALL_DEPS=NO \
-        -DCMAKE_PREFIX_PATH="${BUILDDIR}/highfive/install"
+        -DUSE_BUNDLED_H5GT=NO \
+        -DH5GT_USE_INSTALL_DEPS=NO \
+        -DCMAKE_PREFIX_PATH="${BUILDDIR}/h5gt/install"
 done
