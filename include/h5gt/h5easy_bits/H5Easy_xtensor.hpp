@@ -13,7 +13,7 @@
 #include "H5Easy_misc.hpp"
 #include "H5Easy_scalar.hpp"
 
-#ifdef H5_USE_XTENSOR
+#ifdef H5GT_USE_XTENSOR
 
 namespace H5Easy {
 
@@ -84,5 +84,5 @@ struct io_impl<T, typename std::enable_if<is_xtensor<T>::value>::type> {
 }  // namespace detail
 }  // namespace H5Easy
 
-#endif  // H5_USE_XTENSOR
+#endif  // H5GT_USE_XTENSOR
 #endif  // H5EASY_BITS_XTENSOR_HPP

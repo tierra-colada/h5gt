@@ -4,8 +4,11 @@ set(src_files_test
   tests_high_five_base.cpp
   tests_high_five_easy.cpp
   tests_high_five_multi_dims.cpp
-  tests_high_five_parallel.cpp
   )
+
+if(H5GT_PARALLEL_HDF5)
+  list(APPEND src_files_test tests_high_five_parallel.cpp)
+endif()
 
 add_executable(H5GTTest
   ${src_files_test}

@@ -11,12 +11,19 @@
 
 #include "H5PropertyList.hpp"
 
+#ifdef H5_HAVE_PARALLEL
+#include <H5FDmpi.h>
+#endif
+
 namespace h5gt {
 
 ///
 /// \brief file driver base concept
 ///
 class FileDriver : public FileAccessProps {};
+
+
+#ifdef H5GT_PARALLEL
 
 ///
 /// \brief MPIIO Driver for Parallel HDF5
@@ -27,6 +34,8 @@ public:
 
   void getFaplMPIO(MPI_Comm *comm, MPI_Info *info);
 };
+
+#endif
 
 }  // namespace h5gt
 

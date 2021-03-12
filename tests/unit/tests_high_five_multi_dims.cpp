@@ -14,7 +14,7 @@
 #include <h5gt/H5File.hpp>
 
 
-#ifdef H5_USE_BOOST
+#ifdef H5GT_USE_BOOST
 #include <boost/multi_array.hpp>
 #endif
 
@@ -156,7 +156,7 @@ TEST(H5GTMultiArray, readWrite4DVector) {
 
 
 
-#ifdef H5_USE_BOOST
+#ifdef H5GT_USE_BOOST
 
 template <typename T>
 void MultiArray3DTest() {

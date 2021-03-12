@@ -1785,7 +1785,7 @@ TEST(H5GTBase, Reference) {
   }
 }
 
-#ifdef H5_USE_EIGEN
+#ifdef H5GT_USE_EIGEN
 
 template <typename T>
 void test_eigen_vec(File& file,
@@ -1883,7 +1883,7 @@ TEST(H5GTBase, Eigen) {
           h5gt::DataSetException);
   }
 
-#ifdef H5_USE_BOOST
+#ifdef H5GT_USE_BOOST
   // boost::multi_array<of EigenVector3f>
   {
     DS_NAME_FLAVOR = "BMultiEigenVector3f";

@@ -14,35 +14,35 @@
 
 // optionally enable xtensor plug-in and load the library
 #ifdef XTENSOR_VERSION_MAJOR
-#ifndef H5_USE_XTENSOR
-#define H5_USE_XTENSOR
+#ifndef H5GT_USE_XTENSOR
+#define H5GT_USE_XTENSOR
 #endif
 #endif
 
-#ifdef H5_USE_XTENSOR
+#ifdef H5GT_USE_XTENSOR
 #include <xtensor/xarray.hpp>
 #include <xtensor/xtensor.hpp>
 #endif
 
 // optionally enable Eigen plug-in and load the library
 #ifdef EIGEN_WORLD_VERSION
-#ifndef H5_USE_EIGEN
-#define H5_USE_EIGEN
+#ifndef H5GT_USE_EIGEN
+#define H5GT_USE_EIGEN
 #endif
 #endif
 
-#ifdef H5_USE_EIGEN
+#ifdef H5GT_USE_EIGEN
 #include <Eigen/Eigen>
 #endif
 
 // optionally enable OpenCV plug-in and load the library
 #ifdef CV_MAJOR_VERSION
-#ifndef H5_USE_OPENCV
-#define H5_USE_OPENCV
+#ifndef H5GT_USE_OPENCV
+#define H5GT_USE_OPENCV
 #endif
 #endif
 
-#ifdef H5_USE_OPENCV
+#ifdef H5GT_USE_OPENCV
 #include <opencv2/opencv.hpp>
 #endif
 

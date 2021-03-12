@@ -1,5 +1,5 @@
-#ifndef H5_USE_EIGEN
-#define H5_USE_EIGEN // should be defined before including h5gt
+#ifndef H5GT_USE_EIGEN
+#define H5GT_USE_EIGEN // should be defined before including h5gt
 #endif
 
 #include "../../include/h5gt/H5Object.hpp"

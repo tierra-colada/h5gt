@@ -13,7 +13,7 @@
 #include "H5Easy_misc.hpp"
 #include "H5Easy_scalar.hpp"
 
-#ifdef H5_USE_EIGEN
+#ifdef H5GT_USE_EIGEN
 
 namespace H5Easy {
 
@@ -147,5 +147,5 @@ struct io_impl<
 }  // namespace detail
 }  // namespace H5Easy
 
-#endif  // H5_USE_EIGEN
+#endif  // H5GT_USE_EIGEN
 #endif  // H5EASY_BITS_EIGEN_HPP

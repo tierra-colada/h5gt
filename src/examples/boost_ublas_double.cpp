@@ -8,8 +8,8 @@
  */
 #include <iostream>
 
-#undef H5_USE_BOOST
-#define H5_USE_BOOST
+#undef H5GT_USE_BOOST
+#define H5GT_USE_BOOST
 
 // In some versions of Boost (starting with 1.64), you have to include the serialization header before ublas
 #include <boost/serialization/vector.hpp>

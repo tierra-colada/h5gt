@@ -17,7 +17,7 @@
 #include <string>
 #include <array>
 
-#ifdef H5_USE_BOOST
+#ifdef H5GT_USE_BOOST
 // starting Boost 1.64, serialization header must come before ublas
 #include <boost/serialization/vector.hpp>
 #include <boost/multi_array.hpp>
@@ -230,7 +230,7 @@ struct data_converter<
 };
 
 
-#ifdef H5_USE_BOOST
+#ifdef H5GT_USE_BOOST
 // apply conversion to boost multi array
 template <typename T, std::size_t Dims>
 struct data_converter<boost::multi_array<T, Dims>, void>
@@ -431,7 +431,7 @@ struct data_converter<std::vector<Reference>, void> {
 
 }  // namespace h5gt
 
-#ifdef H5_USE_EIGEN
+#ifdef H5GT_USE_EIGEN
 #include "H5ConverterEigen_misc.hpp"
 #endif
 

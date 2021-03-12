@@ -12,11 +12,9 @@
 
 #include <H5Ppublic.h>
 
-#ifdef H5_HAVE_PARALLEL
-#include <H5FDmpi.h>
-#endif
-
 namespace h5gt {
+
+#ifdef H5GT_PARALLEL
 
 inline MPIOFileDriver::MPIOFileDriver(MPI_Comm comm, MPI_Info info) {
   if (H5Pset_fapl_mpio(_hid, comm, info) < 0) {
@@ -31,6 +29,8 @@ inline void MPIOFileDriver::getFaplMPIO(MPI_Comm *comm, MPI_Info *info) {
           "Unable to get MPIO comm and info");
   }
 }
+
+#endif
 
 } // namespace h5gt
 

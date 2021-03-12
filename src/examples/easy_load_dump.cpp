@@ -6,18 +6,18 @@
 ///
 /// or ask h5gt to include them. E.g.
 ///
-///   #define H5_USE_XTENSOR
-///   #define H5_USE_EIGEN
+///   #define H5GT_USE_XTENSOR
+///   #define H5GT_USE_EIGEN
 ///   #include <h5gt/H5Easy.hpp>
 ///
 
 // optionally enable plug-in xtensor
-#ifdef H5_USE_XTENSOR
+#ifdef H5GT_USE_XTENSOR
 #include <xtensor/xtensor.hpp>
 #endif
 
 // optionally enable plug-in Eigen
-#ifdef H5_USE_EIGEN
+#ifdef H5GT_USE_EIGEN
 #include <Eigen/Eigen>
 #endif
 
@@ -66,7 +66,7 @@ int main()
     H5Easy::getShape(file, "/path/to/C");
   }
 
-#ifdef H5_USE_EIGEN
+#ifdef H5GT_USE_EIGEN
   // (over)write and read Eigen::Matrix
   {
     // matrix
@@ -87,7 +87,7 @@ int main()
   }
 #endif
 
-#ifdef H5_USE_XTENSOR
+#ifdef H5GT_USE_XTENSOR
   // (over)write and read xt::xtensor (or xt::xarray)
   {
     xt::xtensor<size_t,1> E = xt::arange<size_t>(10);

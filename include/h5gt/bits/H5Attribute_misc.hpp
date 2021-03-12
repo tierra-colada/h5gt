@@ -15,7 +15,7 @@
 #include <sstream>
 #include <string>
 
-#ifdef H5_USE_BOOST
+#ifdef H5GT_USE_BOOST
 #include <boost/multi_array.hpp>
 #endif
 

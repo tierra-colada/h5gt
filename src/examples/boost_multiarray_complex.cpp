@@ -9,8 +9,8 @@
 #include <algorithm>
 #include <complex>
 
-#undef H5_USE_BOOST
-#define H5_USE_BOOST
+#undef H5GT_USE_BOOST
+#define H5GT_USE_BOOST
 
 #include <boost/multi_array.hpp>
 #include <highfive/H5DataSet.hpp>

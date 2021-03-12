@@ -22,7 +22,7 @@
 
 #include <h5gt/H5Easy.hpp>
 
-#ifdef H5_USE_XTENSOR
+#ifdef H5GT_USE_XTENSOR
 #include <xtensor/xrandom.hpp>
 #endif
 
@@ -159,7 +159,7 @@ TEST(H5GTEasy, H5Easy_Attribute_scalar)
   ASSERT_EQ(c == c_r, true);
 }
 
-#ifdef H5_USE_XTENSOR
+#ifdef H5GT_USE_XTENSOR
 TEST(H5GTEasy, H5Easy_extend1d)
 {
   H5Easy::File file("test.h5", H5Easy::File::Overwrite);
@@ -276,7 +276,7 @@ TEST(H5GTEasy, H5Easy_Attribute_xtensor)
 }
 #endif
 
-#ifdef H5_USE_EIGEN
+#ifdef H5GT_USE_EIGEN
 TEST(H5GTEasy, H5Easy_Eigen_MatrixX)
 {
   H5Easy::File file("test.h5", H5Easy::File::Overwrite);
@@ -419,7 +419,7 @@ TEST(H5GTEasy, H5Easy_Attribute_Eigen_MatrixX)
 }
 #endif
 
-#ifdef H5_USE_OPENCV
+#ifdef H5GT_USE_OPENCV
 TEST(H5GTEasy, H5Easy_OpenCV_Mat_)
 {
   H5Easy::File file("test.h5", H5Easy::File::Overwrite);

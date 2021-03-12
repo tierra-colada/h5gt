@@ -16,7 +16,7 @@
 #include <sstream>
 #include <string>
 
-#ifdef H5_USE_BOOST
+#ifdef H5GT_USE_BOOST
 // starting Boost 1.64, serialization header must come before ublas
 #include <boost/multi_array.hpp>
 #include <boost/numeric/ublas/matrix.hpp>

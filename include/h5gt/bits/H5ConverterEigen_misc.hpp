@@ -27,7 +27,7 @@ inline size_t compute_total_size(const std::vector<Eigen::Matrix<T,M,N>>& vec) {
   return vec.size() * compute_total_size(vec[0]);
 }
 
-#ifdef H5_USE_BOOST
+#ifdef H5GT_USE_BOOST
 // compute size for  boost::multi_array of Eigens
 template <typename T, size_t Dims>
 inline size_t compute_total_size(const boost::multi_array<T, Dims>& vec) {
@@ -130,7 +130,7 @@ struct data_converter<std::vector<Eigen::Matrix<T,M,N>>, void> {
   const DataSpace& _space;
 };
 
-#ifdef H5_USE_BOOST
+#ifdef H5GT_USE_BOOST
 template <typename T, int M, int N, std::size_t Dims>
 struct data_converter<boost::multi_array<Eigen::Matrix<T, M, N>, Dims>, void> {
   typedef typename boost::multi_array<Eigen::Matrix<T, M, N>, Dims> MultiArrayEigen;
@@ -181,7 +181,7 @@ struct data_converter<boost::multi_array<Eigen::Matrix<T, M, N>, Dims>, void> {
   const DataSpace& _space;
   std::vector<typename inspector<T>::base_type> _vec_align;
 };
-#endif  // H5_USE_BOOST
+#endif  // H5GT_USE_BOOST
 
 }  // namespace details
 

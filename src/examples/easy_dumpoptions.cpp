@@ -6,18 +6,18 @@
 ///
 /// or ask h5gt to include them. E.g.
 ///
-///   #define H5_USE_XTENSOR
-///   #define H5_USE_EIGEN
+///   #define H5GT_USE_XTENSOR
+///   #define H5GT_USE_EIGEN
 ///   #include <h5gt/H5Easy.hpp>
 ///
 
 // optionally enable plug-in xtensor
-#ifdef H5_USE_XTENSOR
+#ifdef H5GT_USE_XTENSOR
 #include <xtensor/xtensor.hpp>
 #endif
 
 // optionally enable plug-in Eigen
-#ifdef H5_USE_EIGEN
+#ifdef H5GT_USE_EIGEN
 #include <Eigen/Eigen>
 #endif
 
