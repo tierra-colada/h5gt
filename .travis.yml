@@ -1,66 +1,95 @@
 language: cpp
 
-os:
-  - linux
-  - osx
+matrix:
+  include:
+    - os: linux
+      dist: focal
+      compiler: gcc
+      env:
+        - H5GT_USE_Eigen=True
+        - H5GT_USE_XTENSOR=True
+        - H5GT_USE_OPENCV=True
+        - H5GT_PARALLEL_HDF5=True
+      # addons: 
+      #   apt:
+      #     packages:
+      #       - libhdf5-openmpi-dev
+      #       - libeigen3-dev
+      #       - ninja-build
+      #     sources:
+      #       - ubuntu-toolchain-r-test
 
-compiler:
-  - gcc
-  - clang
+    - os: linux
+      dist: focal
+      compiler: clang
+      env:
+        - H5GT_USE_Eigen=True
+        - H5GT_USE_XTENSOR=True
+        - H5GT_USE_OPENCV=True
+        - H5GT_PARALLEL_HDF5=True
+      # addons: 
+      #   apt:
+      #     packages:
+      #       - libhdf5-openmpi-dev
+      #       - libeigen3-dev
+      #       - ninja-build
+      #     sources:
+      #       - ubuntu-toolchain-r-test
 
-dist: focal
-osx_image: xcode12.2
+    - os: windows
+      compiler: gcc
+      env:
+        - H5GT_USE_XTENSOR=True
+        - H5GT_USE_OPENCV=True
+        - H5GT_PARALLEL_HDF5=False
 
-# matrix:
-#   include:
-#     - os: linux
-#       dist: focal
-#       compiler: gcc
+    - os: windows
+      compiler: clang
+      env:
+        - H5GT_USE_XTENSOR=True
+        - H5GT_USE_OPENCV=True
+        - H5GT_PARALLEL_HDF5=False
 
-#     - os: linux
-#       dist: focal
-#       compiler: clang
-
-#     - os: linux
-#       dist: bionic
-#       compiler: gcc
-
-#     - os: linux
-#       dist: bionic
-#       compiler: clang
-
-env:
-  global:
-  - CMAKE_DIR=$HOME/cmake
-  - Eigen3_ROOT=$HOME/eigen
+    - os: osx
+      osx_image: xcode12.2
+      compiler: clang
+      env:
+        - H5GT_USE_XTENSOR=True
+        - H5GT_USE_OPENCV=True
+        - H5GT_PARALLEL_HDF5=False
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update          ; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install graphviz; fi
-  - sudo apt-get update
-  - sudo apt-get -y install libhdf5-dev
-  - sudo apt-get -y install ninja-build
-  - sudo apt -y install python3.8
-  - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $Eigen3_ROOT
-  # - mkdir $CMAKE_DIR
-  # - wget http://www.cmake.org/files/v3.19/cmake-3.19.0-rc1-Linux-x86_64.tar.gz
-  # - tar -xzf cmake-3.19.0-rc1-Linux-x86_64.tar.gz -C $CMAKE_DIR --strip-components=1
-  # - export PATH=$CMAKE_DIR/bin/:$PATH
-
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      sudo apt-get update;
-      sudo apt-get -y install libhdf5-dev;
-      sudo apt-get -y install ninja-build; 
-      sudo apt -y install python3.8;
-    elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      brew update;
-      brew install hdf5; brew upgrade hdf5;
-      brew install boost eigen ninja;
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; 
+      MINCONDA_OS = "Linux-x86_64";
+    elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; 
+      MINCONDA_OS = "MacOSX-x86_64";
     fi
 
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; 
+      export CMAKE_GENERATOR="Visual Studio 15 2017 Win64";
+      export TESTS_TARGET="RUN_TESTS";
+      choco install --yes miniconda3;
+      source C:/Tools/miniconda3/Scripts/activate;
+    else
+      export CMAKE_GENERATOR="Ninja";
+      export TESTS_TARGET="test";
+      wget "http://repo.continuum.io/miniconda/Miniconda3-latest-$MINCONDA_OS.sh" -O miniconda.sh;
+      bash miniconda.sh -b -p $HOME/miniconda;
+      source $HOME/miniconda/bin/activate;
+      hash -r;
+    fi
+
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda install -c conda-forge mamba
+  - mamba install -c conda-forge xtl xsimd xtensor libopencv opencv hdf5 eigen;
+
 before_script:
-  - clang --version
-  - gcc --version
+- if [[ "$TRAVIS_COMPILER" == gcc ]];
+    gcc --version;
+  elif [[ "$TRAVIS_COMPILER" == clang ]]
+    clang --version;
+  fi
   - cmake --version
   - python --version
 
@@ -70,13 +99,13 @@ script:
   - >
     cmake 
     -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
-    -DH5GT_PARALLEL_HDF5:BOOL=OFF
+    -DH5GT_TEST_SINGLE_INCLUDES:BOOL=ON
+    -DH5GT_PARALLEL_HDF5:BOOL=${H5GT_PARALLEL_HDF5}
     -DH5GT_USE_EIGEN:BOOL=ON
-    -DH5GT_USE_XTENSOR:BOOL=OFF
-    -DH5GT_USE_OPENCV:BOOL=OFF
-    -DEigen3_ROOT:PATH=$Eigen3_ROOT
-    -G "Ninja" ../
+    -DH5GT_USE_XTENSOR:BOOL=${H5GT_USE_XTENSOR}
+    -DH5GT_USE_OPENCV:BOOL=${H5GT_USE_OPENCV}
+    -G "${CMAKE_GENERATOR}" ../
   - cmake --build .
-  - CTEST_OUTPUT_ON_FAILURE=1 cmake --build . --target test
+  - CTEST_OUTPUT_ON_FAILURE=1 cmake --build . --target ${TESTS_TARGET}
   # - popd
   # - bash tests/test_project_integration.sh;
