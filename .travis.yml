@@ -13,7 +13,7 @@ env:
   - CMAKE_GENERATOR=Ninja
   - TESTS_TARGET=test
 
-before_install: 
+before_install:
   - sudo apt-get update
   - sudo apt-get -y install libhdf5-dev
   - sudo apt-get -y install libeigen3-dev
