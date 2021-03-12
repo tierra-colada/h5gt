@@ -38,7 +38,7 @@ before_script:
   - clang --version
   - gcc --version
   - cmake --version
-  - python ––version
+  - python --version
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
