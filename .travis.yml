@@ -60,12 +60,12 @@ matrix:
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; 
-      MINCONDA_OS = "Linux-x86_64";
-    elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; 
+      MINCONDA_OS = "Linux-x86_64"
+    elif [[ "$TRAVIS_OS_NAME" == "osx" ]]
       MINCONDA_OS = "MacOSX-x86_64";
     fi
 
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; 
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]
       export CMAKE_GENERATOR="Visual Studio 15 2017 Win64";
       export TESTS_TARGET="RUN_TESTS";
       choco install --yes miniconda3;
@@ -85,7 +85,7 @@ before_install:
   - mamba install -c conda-forge xtl xsimd xtensor libopencv opencv hdf5 eigen;
 
 before_script:
-- if [[ "$TRAVIS_COMPILER" == gcc ]];
+- if [[ "$TRAVIS_COMPILER" == gcc ]]
     gcc --version;
   elif [[ "$TRAVIS_COMPILER" == clang ]]
     clang --version;
