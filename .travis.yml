@@ -12,7 +12,6 @@ env:
   global:
   - CMAKE_DIR=$HOME/cmake
   - Eigen3_ROOT=$HOME/eigen
-  - TESTS_TARGET=test
 
 before_install:
   - sudo apt-get update
@@ -41,7 +40,7 @@ script:
     -DH5GT_USE_OPENCV:BOOL=OFF
     -DEigen3_ROOT:PATH=$Eigen3_ROOT
     -G "Ninja" ../
-  - $CMAKE_DIR/bin/cmake --build .
-  - CTEST_OUTPUT_ON_FAILURE=1 $CMAKE_DIR/bin/cmake --build . --target ${TESTS_TARGET}
+  - cmake --build .
+  - CTEST_OUTPUT_ON_FAILURE=1 cmake --build . --target test
   # - popd
   # - bash tests/test_project_integration.sh;
