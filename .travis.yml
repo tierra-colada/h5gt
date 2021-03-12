@@ -11,7 +11,6 @@ env:
   global:
   - CMAKE_DIR=$HOME/cmake
   - Eigen3_ROOT=$HOME/eigen
-  - CMAKE_GENERATOR=Ninja
   - TESTS_TARGET=test
 
 before_install:
@@ -41,7 +40,7 @@ script:
     -DH5GT_USE_XTENSOR:BOOL=OFF
     -DH5GT_USE_OPENCV:BOOL=OFF
     -DEigen3_ROOT:PATH=$Eigen3_ROOT
-    -G "${CMAKE_GENERATOR}" ../
+    -G "Ninja" ../
   - $CMAKE_DIR/bin/cmake --build .
   - CTEST_OUTPUT_ON_FAILURE=1 $CMAKE_DIR/bin/cmake --build . --target ${TESTS_TARGET}
   - popd
