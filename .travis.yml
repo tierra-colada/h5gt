@@ -10,14 +10,15 @@ compiler:
 env:
   global:
   - CMAKE_DIR=$HOME/cmake
+  - Eigen3_ROOT=$HOME/eigen
   - CMAKE_GENERATOR=Ninja
   - TESTS_TARGET=test
 
 before_install:
   - sudo apt-get update
   - sudo apt-get -y install libhdf5-dev
-  - sudo apt-get -y install libeigen3-dev
   - sudo apt-get -y install ninja-build
+  - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $Eigen3_ROOT
   - mkdir $CMAKE_DIR
   - wget http://www.cmake.org/files/v3.19/cmake-3.19.0-rc1-Linux-x86_64.tar.gz
   - tar -xzf cmake-3.19.0-rc1-Linux-x86_64.tar.gz -C $CMAKE_DIR --strip-components=1
@@ -39,7 +40,7 @@ script:
     -DH5GT_USE_EIGEN:BOOL=ON
     -DH5GT_USE_XTENSOR:BOOL=OFF
     -DH5GT_USE_OPENCV:BOOL=OFF
-    -DEigen3_ROOT:PATH=$HOME/eigen
+    -DEigen3_ROOT:PATH=$Eigen3_ROOT
     -G "${CMAKE_GENERATOR}" ../
   - $CMAKE_DIR/bin/cmake --build .
   - CTEST_OUTPUT_ON_FAILURE=1 $CMAKE_DIR/bin/cmake --build . --target ${TESTS_TARGET}
