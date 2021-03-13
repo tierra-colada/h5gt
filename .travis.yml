@@ -10,6 +10,10 @@ matrix:
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
         - H5GT_PARALLEL_HDF5=True
+      addons:
+        apt:
+          packages:
+            - ninja-build
       # addons: 
       #   apt:
       #     packages:
@@ -27,6 +31,10 @@ matrix:
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
         - H5GT_PARALLEL_HDF5=True
+      addons:
+        apt:
+          packages:
+            - ninja-build
       # addons: 
       #   apt:
       #     packages:
@@ -62,6 +70,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
       MINCONDA_OS="Linux-x86_64";
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
+      brew install ninja;
       MINCONDA_OS="MacOSX-x86_64";
     fi
 
