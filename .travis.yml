@@ -6,7 +6,7 @@ matrix:
       dist: focal
       compiler: gcc
       env:
-        - H5GT_USE_Eigen=True
+        - H5GT_USE_Eigen=False
         - H5GT_USE_XTENSOR=False
         - H5GT_USE_OPENCV=False
         - H5GT_UNIT_TESTS=True
@@ -25,7 +25,7 @@ matrix:
       dist: focal
       compiler: clang
       env:
-        - H5GT_USE_Eigen=True
+        - H5GT_USE_Eigen=False
         - H5GT_USE_XTENSOR=False
         - H5GT_USE_OPENCV=False
         - H5GT_UNIT_TESTS=True
