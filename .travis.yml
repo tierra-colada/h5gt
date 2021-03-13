@@ -9,7 +9,7 @@ matrix:
         - H5GT_USE_Eigen=True
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
-        - H5GT_PARALLEL_HDF5=True
+        - H5GT_PARALLEL_HDF5=False
 
     - os: linux
       dist: focal
@@ -18,11 +18,12 @@ matrix:
         - H5GT_USE_Eigen=True
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
-        - H5GT_PARALLEL_HDF5=True
+        - H5GT_PARALLEL_HDF5=False
 
     - os: windows
       compiler: gcc
       env:
+        - H5GT_USE_Eigen=True
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
         - H5GT_PARALLEL_HDF5=False
@@ -30,6 +31,7 @@ matrix:
     - os: windows
       compiler: clang
       env:
+        - H5GT_USE_Eigen=True
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
         - H5GT_PARALLEL_HDF5=False
