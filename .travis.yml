@@ -60,9 +60,9 @@ matrix:
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
-      MINCONDA_OS = "Linux-x86_64";
+      MINCONDA_OS="Linux-x86_64";
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
-      MINCONDA_OS = "MacOSX-x86_64";
+      MINCONDA_OS="MacOSX-x86_64";
     fi
 
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 
