@@ -9,7 +9,11 @@ matrix:
         - H5GT_USE_Eigen=True
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
-        - H5GT_PARALLEL_HDF5=False
+        - H5GT_PARALLEL_HDF5=True
+      addons:
+        apt:
+          packages:
+            - libhdf5-mpi-dev
 
     - os: linux
       dist: focal
@@ -18,7 +22,11 @@ matrix:
         - H5GT_USE_Eigen=True
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
-        - H5GT_PARALLEL_HDF5=False
+        - H5GT_PARALLEL_HDF5=True
+      addons:
+        apt:
+          packages:
+            - libhdf5-mpi-dev
 
     - os: windows
       compiler: gcc
@@ -49,7 +57,9 @@ env:
   - EIGEN3_ROOT=${TRAVIS_BUILD_DIR}/../eigen
 
 before_install:
-  - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git
+  - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $EIGEN3_ROOT
+  - export PATH=$EIGEN3_ROOT:$PATH
+
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
       MINCONDA_OS="Linux-x86_64";
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
@@ -74,7 +84,11 @@ before_install:
   - conda update -q conda
   - conda install -c conda-forge mamba
   - mamba install -c conda-forge xtl xsimd xtensor libopencv opencv hdf5 ninja;
-  - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $EIGEN3_ROOT
+  
+  # Linux uses HDF5 with MPI
+  - if [[ "$TRAVIS_OS_NAME" != "linux" ]]; then 
+      mamba install -c conda-forge ninja;
+    fi
 
 before_script:
   - if [[ "$TRAVIS_COMPILER" == "gcc" ]]; then 
