@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15.0)
 
 if(NOT DEFINED CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
+  set(CMAKE_CXX_STANDARD 14) # C++14 is required by pybind and xtensor
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -36,14 +36,6 @@ option(H5GT_BUILD_h5gtpy "Build python wrapper (make sure to disable HDF5_USE_ST
 option(HDF5_USE_STATIC_LIBRARIES "Use static hdf5 lib" OFF)
 
 set(gtest_force_shared_crt ON CACHE BOOL "Always use msvcrt.dll") # needed for googletest
-
-if(H5GT_USE_XTENSOR)
-  if(NOT COMPILER_SUPPORTS_CXX14)
-    message(SEND_ERROR "C++ compiler does not support standard c++14, required to support xtensor.")
-  else()
-    set(CMAKE_CXX_STANDARD 14)
-  endif()
-endif()
 
 find_package(HDF5 REQUIRED)
 
