@@ -125,6 +125,8 @@ script:
   - echo $VAR
   - echo $H5GT_USE_EIGEN
   - echo ${H5GT_USE_EIGEN}
+  - echo ${HDF5_USE_STATIC_LIBRARIES}
+  - echo $H5GT_USE_XTENSOR
   - echo ${TRAVIS_BUILD_DIR}
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir -p build && pushd build
