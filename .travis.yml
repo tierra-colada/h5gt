@@ -26,7 +26,7 @@ matrix:
       addons:
         apt:
           packages:
-            - libhdf5-mpi-dev
+            - libhdf5-mpich-dev
 
     - os: windows
       compiler: gcc
@@ -83,11 +83,11 @@ before_install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda install -c conda-forge mamba
-  - mamba install -c conda-forge xtl xsimd xtensor libopencv opencv hdf5 ninja;
+  - mamba install -c conda-forge xtl xsimd xtensor libopencv opencv ninja;
   
   # Linux uses HDF5 with MPI
   - if [[ "$TRAVIS_OS_NAME" != "linux" ]]; then 
-      mamba install -c conda-forge ninja;
+      mamba install -c conda-forge hdf5;
     fi
 
 before_script:
