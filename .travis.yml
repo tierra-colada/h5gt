@@ -85,9 +85,9 @@ before_install:
   - mamba install -c conda-forge xtl xsimd xtensor libopencv opencv hdf5 eigen;
 
 before_script:
-- if [[ "$TRAVIS_COMPILER" == gcc ]]; then
+- if [[ "$TRAVIS_COMPILER" == "gcc" ]]; then
     gcc --version;
-  elif [[ "$TRAVIS_COMPILER" == clang ]]; then
+  elif [[ "$TRAVIS_COMPILER" == "clang" ]]; then
     clang --version;
   fi
   - cmake --version
