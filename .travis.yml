@@ -123,6 +123,7 @@ before_script:
 
 script:
   - echo $VAR
+  - echo $HDF5_USE_STATIC_LIBRARIES
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir -p build && pushd build
   - >
