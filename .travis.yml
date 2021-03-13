@@ -37,7 +37,7 @@ matrix:
         - H5GT_PARALLEL_HDF5=False
 
     - os: osx
-      osx_image: xcode11.4
+      osx_image: xcode12.2
       compiler: clang
       env:
         - H5GT_USE_XTENSOR=True
@@ -56,7 +56,8 @@ before_install:
       sudo apt-get -y install ninja-build;
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
       MINCONDA_OS="MacOSX-x86_64";
-      brew install ninja;
+      brew update;
+      brew install --build-from-source ninja;
     fi
 
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 
