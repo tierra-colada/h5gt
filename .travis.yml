@@ -112,7 +112,7 @@ before_install:
       conda config --set always_yes yes --set changeps1 no;
       conda update -q conda;
       conda install -c conda-forge mamba;
-      mamba install -c conda-forge xtl xsimd xtensor libopencv opencv;
+      mamba install -c conda-forge xtl xsimd xtensor libopencv opencv hdf5;
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
       export CMAKE_GENERATOR="Ninja";
       export TESTS_TARGET="test";
@@ -123,7 +123,7 @@ before_install:
       conda config --set always_yes yes --set changeps1 no;
       conda update -q conda;
       conda install -c conda-forge mamba;
-      mamba install -c conda-forge xtl xsimd xtensor libopencv opencv ninja;
+      mamba install -c conda-forge xtl xsimd xtensor libopencv opencv hdf5 ninja;
     elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
       export CMAKE_GENERATOR="Ninja";
       export TESTS_TARGET="test";
