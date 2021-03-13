@@ -14,6 +14,7 @@ matrix:
         - H5GT_PARALLEL_HDF5=True
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
+        - VAR=AAAAAAAAAAA
       addons:
         apt:
           packages:
@@ -32,6 +33,7 @@ matrix:
         - H5GT_PARALLEL_HDF5=True
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
+        - VAR=BBBBBBBBBB
       addons:
         apt:
           packages:
@@ -80,6 +82,7 @@ env:
   - EIGEN3_ROOT=${TRAVIS_BUILD_DIR}/../eigen
 
 before_install:
+  - echo $VAR
   - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $EIGEN3_ROOT
   - export PATH=$EIGEN3_ROOT:$PATH
 
@@ -119,7 +122,7 @@ before_script:
   - python --version
 
 script:
-  - echo $H5GT_USE_EIGEN
+  - echo $VAR
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir -p build && pushd build
   - >
