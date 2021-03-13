@@ -7,8 +7,8 @@ matrix:
       compiler: gcc
       env:
         - H5GT_USE_Eigen=True
-        - H5GT_USE_XTENSOR=True
-        - H5GT_USE_OPENCV=True
+        - H5GT_USE_XTENSOR=False
+        - H5GT_USE_OPENCV=False
         - H5GT_PARALLEL_HDF5=True
       addons:
         apt:
@@ -20,8 +20,8 @@ matrix:
       compiler: clang
       env:
         - H5GT_USE_Eigen=True
-        - H5GT_USE_XTENSOR=True
-        - H5GT_USE_OPENCV=True
+        - H5GT_USE_XTENSOR=False
+        - H5GT_USE_OPENCV=False
         - H5GT_PARALLEL_HDF5=True
       addons:
         apt:
@@ -83,12 +83,15 @@ before_install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda install -c conda-forge mamba
-  - mamba install -c conda-forge xtl xsimd xtensor libopencv opencv ninja;
-  
-  # Linux uses HDF5 with MPI
-  # - if [[ "$TRAVIS_OS_NAME" != "linux" ]]; then 
-  #     mamba install -c conda-forge hdf5;
-  #   fi
+  - mamba install -c conda-forge xtensor libopencv opencv ninja;
+
+  # - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
+  #     mamba install -c conda-forge xtensor libopencv opencv ninja;
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
+      mamba install -c conda-forge xtensor libopencv opencv ninja hdf5;
+    elif [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 
+      mamba install -c conda-forge xtensor libopencv opencv ninja hdf5;
+    fi
 
 before_script:
   - if [[ "$TRAVIS_COMPILER" == "gcc" ]]; then 
