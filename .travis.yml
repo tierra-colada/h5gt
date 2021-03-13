@@ -10,18 +10,6 @@ matrix:
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
         - H5GT_PARALLEL_HDF5=True
-      addons:
-        apt:
-          packages:
-            - ninja-build
-      # addons: 
-      #   apt:
-      #     packages:
-      #       - libhdf5-openmpi-dev
-      #       - libeigen3-dev
-      #       - ninja-build
-      #     sources:
-      #       - ubuntu-toolchain-r-test
 
     - os: linux
       dist: focal
@@ -31,18 +19,6 @@ matrix:
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
         - H5GT_PARALLEL_HDF5=True
-      addons:
-        apt:
-          packages:
-            - ninja-build
-      # addons: 
-      #   apt:
-      #     packages:
-      #       - libhdf5-openmpi-dev
-      #       - libeigen3-dev
-      #       - ninja-build
-      #     sources:
-      #       - ubuntu-toolchain-r-test
 
     - os: windows
       compiler: gcc
@@ -69,9 +45,12 @@ matrix:
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
       MINCONDA_OS="Linux-x86_64";
+      sudo apt-get update;
+      sudo apt-get -y install ninja-build;
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
-      brew install ninja;
       MINCONDA_OS="MacOSX-x86_64";
+      brew update;
+      brew install ninja;
     fi
 
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 
