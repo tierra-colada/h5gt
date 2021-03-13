@@ -2,6 +2,7 @@ language: cpp
 
 matrix:
   include:
+    # MPI 3.1
     - os: linux
       dist: focal
       compiler: gcc
@@ -20,6 +21,7 @@ matrix:
             - libhdf5-mpi-dev
             - ninja-build
 
+    # MPICH 3.1
     - os: linux
       dist: focal
       compiler: clang
@@ -36,6 +38,25 @@ matrix:
         apt:
           packages:
             - libhdf5-mpich-dev
+            - ninja-build
+
+    # OpenMPI 3.1
+    - os: linux
+      dist: focal
+      compiler: clang
+      env:
+        - H5GT_USE_EIGEN=True
+        - H5GT_USE_XTENSOR=False
+        - H5GT_USE_OPENCV=False
+        - H5GT_UNIT_TESTS=True
+        - H5GT_EXAMPLES=True
+        - H5GT_PARALLEL_HDF5=True
+        - H5GT_BUILD_h5gtpy=True
+        - HDF5_USE_STATIC_LIBRARIES=False
+      addons:
+        apt:
+          packages:
+            - libhdf5-openmpi-dev
             - ninja-build
 
     - os: windows

@@ -28,60 +28,61 @@ using namespace h5gt;
 template <typename T>
 void selectionArraySimpleTestParallel() {
 
-    int mpi_rank, mpi_size;
-    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
-    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+  int mpi_rank, mpi_size;
+  MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+  MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
 
-    typedef typename std::vector<T> Vector;
+  typedef typename std::vector<T> Vector;
 
-    std::ostringstream filename;
-    filename << "h5_rw_select_parallel_test_" << typeNameHelper<T>() << "_test.h5";
+  std::ostringstream filename;
+  filename << "h5_rw_select_parallel_test_" << typeNameHelper<T>() << "_test.h5";
 
-    const auto size_x = static_cast<size_t>(mpi_size);
-    const auto offset_x = static_cast<size_t>(mpi_rank);
-    const auto count_x = static_cast<size_t>(mpi_size - mpi_rank);
+  const auto size_x = static_cast<size_t>(mpi_size);
+  const auto offset_x = static_cast<size_t>(mpi_rank);
+  const auto count_x = static_cast<size_t>(mpi_size - mpi_rank);
 
-    const std::string DATASET_NAME("dset");
+  const std::string DATASET_NAME("dset");
 
-    Vector values(size_x);
+  Vector values(size_x);
 
-    ContentGenerate<T> generator;
-    std::generate(values.begin(), values.end(), generator);
+  ContentGenerate<T> generator;
+  std::generate(values.begin(), values.end(), generator);
 
-    // Create a new file using the default property lists.
-    File file(filename.str(), File::ReadWrite | File::Create | File::Truncate,
-              MPIOFileDriver(MPI_COMM_WORLD, MPI_INFO_NULL));
+  // Create a new file using the default property lists.
+  File file(filename.str(), File::ReadWrite | File::Create | File::Truncate,
+            MPIOFileDriver(MPI_COMM_WORLD, MPI_INFO_NULL));
 
-    DataSet dataset =
-        file.createDataSet<T>(DATASET_NAME, DataSpace::From(values));
+  DataSet dataset =
+      file.createDataSet<T>(DATASET_NAME, DataSpace::From(values));
 
-    dataset.write(values);
+  dataset.write(values);
 
-    file.flush();
+  file.flush();
 
-    // read it back
-    Vector result;
-    std::vector<size_t> offset;
-    offset.push_back(offset_x);
-    std::vector<size_t> size;
-    size.push_back(count_x);
+  // read it back
+  Vector result;
+  std::vector<size_t> offset;
+  offset.push_back(offset_x);
+  std::vector<size_t> size;
+  size.push_back(count_x);
 
-    Selection slice = dataset.select(offset, size);
+  Selection slice = dataset.select(offset, size);
 
-    EXPECT_EQ(slice.getSpace().getDimensions()[0], size_x);
-    EXPECT_EQ(slice.getMemSpace().getDimensions()[0], count_x);
+  EXPECT_EQ(slice.getSpace().getDimensions()[0], size_x);
+  EXPECT_EQ(slice.getMemSpace().getDimensions()[0], count_x);
 
-    slice.read(result);
+  slice.read(result);
 
-    EXPECT_EQ(result.size(), count_x);
+  EXPECT_EQ(result.size(), count_x);
 
-    for (size_t i = offset_x; i < count_x; ++i) {
-        // std::cout << result[i] << " ";
-        EXPECT_EQ(values[i + offset_x], result[i]);
-    }
+  for (size_t i = offset_x; i < count_x; ++i) {
+    // std::cout << result[i] << " ";
+    EXPECT_EQ(values[i + offset_x], result[i]);
+  }
 }
 
 TEST(H5GTParallel, selectionArraySimple) {
+  int err = MPI_Init(NULL, NULL);
   selectionArraySimpleTestParallel<std::string>();
   selectionArraySimpleTestParallel<int>();
   selectionArraySimpleTestParallel<unsigned>();
@@ -90,4 +91,5 @@ TEST(H5GTParallel, selectionArraySimple) {
   selectionArraySimpleTestParallel<float>();
   selectionArraySimpleTestParallel<double>();
   selectionArraySimpleTestParallel<std::complex<double> >();
+  err = MPI_Finalize();
 }
