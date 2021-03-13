@@ -44,7 +44,12 @@ matrix:
         - H5GT_USE_OPENCV=True
         - H5GT_PARALLEL_HDF5=False
 
+env:
+  global:
+  - EIGEN3_ROOT=${TRAVIS_BUILD_DIR}/../eigen
+
 before_install:
+  - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
       MINCONDA_OS="Linux-x86_64";
       sudo apt-get update;
@@ -72,7 +77,8 @@ before_install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda install -c conda-forge mamba
-  - mamba install -c conda-forge xtl xsimd xtensor libopencv opencv hdf5 eigen;
+  - mamba install -c conda-forge xtl xsimd xtensor libopencv opencv hdf5;
+  - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $EIGEN3_ROOT
 
 before_script:
   - if [[ "$TRAVIS_COMPILER" == "gcc" ]]; then 
@@ -92,6 +98,7 @@ script:
     -DH5GT_TEST_SINGLE_INCLUDES:BOOL=ON
     -DH5GT_PARALLEL_HDF5:BOOL=${H5GT_PARALLEL_HDF5}
     -DH5GT_USE_EIGEN:BOOL=ON
+    -DEigen3_ROOT:PATH=$EIGEN3_ROOT
     -DH5GT_USE_XTENSOR:BOOL=${H5GT_USE_XTENSOR}
     -DH5GT_USE_OPENCV:BOOL=${H5GT_USE_OPENCV}
     -G "${CMAKE_GENERATOR}" ../
