@@ -6,7 +6,7 @@ matrix:
       dist: focal
       compiler: gcc
       env:
-        - H5GT_USE_Eigen=False
+        - H5GT_USE_EIGEN=True
         - H5GT_USE_XTENSOR=False
         - H5GT_USE_OPENCV=False
         - H5GT_UNIT_TESTS=True
@@ -14,7 +14,6 @@ matrix:
         - H5GT_PARALLEL_HDF5=True
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
-        - VAR=AAAAAAAAAAA
       addons:
         apt:
           packages:
@@ -25,7 +24,7 @@ matrix:
       dist: focal
       compiler: clang
       env:
-        - H5GT_USE_Eigen=False
+        - H5GT_USE_EIGEN=True
         - H5GT_USE_XTENSOR=False
         - H5GT_USE_OPENCV=False
         - H5GT_UNIT_TESTS=True
@@ -33,7 +32,6 @@ matrix:
         - H5GT_PARALLEL_HDF5=True
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
-        - VAR=BBBBBBBBBB
       addons:
         apt:
           packages:
@@ -43,7 +41,7 @@ matrix:
     - os: windows
       compiler: gcc
       env:
-        - H5GT_USE_Eigen=True
+        - H5GT_USE_EIGEN=True
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
         - H5GT_UNIT_TESTS=True
@@ -55,7 +53,7 @@ matrix:
     - os: windows
       compiler: clang
       env:
-        - H5GT_USE_Eigen=True
+        - H5GT_USE_EIGEN=True
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
         - H5GT_UNIT_TESTS=True
@@ -68,7 +66,7 @@ matrix:
       osx_image: xcode12.2
       compiler: clang
       env:
-        - H5GT_USE_Eigen=False
+        - H5GT_USE_EIGEN=False
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
         - H5GT_UNIT_TESTS=True
@@ -82,7 +80,6 @@ env:
   - EIGEN3_ROOT=${TRAVIS_BUILD_DIR}/../eigen
 
 before_install:
-  - echo $VAR
   - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $EIGEN3_ROOT
   - export PATH=$EIGEN3_ROOT:$PATH
 
@@ -109,7 +106,6 @@ before_install:
     elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
       export CMAKE_GENERATOR="Ninja";
       export TESTS_TARGET="test";
-      hash -r;
     fi
 
 before_script:
@@ -122,12 +118,6 @@ before_script:
   - python --version
 
 script:
-  - echo $VAR
-  - echo $H5GT_USE_EIGEN
-  - echo ${H5GT_USE_EIGEN}
-  - echo ${HDF5_USE_STATIC_LIBRARIES}
-  - echo $H5GT_USE_XTENSOR
-  - echo ${TRAVIS_BUILD_DIR}
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir -p build && pushd build
   - >
