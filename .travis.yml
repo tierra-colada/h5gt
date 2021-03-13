@@ -106,6 +106,7 @@ before_install:
     elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
       export CMAKE_GENERATOR="Ninja";
       export TESTS_TARGET="test";
+      hash -r;
     fi
 
 before_script:
@@ -118,6 +119,7 @@ before_script:
   - python --version
 
 script:
+  - echo $H5GT_USE_EIGEN
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir -p build && pushd build
   - >
