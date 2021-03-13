@@ -9,7 +9,11 @@ matrix:
         - H5GT_USE_Eigen=True
         - H5GT_USE_XTENSOR=False
         - H5GT_USE_OPENCV=False
+        - H5GT_UNIT_TESTS=True
+        - H5GT_EXAMPLES=True
         - H5GT_PARALLEL_HDF5=True
+        - H5GT_BUILD_h5gtpy=True
+        - HDF5_USE_STATIC_LIBRARIES=False
       addons:
         apt:
           packages:
@@ -22,7 +26,11 @@ matrix:
         - H5GT_USE_Eigen=True
         - H5GT_USE_XTENSOR=False
         - H5GT_USE_OPENCV=False
+        - H5GT_UNIT_TESTS=True
+        - H5GT_EXAMPLES=True
         - H5GT_PARALLEL_HDF5=True
+        - H5GT_BUILD_h5gtpy=True
+        - HDF5_USE_STATIC_LIBRARIES=False
       addons:
         apt:
           packages:
@@ -34,7 +42,11 @@ matrix:
         - H5GT_USE_Eigen=True
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
+        - H5GT_UNIT_TESTS=True
+        - H5GT_EXAMPLES=True
         - H5GT_PARALLEL_HDF5=False
+        - H5GT_BUILD_h5gtpy=True
+        - HDF5_USE_STATIC_LIBRARIES=False
 
     - os: windows
       compiler: clang
@@ -42,15 +54,24 @@ matrix:
         - H5GT_USE_Eigen=True
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
+        - H5GT_UNIT_TESTS=True
+        - H5GT_EXAMPLES=True
         - H5GT_PARALLEL_HDF5=False
+        - H5GT_BUILD_h5gtpy=True
+        - HDF5_USE_STATIC_LIBRARIES=False
 
     - os: osx
       osx_image: xcode12.2
       compiler: clang
       env:
+        - H5GT_USE_Eigen=False
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
+        - H5GT_UNIT_TESTS=True
+        - H5GT_EXAMPLES=True
         - H5GT_PARALLEL_HDF5=False
+        - H5GT_BUILD_h5gtpy=False
+        - HDF5_USE_STATIC_LIBRARIES=True
 
 env:
   global:
@@ -60,37 +81,31 @@ before_install:
   - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $EIGEN3_ROOT
   - export PATH=$EIGEN3_ROOT:$PATH
 
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
-      MINCONDA_OS="Linux-x86_64";
-    elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
-      MINCONDA_OS="MacOSX-x86_64";
-    fi
+  # - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
+  #     MINCONDA_OS="Linux-x86_64";
+  #   elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
+  #     MINCONDA_OS="MacOSX-x86_64";
+  #   fi
 
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 
       export CMAKE_GENERATOR="Visual Studio 15 2017 Win64";
       export TESTS_TARGET="RUN_TESTS";
       choco install --yes miniconda3;
       source C:/Tools/miniconda3/Scripts/activate;
-    else
+    elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
       export CMAKE_GENERATOR="Ninja";
       export TESTS_TARGET="test";
-      wget "http://repo.continuum.io/miniconda/Miniconda3-latest-$MINCONDA_OS.sh" -O miniconda.sh;
+      wget "http://repo.continuum.io/miniconda/Miniconda3-latest-$MacOSX-x86_64.sh" -O miniconda.sh;
       bash miniconda.sh -b -p $HOME/miniconda;
       source $HOME/miniconda/bin/activate;
       hash -r;
     fi
 
-  - conda config --set always_yes yes --set changeps1 no
-  - conda update -q conda
-  - conda install -c conda-forge mamba
-  - mamba install -c conda-forge xtensor libopencv opencv ninja;
-
-  # - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
-  #     mamba install -c conda-forge xtensor libopencv opencv ninja;
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
-      mamba install -c conda-forge xtensor libopencv opencv ninja hdf5;
-    elif [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 
-      mamba install -c conda-forge xtensor libopencv opencv ninja hdf5;
+  - if [[ "$TRAVIS_OS_NAME" != "linux" ]]; then 
+      conda config --set always_yes yes --set changeps1 no
+      conda update -q conda
+      conda install -c conda-forge mamba
+      mamba install -c conda-forge xtensor libopencv opencv ninja;
     fi
 
 before_script:
@@ -108,12 +123,15 @@ script:
   - >
     cmake 
     -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
-    -DH5GT_TEST_SINGLE_INCLUDES:BOOL=ON
-    -DH5GT_PARALLEL_HDF5:BOOL=${H5GT_PARALLEL_HDF5}
-    -DH5GT_USE_EIGEN:BOOL=ON
-    -DEigen3_ROOT:PATH=$EIGEN3_ROOT
+    -DH5GT_USE_EIGEN:BOOL=${H5GT_USE_EIGEN}
     -DH5GT_USE_XTENSOR:BOOL=${H5GT_USE_XTENSOR}
     -DH5GT_USE_OPENCV:BOOL=${H5GT_USE_OPENCV}
+    -DH5GT_UNIT_TESTS:BOOL=${H5GT_UNIT_TESTS}
+    -DH5GT_EXAMPLES:BOOL=${H5GT_EXAMPLES}
+    -DH5GT_PARALLEL_HDF5:BOOL=${H5GT_PARALLEL_HDF5}
+    -DH5GT_BUILD_h5gtpy=${H5GT_BUILD_h5gtpy}
+    -DHDF5_USE_STATIC_LIBRARIES=${HDF5_USE_STATIC_LIBRARIES}
+    -DEigen3_ROOT:PATH=$EIGEN3_ROOT    
     -G "${CMAKE_GENERATOR}" ../
   - cmake --build .
   - CTEST_OUTPUT_ON_FAILURE=1 cmake --build . --target ${TESTS_TARGET}
