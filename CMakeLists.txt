@@ -6,12 +6,8 @@ endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12.0")
-  cmake_policy(SET CMP0074 NEW)
-endif()
-if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.13.0")
-  cmake_policy(SET CMP0077 NEW)
-endif()
+cmake_policy(SET CMP0074 NEW)
+cmake_policy(SET CMP0077 NEW)
 
 project(h5gt VERSION 0.1.0 LANGUAGES C CXX)
 
@@ -35,13 +31,7 @@ option(H5GT_PARALLEL_HDF5 "Enable Parallel HDF5 support" OFF)
 option(H5GT_BUILD_h5gtpy "Build python wrapper (make sure to disable HDF5_USE_STATIC_LIBRARIES and enable H5GT_USE_EIGEN)" ON)
 option(HDF5_USE_STATIC_LIBRARIES "Use static hdf5 lib" OFF)
 
-if(HDF5_USE_STATIC_LIBRARIES)
-  set(gtest_force_shared_crt OFF CACHE BOOL "Always use msvcrt.dll") # needed for googletest
-else()
-  set(gtest_force_shared_crt ON CACHE BOOL "Always use msvcrt.dll") # needed for googletest
-endif();
-
-find_package(HDF5 REQUIRED)
+set(gtest_force_shared_crt ON CACHE BOOL "Prevent overriding the parent project's compiler/linker settings on Windows")
 
 add_subdirectory(include)
 add_library(h5gt INTERFACE ${include_files})
@@ -51,6 +41,7 @@ target_include_directories(h5gt INTERFACE
 )
 install(TARGETS h5gt DESTINATION lib EXPORT h5gt-targets)
 
+find_package(HDF5 REQUIRED)
 if(H5GT_PARALLEL_HDF5 AND HDF5_IS_PARALLEL)
   target_compile_definitions(h5gt INTERFACE H5GT_PARALLEL)
 elseif(H5GT_PARALLEL_HDF5 AND NOT HDF5_IS_PARALLEL)
@@ -61,8 +52,10 @@ target_link_libraries(h5gt INTERFACE ${HDF5_C_LIBRARIES})
 target_include_directories(h5gt INTERFACE ${HDF5_INCLUDE_DIRS})
 target_compile_definitions(h5gt INTERFACE ${HDF5_DEFINITIONS})
 
+find_package(ZLIB REQUIRED)
+target_link_libraries(h5gt INTERFACE ZLIB::ZLIB)
+
 if(H5GT_BUILD_h5gtpy)
-  # create h5py
   add_subdirectory(src/python)
 endif()
 
