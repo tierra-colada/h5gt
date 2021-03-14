@@ -16,6 +16,7 @@ matrix:
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
         - CMAKE_GENERATOR="Ninja"
+        - TESTS_TARGET="test"
       addons:
         apt:
           packages:
@@ -36,6 +37,7 @@ matrix:
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
         - CMAKE_GENERATOR="Ninja"
+        - TESTS_TARGET="test"
       addons:
         apt:
           packages:
@@ -56,6 +58,7 @@ matrix:
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
         - CMAKE_GENERATOR="Ninja"
+        - TESTS_TARGET="test"
       addons:
         apt:
           packages:
@@ -74,6 +77,7 @@ matrix:
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
         - CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
+        - TESTS_TARGET="RUN_TESTS"
 
     - os: windows
       # compiler: clang
@@ -85,7 +89,8 @@ matrix:
         - H5GT_EXAMPLES=True
         - H5GT_PARALLEL_HDF5=False
         - H5GT_BUILD_h5gtpy=True
-        - CMAKE_GENERATOR="Visual Studio 16 2019 Win64"
+        - CMAKE_GENERATOR="Visual Studio 16 2019"
+        - TESTS_TARGET="RUN_TESTS"
 
     - os: osx
       osx_image: xcode12.2
@@ -99,6 +104,8 @@ matrix:
         - H5GT_PARALLEL_HDF5=False
         - H5GT_BUILD_h5gtpy=False
         - HDF5_USE_STATIC_LIBRARIES=True
+        - CMAKE_GENERATOR="Ninja"
+        - TESTS_TARGET="test"
 
 env:
   global:
