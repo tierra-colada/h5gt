@@ -35,7 +35,11 @@ option(H5GT_PARALLEL_HDF5 "Enable Parallel HDF5 support" OFF)
 option(H5GT_BUILD_h5gtpy "Build python wrapper (make sure to disable HDF5_USE_STATIC_LIBRARIES and enable H5GT_USE_EIGEN)" ON)
 option(HDF5_USE_STATIC_LIBRARIES "Use static hdf5 lib" OFF)
 
-set(gtest_force_shared_crt ON CACHE BOOL "Always use msvcrt.dll") # needed for googletest
+if(HDF5_USE_STATIC_LIBRARIES)
+  set(gtest_force_shared_crt OFF CACHE BOOL "Always use msvcrt.dll") # needed for googletest
+else()
+  set(gtest_force_shared_crt ON CACHE BOOL "Always use msvcrt.dll") # needed for googletest
+endif();
 
 find_package(HDF5 REQUIRED)
 
