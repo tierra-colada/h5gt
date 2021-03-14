@@ -132,14 +132,14 @@ before_install:
       mamba install -c conda-forge xtl xsimd xtensor libopencv opencv hdf5 ninja;
     fi
 
-  - if [[ "$CMAKE_GENERATOR" == "Visual Studio 16 2019" ]]
+  - if [[ "$CMAKE_GENERATOR" == "Visual Studio 16 2019" ]]; then 
       choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64";
       choco install dotnetcore-sdk;
       dotnet restore
-      export PATH=$MSBUILD_PATH:$PATH
-      MSBuild.exe -p:Configuration=Release -p:Platform=x64 CppProject/CppProject.vcxproj
-      dotnet build --configuration Release
-      dotnet test DotNetProject.Tests/bin/Release/netcoreapp3.1/DotNetProject.Tests.dll
+      export PATH=$MSBUILD_PATH:$PATH;
+      MSBuild.exe -p:Configuration=Release -p:Platform=x64 CppProject/CppProject.vcxproj;
+      dotnet build --configuration Release;
+      dotnet test DotNetProject.Tests/bin/Release/netcoreapp3.1/DotNetProject.Tests.dll;
     fi
 
 before_script:
