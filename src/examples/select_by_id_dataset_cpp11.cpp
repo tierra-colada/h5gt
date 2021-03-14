@@ -29,9 +29,7 @@ int main(void) {
     {
       // We have a set of string
       std::vector<std::string> values = {
-        "Cat", "Dog",  "Hello", "Tree", "World",     "Plane",
-        ", ",  "你好", "Tea",   "Moon", "صباح جميل", "Spaceship",
-      };
+        "Cat", "Dog",  "Hello", "Tree", "World", "Plane"};
 
       // let's create a dataset
       DataSet dataset = file.createDataSet<std::string>(
@@ -47,7 +45,7 @@ int main(void) {
       // now let's read back by cherry pick our interesting string
       std::vector<std::string> result;
       // we select only element N° 2 and 5
-      dataset.select(ElementSet({2, 4, 6, 7, 6, 10})).read(result);
+      dataset.select(ElementSet({2, 4})).read(result);
 
       // and display it
       for (auto i : result) {

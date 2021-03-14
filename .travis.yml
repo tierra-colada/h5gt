@@ -15,6 +15,7 @@ matrix:
         - H5GT_PARALLEL_HDF5=True
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
+        - CMAKE_GENERATOR="Ninja"
       addons:
         apt:
           packages:
@@ -34,6 +35,7 @@ matrix:
         - H5GT_PARALLEL_HDF5=True
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
+        - CMAKE_GENERATOR="Ninja"
       addons:
         apt:
           packages:
@@ -53,6 +55,7 @@ matrix:
         - H5GT_PARALLEL_HDF5=True
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
+        - CMAKE_GENERATOR="Ninja"
       addons:
         apt:
           packages:
@@ -60,7 +63,7 @@ matrix:
             - ninja-build
 
     - os: windows
-      compiler: gcc
+      # compiler: gcc
       env:
         - H5GT_USE_EIGEN=True
         - H5GT_USE_XTENSOR=True
@@ -70,9 +73,10 @@ matrix:
         - H5GT_PARALLEL_HDF5=False
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
+        - CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
 
     - os: windows
-      compiler: clang
+      # compiler: clang
       env:
         - H5GT_USE_EIGEN=True
         - H5GT_USE_XTENSOR=True
@@ -81,7 +85,7 @@ matrix:
         - H5GT_EXAMPLES=True
         - H5GT_PARALLEL_HDF5=False
         - H5GT_BUILD_h5gtpy=True
-        - HDF5_USE_STATIC_LIBRARIES=False
+        - CMAKE_GENERATOR="Visual Studio 16 2019 Win64"
 
     - os: osx
       osx_image: xcode12.2
@@ -105,7 +109,6 @@ before_install:
   - export PATH=$EIGEN3_ROOT:$PATH
 
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 
-      export CMAKE_GENERATOR="Visual Studio 15 2017 Win64";
       export TESTS_TARGET="RUN_TESTS";
       choco install --yes miniconda3;
       source C:/Tools/miniconda3/Scripts/activate;
@@ -114,7 +117,6 @@ before_install:
       conda install -c conda-forge mamba;
       mamba install -c conda-forge xtl xsimd xtensor libopencv opencv hdf5;
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
-      export CMAKE_GENERATOR="Ninja";
       export TESTS_TARGET="test";
       wget "http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh" -O miniconda.sh;
       bash miniconda.sh -b -p $HOME/miniconda;
@@ -125,7 +127,6 @@ before_install:
       conda install -c conda-forge mamba;
       mamba install -c conda-forge xtl xsimd xtensor libopencv opencv hdf5 ninja;
     elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
-      export CMAKE_GENERATOR="Ninja";
       export TESTS_TARGET="test";
     fi
 
