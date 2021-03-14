@@ -89,7 +89,7 @@ matrix:
         - H5GT_EXAMPLES=True
         - H5GT_PARALLEL_HDF5=False
         - H5GT_BUILD_h5gtpy=True
-        - CMAKE_GENERATOR="Visual Studio 16 2019"
+        - CMAKE_GENERATOR="Ninja"
         - TESTS_TARGET="RUN_TESTS"
 
     - os: osx
@@ -116,7 +116,6 @@ before_install:
   - export PATH=$EIGEN3_ROOT:$PATH
 
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 
-      export TESTS_TARGET="RUN_TESTS";
       choco install --yes miniconda3;
       source C:/Tools/miniconda3/Scripts/activate;
       conda config --set always_yes yes --set changeps1 no;
@@ -124,7 +123,6 @@ before_install:
       conda install -c conda-forge mamba;
       mamba install -c conda-forge xtl xsimd xtensor libopencv opencv hdf5;
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
-      export TESTS_TARGET="test";
       wget "http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh" -O miniconda.sh;
       bash miniconda.sh -b -p $HOME/miniconda;
       source $HOME/miniconda/bin/activate;
@@ -133,8 +131,6 @@ before_install:
       conda update -q conda;
       conda install -c conda-forge mamba;
       mamba install -c conda-forge xtl xsimd xtensor libopencv opencv hdf5 ninja;
-    elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
-      export TESTS_TARGET="test";
     fi
 
 before_script:
