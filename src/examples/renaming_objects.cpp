@@ -9,13 +9,13 @@ using namespace h5gt;
 int main(void)
 {
   /* We are going to create group in root directory then add
-     * dataset to this group and attach attribute to the dataset.
-     * Then we are trying to get path to the root, group dataset
-     * and the name of the dataset.
-     * Secondly we will move dataset with attached attribute to
-     * some destination path.
-     * To check if dataset object is still valid, we create a
-     * second attribute */
+   * dataset to this group and attach attribute to the dataset.
+   * Then we are trying to get path to the root, group dataset
+   * and the name of the dataset.
+   * Secondly we will move dataset with attached attribute to
+   * some destination path.
+   * To check if dataset object is still valid, we create a
+   * second attribute */
 
   // Create a new file using the default property lists.
   File file("names.h5", File::ReadWrite | File::Create | File::Truncate);

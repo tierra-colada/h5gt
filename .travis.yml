@@ -69,7 +69,7 @@ matrix:
       env:
         - H5GT_USE_EIGEN=True
         - H5GT_USE_XTENSOR=True
-        - H5GT_USE_OPENCV=True
+        - H5GT_USE_OPENCV=False
         - H5GT_BUILD_TESTS=True
         - H5GT_EXAMPLES=True
         - H5GT_PARALLEL_HDF5=False
@@ -82,7 +82,7 @@ matrix:
       env:
         - H5GT_USE_EIGEN=True
         - H5GT_USE_XTENSOR=True
-        - H5GT_USE_OPENCV=True
+        - H5GT_USE_OPENCV=False
         - H5GT_BUILD_TESTS=True
         - H5GT_EXAMPLES=True
         - H5GT_PARALLEL_HDF5=False
@@ -97,7 +97,7 @@ matrix:
       env:
         - H5GT_USE_EIGEN=False
         - H5GT_USE_XTENSOR=True
-        - H5GT_USE_OPENCV=True
+        - H5GT_USE_OPENCV=False
         - H5GT_BUILD_TESTS=True
         - H5GT_EXAMPLES=True
         - H5GT_PARALLEL_HDF5=False
@@ -120,7 +120,7 @@ before_install:
       conda config --set always_yes yes --set changeps1 no;
       conda update -q conda;
       conda install -c conda-forge mamba;
-      mamba install -c conda-forge xtl xsimd xtensor libopencv opencv zlib hdf5;
+      mamba install -c conda-forge xtl xsimd xtensor zlib hdf5;
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
       wget "http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh" -O miniconda.sh;
       bash miniconda.sh -b -p $HOME/miniconda;
@@ -129,7 +129,7 @@ before_install:
       conda config --set always_yes yes --set changeps1 no;
       conda update -q conda;
       conda install -c conda-forge mamba;
-      mamba install -c conda-forge xtl xsimd xtensor libopencv opencv zlib hdf5 ninja;
+      mamba install -c conda-forge xtl xsimd xtensor zlib hdf5 ninja;
     fi
 
 before_script:
