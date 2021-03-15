@@ -33,8 +33,7 @@ option(HDF5_USE_STATIC_LIBRARIES "Use static hdf5 lib" OFF)
 
 set(gtest_force_shared_crt ON CACHE BOOL "Prevent overriding the parent project's compiler/linker settings on Windows")
 
-include("cmake/include_files.cmake")
-add_library(h5gt INTERFACE "${include_files}")
+add_library(h5gt INTERFACE)
 target_include_directories(h5gt INTERFACE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
