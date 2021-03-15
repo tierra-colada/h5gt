@@ -1,3 +1,6 @@
+project(h5gt_examples VERSION ${COMMON_PROJECT_VERSION} LANGUAGES C CXX)
+message("project: h5gt_examples")
+
 include_directories(${HDF5_INCLUDE_DIRS})
 
 function(compile_example exemple_source)

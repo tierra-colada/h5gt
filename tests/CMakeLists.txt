@@ -1,3 +1,6 @@
+project(h5gt_tests VERSION ${COMMON_PROJECT_VERSION} LANGUAGES C CXX)
+message("project: h5gt_tests")
+
 include(FetchContent)
 FetchContent_Declare(
   googletest

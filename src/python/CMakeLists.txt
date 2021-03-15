@@ -1,3 +1,6 @@
+project(h5gtpy VERSION ${COMMON_PROJECT_VERSION} LANGUAGES C CXX)
+message("project: h5gtpy")
+
 include(FetchContent)
 FetchContent_Declare(
   pybind11

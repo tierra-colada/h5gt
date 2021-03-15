@@ -9,7 +9,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 cmake_policy(SET CMP0074 NEW)
 cmake_policy(SET CMP0077 NEW)
 
-project(h5gt VERSION 0.1.0 LANGUAGES C CXX)
+set(COMMON_PROJECT_VERSION 0.1.0)
+project(h5gt VERSION ${COMMON_PROJECT_VERSION} LANGUAGES C CXX)
+message("project: h5gt")
 
 if(CMAKE_CXX_COMPILER_IS_ICC)
   # ICC gets mad if we shorten "int"s
