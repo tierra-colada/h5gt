@@ -100,7 +100,7 @@ AnnotateTraits<Derivate>::listAttributeNames() const {
 
   if (H5Aiterate2(static_cast<const Derivate*>(this)->getId(false), H5_INDEX_NAME,
                   H5_ITER_INC, NULL,
-                  &details::internal_high_five_iterate<H5A_info_t>,
+                  &details::internal_h5gt_iterate<H5A_info_t>,
                   static_cast<void*>(&iterateData)) < 0) {
     HDF5ErrMapper::ToException<AttributeException>(
           std::string("Unable to list attributes in group"));

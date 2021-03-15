@@ -194,7 +194,7 @@ inline std::vector<std::string> NodeTraits<Derivate>::listObjectNames() const {
 
   if (H5Literate(static_cast<const Derivate*>(this)->getId(false), H5_INDEX_NAME,
                  H5_ITER_INC, NULL,
-                 &details::internal_high_five_iterate<H5L_info_t>,
+                 &details::internal_h5gt_iterate<H5L_info_t>,
                  static_cast<void*>(&iterateData)) < 0) {
     HDF5ErrMapper::ToException<GroupException>(
           std::string("Unable to list objects in group"));

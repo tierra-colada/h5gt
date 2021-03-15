@@ -18,7 +18,7 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <h5gt/H5File.hpp>
 
-using namespace HighFive;
+using namespace h5gt;
 
 const std::string FILE_NAME("boost_ublas_double.h5");
 const std::string DATASET_NAME("dset");

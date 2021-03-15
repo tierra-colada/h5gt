@@ -13,13 +13,13 @@ endif()
 option(USE_BUNDLED_HIGHFIVE "Use h5gt from deps folder. Otherwise must be installed" ON)
 
 if(USE_BUNDLED_HIGHFIVE)
-    add_subdirectory("deps/HighFive" EXCLUDE_FROM_ALL)
+    add_subdirectory("deps/h5gt" EXCLUDE_FROM_ALL)
 else()
-    find_package(HighFive REQUIRED)
+    find_package(h5gt REQUIRED)
 endif()
 
 add_executable(read_write_bin "read_write_vector_dataset.cpp")
-target_link_libraries(read_write_bin HighFive)
+target_link_libraries(read_write_bin h5gt)
 
 enable_testing()
 add_test(NAME test_project COMMAND ${CMAKE_CURRENT_BINARY_DIR}/read_write_bin)

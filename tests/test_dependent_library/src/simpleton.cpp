@@ -2,7 +2,7 @@
 
 #include "simpleton.hpp"
 
-void function(const HighFive::Object& obj) {
+void function(const h5gt::Object& obj) {
     if (!obj.isValid()) {
         throw std::exception();
     }

@@ -13,9 +13,9 @@ endif()
 option(USE_BUNDLED_HIGHFIVE "Use h5gt from deps folder. Otherwise must be installed" ON)
 
 if(USE_BUNDLED_HIGHFIVE)
-    add_subdirectory("deps/HighFive" EXCLUDE_FROM_ALL)
+    add_subdirectory("deps/h5gt" EXCLUDE_FROM_ALL)
 else()
-    find_package(HighFive REQUIRED)
+    find_package(h5gt REQUIRED)
 endif()
 
 add_library(simpleton SHARED "src/simpleton.cpp" "src/otherton.cpp")
@@ -23,7 +23,7 @@ target_include_directories(simpleton
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
-target_link_libraries(simpleton PUBLIC HighFive)
+target_link_libraries(simpleton PUBLIC h5gt)
 set_property(TARGET simpleton PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 add_library(otherton STATIC "src/simpleton.cpp" "src/otherton.cpp")
@@ -31,7 +31,7 @@ target_include_directories(otherton
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
-target_link_libraries(otherton PUBLIC HighFive)
+target_link_libraries(otherton PUBLIC h5gt)
 set_property(TARGET otherton PROPERTY POSITION_INDEPENDENT_CODE OFF)
 
 install(

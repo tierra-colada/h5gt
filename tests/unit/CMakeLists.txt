@@ -1,13 +1,13 @@
 set(src_files_test
   main.cxx
-  tests_high_five.hpp
-  tests_high_five_base.cpp
-  tests_high_five_easy.cpp
-  tests_high_five_multi_dims.cpp
+  tests_h5gt.hpp
+  tests_h5gt_base.cpp
+  tests_h5gt_easy.cpp
+  tests_h5gt_multi_dims.cpp
   )
 
 if(H5GT_PARALLEL_HDF5)
-  list(APPEND src_files_test tests_high_five_parallel.cpp)
+  list(APPEND src_files_test tests_h5gt_parallel.cpp)
 endif()
 
 add_executable(H5GTTest

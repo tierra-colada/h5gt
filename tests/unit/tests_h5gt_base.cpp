@@ -28,7 +28,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include "tests_high_five.hpp"
+#include "tests_h5gt.hpp"
 
 using namespace h5gt;
 

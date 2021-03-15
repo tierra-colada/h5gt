@@ -24,8 +24,8 @@ int main() {
     std::fill_n(multi_array.origin(), multi_array.num_elements(), 1.0);
     multi_array[1][1][0][0] = complex_t{1.1, 1.2};
 
-    HighFive::File file("multi_array_complex.h5", HighFive::File::Truncate);
+    h5gt::File file("multi_array_complex.h5", h5gt::File::Truncate);
 
-    HighFive::DataSet dataset = file.createDataSet("multi_array", multi_array);
+    h5gt::DataSet dataset = file.createDataSet("multi_array", multi_array);
     return 0;
 }

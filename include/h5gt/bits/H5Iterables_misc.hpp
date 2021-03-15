@@ -36,7 +36,7 @@ struct H5GTIterateData {
 };
 
 template <typename InfoType>
-inline herr_t internal_high_five_iterate(
+inline herr_t internal_h5gt_iterate(
     hid_t /*id*/, const char* name, const InfoType* /*info*/, void* op_data) {
   auto* data = static_cast<H5GTIterateData*>(op_data);
   try {
