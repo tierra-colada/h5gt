@@ -26,6 +26,7 @@ add_test(
   COMMAND H5GTTest
   )
 
+# Single include testing
 file(GLOB public_headers LIST_DIRECTORIES false RELATIVE ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/include/h5gt/*.hpp)
 foreach(PUBLIC_HEADER ${public_headers})
   get_filename_component(CLASS_NAME ${PUBLIC_HEADER} NAME_WE)

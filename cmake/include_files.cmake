@@ -1,4 +1,4 @@
-set(files
+set(include_files
   ${CMAKE_CURRENT_SOURCE_DIR}/include/h5gt/H5Attribute.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/h5gt/H5DataSet.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/h5gt/H5DataSpace.hpp
@@ -46,7 +46,3 @@ set(files
   ${CMAKE_CURRENT_SOURCE_DIR}/include/h5gt/h5easy_bits/H5Easy_vector.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/h5gt/h5easy_bits/H5Easy_xtensor.hpp
   )
-
-foreach(file ${files})
-  list(APPEND include_files ${file})
-endforeach()
