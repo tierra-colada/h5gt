@@ -1,5 +1,5 @@
 project(h5gt_examples VERSION ${COMMON_PROJECT_VERSION} LANGUAGES C CXX)
-message("project: h5gt_examples")
+message("project: ${PROJECT_NAME}")
 
 include_directories(${HDF5_INCLUDE_DIRS})
 

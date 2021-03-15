@@ -1,5 +1,5 @@
 project(h5gtpy VERSION ${COMMON_PROJECT_VERSION} LANGUAGES C CXX)
-message("project: h5gtpy")
+message("project: ${PROJECT_NAME}")
 
 include(FetchContent)
 FetchContent_Declare(

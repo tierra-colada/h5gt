@@ -1,5 +1,5 @@
 project(h5gt_tests VERSION ${COMMON_PROJECT_VERSION} LANGUAGES C CXX)
-message("project: h5gt_tests")
+message("project: ${PROJECT_NAME}")
 
 include(FetchContent)
 FetchContent_Declare(
