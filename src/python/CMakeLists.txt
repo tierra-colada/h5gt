@@ -11,8 +11,7 @@ if(NOT pybind11_POPULATED)
   add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR} EXCLUDE_FROM_ALL)  # we need to exclude pybind11 from installation
 endif()
 
-include("${CMAKE_SOURCE_DIR}/cmake/include_files.cmake")
-pybind11_add_module(h5gtpy ${include_files} h5gtpy.cpp)
+pybind11_add_module(h5gtpy h5gtpy.cpp)
 target_link_directories(h5gtpy PRIVATE pybind11)
 install(TARGETS h5gtpy DESTINATION lib EXPORT h5gt-targets)
 
