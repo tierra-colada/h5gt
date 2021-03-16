@@ -72,7 +72,7 @@ public:
     return T;
   }
 
-  hid_t getId(const bool& increaseRefCount) const {
+  hid_t getId(const bool& increaseRefCount = false) const {
     if (increaseRefCount)
       H5Iinc_ref(_hid);
 

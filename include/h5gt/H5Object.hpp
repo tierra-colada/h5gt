@@ -70,7 +70,7 @@ public:
   /// \return internal HDF5 id to the object
   ///  provided for C API compatibility
   ///
-  hid_t getId(const bool& increaseRefCount) const noexcept;
+  hid_t getId(const bool& increaseRefCount = false) const noexcept;
 
   ///
   /// \brief getFileId return file's ID the object belong to
@@ -81,7 +81,7 @@ public:
   /// while file is closed
   /// \return
   ///
-  hid_t getFileId(const bool& increaseRefCount) const;
+  hid_t getFileId(const bool& increaseRefCount = false) const;
   std::string getFileName() const;
 
   ///
@@ -126,6 +126,7 @@ protected:
   LinkInfo getLinkInfo() const;
 
   Object& operator=(const Object& other);
+//  bool operator==(const Object& other);
 
   hid_t _hid;
 
@@ -149,25 +150,30 @@ private:
 class ObjectInfo  {
 public:
   /// \brief Retrieve the address of the object (within its file)
-  H5_DEPRECATED("Deprecated since h5gt 2.2. Soon supporting VOL tokens")
+#if (H5Oget_info_vers < 3)
   haddr_t getAddress() const noexcept;
+#else
+  /// \brief Non-zero tokens only for Group, DataSet and DataType
+  H5O_token_t getHardLinkToken() const noexcept;
+#endif
+
+  unsigned long  getFileNumber() const noexcept;
 
   /// \brief Retrieve the number of references to this object
   size_t getHardLinkRefCount() const noexcept;
 
-  /// \brief Retrieve the object's creation time
-  time_t getCreationTime() const noexcept;
-
-  /// \brief Retrieve the object's last modification time
+  time_t getAccessTime() const noexcept;
   time_t getModificationTime() const noexcept;
+  time_t getChangeTime() const noexcept;
+  time_t getCreationTime() const noexcept;
+  hsize_t getNumAttr() const noexcept;
 
 protected:
 
 #if (H5Oget_info_vers < 3)
   H5O_info_t raw_info;
 #else
-  // Use compat H5O_info1_t while getAddress() is supported (deprecated)
-  H5O_info1_t raw_info;
+  H5O_info2_t raw_info;
 #endif
 
   friend class Object;

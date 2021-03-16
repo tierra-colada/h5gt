@@ -426,14 +426,14 @@ TEST(H5GTBase, DataTypeEqualSimple) {
   AtomicType<unsigned> uint_var;
 
   // check different type matching
-  ASSERT_TRUE(d_var == d_var_test);
-  ASSERT_TRUE(d_var != size_var);
+  ASSERT_TRUE(d_var.isTypeEqual(d_var_test));
+  ASSERT_FALSE(d_var.isTypeEqual(size_var));
 
   // check type copy matching
-  ASSERT_TRUE(size_var_cpy == size_var);
+  ASSERT_TRUE(size_var_cpy.isTypeEqual(size_var));
 
   // check sign change not matching
-  ASSERT_TRUE(int_var != uint_var);
+  ASSERT_FALSE(int_var.isTypeEqual(uint_var));
 }
 
 TEST(H5GTBase, DataTypeEqualTakeBack) {
@@ -454,12 +454,8 @@ TEST(H5GTBase, DataTypeEqualTakeBack) {
   AtomicType<size_t> s;
   AtomicType<double> d;
 
-  ASSERT_TRUE(s == dataset.getDataType());
-  ASSERT_TRUE(d != dataset.getDataType());
-
-  // Test getAddress and expect deprecation warning
-  auto addr = dataset.getObjectInfo().getAddress();
-  ASSERT_TRUE(addr != 0);
+  ASSERT_TRUE(s.isTypeEqual(dataset.getDataType()));
+  ASSERT_FALSE(d.isTypeEqual(dataset.getDataType()));
 }
 
 TEST(H5GTBase, DataSpaceTest) {
@@ -1222,6 +1218,32 @@ TEST(H5GTBase, Refresh) {
   File file("getFileName.h5", File::ReadWrite | File::Create | File::Truncate);
   DataSet dset = file.createDataSet<double>("data", DataSpace(1));
   ASSERT_TRUE(dset.refresh());
+}
+
+TEST(H5GTBase, EqualityOperator) {
+  File file1("equality_operator_1.h5", File::ReadWrite | File::Create | File::Truncate);
+  File file2("equality_operator_2.h5", File::ReadWrite | File::Create | File::Truncate);
+
+  ASSERT_TRUE(file1 == file1);
+  ASSERT_FALSE(file1 == file2);
+
+  Group group11 = file1.createGroup("group_1");
+  Group group12 = file1.createGroup("group_2");
+  Group group21 = file2.createGroup("group_1");
+  Group group22 = file2.createGroup("group_2");
+
+  ASSERT_TRUE(group11 == group11);
+  ASSERT_FALSE(group11 == group12);
+  ASSERT_FALSE(group11 == group21);
+
+  DataSet dset11 = file1.createDataSet<int>("data_1", DataSpace(1));
+  DataSet dset12 = file1.createDataSet<int>("data_2", DataSpace(1));
+  DataSet dset21 = file2.createDataSet<int>("data_1", DataSpace(1));
+  DataSet dset22 = file2.createDataSet<int>("data_2", DataSpace(1));
+
+  ASSERT_TRUE(dset11 == dset11);
+  ASSERT_FALSE(dset11 == dset12);
+  ASSERT_FALSE(dset11 == dset21);
 }
 
 TEST(H5GTBase, CheckIdFunctionality) {

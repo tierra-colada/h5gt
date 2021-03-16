@@ -56,7 +56,39 @@ public:
     return getPath();
   }
 
-  static Group FromId(const hid_t& id, const bool& increaseRefCount){
+  /// \brief operator == Check if objects reside in the same file and equal to each other
+  /// \param other
+  /// \return
+  bool operator==(const Group& other) const {
+    ObjectInfo leftOInfo = getObjectInfo();
+    ObjectInfo rightOInfo = other.getObjectInfo();
+
+    if (leftOInfo.getFileNumber() != rightOInfo.getFileNumber() ||
+        leftOInfo.getFileNumber() == 0 ||
+        rightOInfo.getFileNumber() == 0)
+      return false;
+
+  #if (H5Oget_info_vers < 3)
+    return getAddress() == other.getAddress();
+  #else
+    int tokenCMP;
+    H5O_token_t leftToken = leftOInfo.getHardLinkToken();
+    H5O_token_t rightToken = rightOInfo.getHardLinkToken();
+
+    if (H5Otoken_cmp(getFileId(false), &leftToken, &rightToken, &tokenCMP) < 0){
+      HDF5ErrMapper::ToException<DataSetException>(
+            "Unable compare tokens");
+    }
+
+    return !tokenCMP;
+  #endif
+  }
+
+  bool operator!=(const Group& other) const {
+    return !(*this == other);
+  }
+
+  static Group FromId(const hid_t& id, const bool& increaseRefCount = false){
     Object obj = Object(id, ObjectType::Group, increaseRefCount);
     return Group(obj);
   };

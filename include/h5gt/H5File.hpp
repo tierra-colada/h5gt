@@ -62,16 +62,6 @@ public:
   explicit File(const std::string& filename, unsigned openFlags = ReadOnly,
                 const FileAccessProps& fileAccessProps = FileDriver());
 
-
-//  File createSoftLink(File& target, const std::string& linkName,
-//                      const LinkCreateProps& linkCreateProps = LinkCreateProps(),
-//                      const LinkAccessProps& linkAccessProps = LinkAccessProps());
-
-  ///
-  /// \brief Return the name of the file
-  ///
-//  const std::string getName() const noexcept;
-
   ///
   /// \brief flush
   ///
@@ -79,7 +69,10 @@ public:
   ///
   void flush();
 
-  static File FromId(const hid_t& id, const bool& increaseRefCount){
+  bool operator==(const File& other) const;
+  bool operator!=(const File& other) const;
+
+  static File FromId(const hid_t& id, const bool& increaseRefCount = false){
       Object obj = Object(id, ObjectType::File, increaseRefCount);
       return File(obj);
   };

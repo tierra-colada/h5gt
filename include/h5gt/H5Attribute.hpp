@@ -83,7 +83,7 @@ public:
   template <typename T>
   void write_raw(const T* buffer, const DataType& dtype = DataType());
 
-  static Attribute FromId(const hid_t& id, const bool& increaseRefCount){
+  static Attribute FromId(const hid_t& id, const bool& increaseRefCount = false){
     Object obj = Object(id, ObjectType::Attribute, increaseRefCount);
     return Attribute(obj);
   };

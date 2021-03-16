@@ -118,7 +118,7 @@ public:
   template <std::size_t N, std::size_t Width>
   static DataSpace FromCharArrayStrings(const char(&)[N][Width]);
 
-  static DataSpace FromId(const hid_t& id, const bool& increaseRefCount){
+  static DataSpace FromId(const hid_t& id, const bool& increaseRefCount = false){
     Object obj = Object(id, ObjectType::DataSpace, increaseRefCount);
     return DataSpace(obj);
   };

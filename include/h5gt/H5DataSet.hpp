@@ -100,7 +100,13 @@ public:
     return getSpace().getElementCount();
   }
 
-  static DataSet FromId(const hid_t& id, const bool& increaseRefCount){
+  /// \brief operator == Check if objects reside in the same file and equal to each other
+  /// \param other
+  /// \return
+  bool operator==(const DataSet& other) const;
+  bool operator!=(const DataSet& other) const;
+
+  static DataSet FromId(const hid_t& id, const bool& increaseRefCount = false){
       Object obj = Object(id, ObjectType::Dataset, increaseRefCount);
       return DataSet(obj);
   };

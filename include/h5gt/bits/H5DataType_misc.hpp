@@ -37,12 +37,8 @@ inline size_t DataType::getSize() const {
   return H5Tget_size(_hid);
 }
 
-inline bool DataType::operator==(const DataType& other) const {
+inline bool DataType::isTypeEqual(const DataType& other) const {
   return (H5Tequal(_hid, other._hid) > 0);
-}
-
-inline bool DataType::operator!=(const DataType& other) const {
-  return !(*this == other);
 }
 
 inline bool DataType::isVariableStr() const {
@@ -60,6 +56,35 @@ inline bool DataType::isFixedLenStr() const {
 
 inline bool DataType::isReference() const {
   return H5Tequal(_hid, H5T_STD_REF_OBJ) > 0;
+}
+
+inline bool DataType::operator==(const DataType& other) const {
+  ObjectInfo leftOInfo = getObjectInfo();
+  ObjectInfo rightOInfo = other.getObjectInfo();
+
+  if (leftOInfo.getFileNumber() != rightOInfo.getFileNumber() ||
+      leftOInfo.getFileNumber() == 0 ||
+      rightOInfo.getFileNumber() == 0)
+    return false;
+
+#if (H5Oget_info_vers < 3)
+  return getAddress() == other.getAddress();
+#else
+  int tokenCMP;
+  H5O_token_t leftToken = leftOInfo.getHardLinkToken();
+  H5O_token_t rightToken = rightOInfo.getHardLinkToken();
+
+  if (H5Otoken_cmp(getFileId(false), &leftToken, &rightToken, &tokenCMP) < 0){
+    HDF5ErrMapper::ToException<DataSetException>(
+          "Unable compare tokens");
+  }
+
+  return !tokenCMP;
+#endif
+}
+
+inline bool DataType::operator!=(const DataType& other) const {
+  return !(*this == other);
 }
 
 inline std::string DataType::string() const {

@@ -204,7 +204,11 @@ ObjectInfo_decl(py::module &m){
 }
 
 void ObjectInfo_def(py::class_<ObjectInfo>& py_obj){
+#if (H5Oget_info_vers < 3)
   py_obj.def("getAddress", &ObjectInfo::getAddress)
+#else
+  py_obj.def("getHardLinkToken", &ObjectInfo::getHardLinkToken)
+#endif
       .def("getHardLinkRefCount", &ObjectInfo::getHardLinkRefCount)
       .def("getCreationTime", &ObjectInfo::getCreationTime)
       .def("getModificationTime", &ObjectInfo::getModificationTime);

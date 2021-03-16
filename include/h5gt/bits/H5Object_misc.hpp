@@ -102,6 +102,21 @@ inline Object& Object::operator=(const Object& other) {
   return *this;
 }
 
+//inline bool Object::operator==(const Object& other) {
+//  ObjectType leftOType = getObjectType();
+//  ObjectType rightOType = other.getObjectType();
+
+//  if (leftOType != rightOType)
+//    return false;
+
+//  if (leftOType == ObjectType::Group ||
+//      leftOType == ObjectType::Dataset ||
+//      leftOType == ObjectType::UserDataType){
+//    if (H5Otoken_cmp(file, &oi_dset.token, &oi_hard1.token, &token_cmp1) < 0)
+//  }
+
+//}
+
 inline Object::~Object() {
   if (isValid() && H5Idec_ref(_hid) < 0) {
     std::cerr << "h5gt::~Object: reference counter decrease failure"
@@ -169,7 +184,7 @@ inline ObjectInfo Object::getObjectInfo() const {
 #if (H5Oget_info_vers < 3)
   if (H5Oget_info(_hid, &info.raw_info) < 0) {
 #else
-  if (H5Oget_info1(_hid, &info.raw_info) < 0) {
+  if (H5Oget_info3(_hid, &info.raw_info, H5O_INFO_ALL) < 0) {
 #endif
     HDF5ErrMapper::ToException<ObjectException>("Unable to obtain info for object");
   }
@@ -188,18 +203,39 @@ inline LinkInfo Object::getLinkInfo() const {
   return info;
 }
 
+#if (H5Lget_info_vers < 2)
 inline haddr_t ObjectInfo::getAddress() const noexcept {
   return raw_info.addr;
 }
+#else
+inline H5O_token_t ObjectInfo::getHardLinkToken() const noexcept{
+  return raw_info.token;
+}
+#endif
+
+inline unsigned long ObjectInfo::getFileNumber() const noexcept {
+  return raw_info.fileno;
+}
+
 inline size_t ObjectInfo::getHardLinkRefCount() const noexcept {
   return raw_info.rc;
 }
-inline time_t ObjectInfo::getCreationTime() const noexcept {
-  return raw_info.btime;
+inline time_t ObjectInfo::getAccessTime() const noexcept {
+  return raw_info.atime;
 }
 inline time_t ObjectInfo::getModificationTime() const noexcept {
   return raw_info.mtime;
 }
+inline time_t ObjectInfo::getChangeTime() const noexcept {
+  return raw_info.ctime;
+}
+inline time_t ObjectInfo::getCreationTime() const noexcept {
+  return raw_info.btime;
+}
+inline hsize_t ObjectInfo::getNumAttr() const noexcept {
+  return raw_info.num_attrs;
+}
+
 
 inline LinkType LinkInfo::getLinkType() const noexcept{
   return _convert_link_type(link_info.type);

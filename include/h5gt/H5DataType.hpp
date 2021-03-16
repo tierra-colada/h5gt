@@ -43,9 +43,10 @@ class DataType : public Object {
 public:
   DataType(){};
 
-  bool operator==(const DataType& other) const;
-
-  bool operator!=(const DataType& other) const;
+  /// \brief isTypeEqual Unlike `==` operator this only checks if
+  /// the data types are equal and do not check if they belong
+  /// to the same h5 file
+  bool isTypeEqual(const DataType& other) const;
 
   ///
   /// \brief Return the fundamental type.
@@ -84,7 +85,13 @@ public:
   /// \brief Returns whether the type is a Reference
   bool isReference() const;
 
-  static DataType FromId(const hid_t& id, const bool& increaseRefCount){
+  /// \brief operator == Check if objects reside in the same file and equal to each other
+  /// \param other
+  /// \return
+  bool operator==(const DataType& other) const;
+  bool operator!=(const DataType& other) const;
+
+  static DataType FromId(const hid_t& id, const bool& increaseRefCount = false){
     Object obj = Object(id, ObjectType::UserDataType, increaseRefCount);
     return DataType(obj);
   };
@@ -113,7 +120,7 @@ public:
 
   typedef T basic_type;
 
-  static AtomicType FromId(const hid_t& id, const bool& increaseRefCount){
+  static AtomicType FromId(const hid_t& id, const bool& increaseRefCount = false){
     DataType obj = DataType::FromId(id, increaseRefCount);
     return AtomicType(obj);
   };
@@ -170,7 +177,7 @@ public:
     return members;
   }
 
-  static CompoundType FromId(const hid_t& id, const bool& increaseRefCount){
+  static CompoundType FromId(const hid_t& id, const bool& increaseRefCount = false){
     DataType obj = DataType::FromId(id, increaseRefCount);
     return CompoundType(obj);
   };
@@ -238,7 +245,7 @@ public:
   /// \param name Name to give the datatype
   void commit(const Object& object, const std::string& name) const;
 
-  static EnumType FromId(const hid_t& id, const bool& increaseRefCount){
+  static EnumType FromId(const hid_t& id, const bool& increaseRefCount = false){
     DataType obj = DataType::FromId(id, increaseRefCount);
     return EnumType(obj);
   };

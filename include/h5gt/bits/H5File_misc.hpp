@@ -83,6 +83,26 @@ inline void File::flush() {
   }
 }
 
+inline bool File::operator==(const File& other) const {
+  unsigned long file_no_left, file_no_right;
+
+  if (H5Fget_fileno(_hid, &file_no_left) < 0){
+    HDF5ErrMapper::ToException<FileException>(
+          std::string("Unable to get file number for " + getFileName()));
+  }
+
+  if (H5Fget_fileno(other.getId(false), &file_no_right) < 0){
+    HDF5ErrMapper::ToException<FileException>(
+          std::string("Unable to get file number for " + other.getFileName()));
+  }
+
+  return file_no_left == file_no_right;
+}
+
+inline bool File::operator!=(const File& other) const {
+  return !(*this == other);
+}
+
 }  // namespace h5gt
 
 #endif  // H5FILE_MISC_HPP
