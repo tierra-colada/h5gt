@@ -147,7 +147,7 @@ private:
 ///
 /// \brief A class for accessing hdf5 objects info
 ///
-class ObjectInfo  {
+class ObjectInfo {
 public:
   /// \brief Retrieve the address of the object (within its file)
 #if (H5Oget_info_vers < 3)

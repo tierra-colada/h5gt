@@ -68,7 +68,7 @@ inline bool DataType::operator==(const DataType& other) const {
     return false;
 
 #if (H5Oget_info_vers < 3)
-  return getAddress() == other.getAddress();
+  return getObjectInfo().getAddress() == other.getObjectInfo().getAddress();
 #else
   int tokenCMP;
   H5O_token_t leftToken = leftOInfo.getHardLinkToken();
