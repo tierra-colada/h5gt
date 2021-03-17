@@ -84,19 +84,22 @@ inline void File::flush() {
 }
 
 inline bool File::operator==(const File& other) const {
-  unsigned long file_no_left, file_no_right;
+#if (H5_VERS_MAJOR >= 1 && H5_VERS_MINOR >= 12)
+  unsigned long fileNumLeft, fileNumRight;
 
-  if (H5Fget_fileno(_hid, &file_no_left) < 0){
+  if (H5Fget_fileno(_hid, &fileNumLeft) < 0){
     HDF5ErrMapper::ToException<FileException>(
           std::string("Unable to get file number for " + getFileName()));
   }
 
-  if (H5Fget_fileno(other.getId(false), &file_no_right) < 0){
+  if (H5Fget_fileno(other.getId(false), &fileNumRight) < 0){
     HDF5ErrMapper::ToException<FileException>(
           std::string("Unable to get file number for " + other.getFileName()));
   }
-
-  return file_no_left == file_no_right;
+  return fileNumLeft == fileNumRight;
+#else
+  return getObjectInfo().getFileNumber() != other.getObjectInfo().getFileNumber();
+#endif
 }
 
 inline bool File::operator!=(const File& other) const {
