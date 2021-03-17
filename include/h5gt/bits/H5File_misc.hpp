@@ -98,7 +98,7 @@ inline bool File::operator==(const File& other) const {
   }
   return fileNumLeft == fileNumRight;
 #else
-  return getObjectInfo().getFileNumber() != other.getObjectInfo().getFileNumber();
+  return getObjectInfo().getFileNumber() == other.getObjectInfo().getFileNumber();
 #endif
 }
 
