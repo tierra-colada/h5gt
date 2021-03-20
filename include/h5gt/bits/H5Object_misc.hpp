@@ -102,20 +102,30 @@ inline Object& Object::operator=(const Object& other) {
   return *this;
 }
 
-//inline bool Object::operator==(const Object& other) {
-//  ObjectType leftOType = getObjectType();
-//  ObjectType rightOType = other.getObjectType();
+inline bool Object::operator==(const Object& other) const {
+  ObjectInfo leftOInfo = getObjectInfo();
+  ObjectInfo rightOInfo = other.getObjectInfo();
 
-//  if (leftOType != rightOType)
-//    return false;
+  if (leftOInfo.getFileNumber() != rightOInfo.getFileNumber() ||
+      leftOInfo.getFileNumber() == 0 ||
+      rightOInfo.getFileNumber() == 0)
+    return false;
 
-//  if (leftOType == ObjectType::Group ||
-//      leftOType == ObjectType::Dataset ||
-//      leftOType == ObjectType::UserDataType){
-//    if (H5Otoken_cmp(file, &oi_dset.token, &oi_hard1.token, &token_cmp1) < 0)
-//  }
+#if (H5Oget_info_vers < 3)
+  return getObjectInfo().getAddress() == other.getObjectInfo().getAddress();
+#else
+  int tokenCMP;
+  H5O_token_t leftToken = leftOInfo.getHardLinkToken();
+  H5O_token_t rightToken = rightOInfo.getHardLinkToken();
 
-//}
+  if (H5Otoken_cmp(getFileId(false), &leftToken, &rightToken, &tokenCMP) < 0){
+    HDF5ErrMapper::ToException<DataSetException>(
+          "Unable compare tokens");
+  }
+
+  return !tokenCMP;
+#endif
+}
 
 inline Object::~Object() {
   if (isValid() && H5Idec_ref(_hid) < 0) {

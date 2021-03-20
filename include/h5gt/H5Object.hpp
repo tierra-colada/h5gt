@@ -126,7 +126,7 @@ protected:
   LinkInfo getLinkInfo() const;
 
   Object& operator=(const Object& other);
-//  bool operator==(const Object& other);
+  bool operator==(const Object& other) const;
 
   hid_t _hid;
 

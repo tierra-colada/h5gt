@@ -60,28 +60,7 @@ public:
   /// \param other
   /// \return
   bool operator==(const Group& other) const {
-    ObjectInfo leftOInfo = getObjectInfo();
-    ObjectInfo rightOInfo = other.getObjectInfo();
-
-    if (leftOInfo.getFileNumber() != rightOInfo.getFileNumber() ||
-        leftOInfo.getFileNumber() == 0 ||
-        rightOInfo.getFileNumber() == 0)
-      return false;
-
-  #if (H5Oget_info_vers < 3)
-    return getObjectInfo().getAddress() == other.getObjectInfo().getAddress();
-  #else
-    int tokenCMP;
-    H5O_token_t leftToken = leftOInfo.getHardLinkToken();
-    H5O_token_t rightToken = rightOInfo.getHardLinkToken();
-
-    if (H5Otoken_cmp(getFileId(false), &leftToken, &rightToken, &tokenCMP) < 0){
-      HDF5ErrMapper::ToException<DataSetException>(
-            "Unable compare tokens");
-    }
-
-    return !tokenCMP;
-  #endif
+    return Object::operator==(other);
   }
 
   bool operator!=(const Group& other) const {
