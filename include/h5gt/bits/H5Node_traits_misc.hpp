@@ -284,8 +284,8 @@ inline ObjectType NodeTraits<Derivate>::getObjectType(const std::string& obj_nam
 template <typename Derivate>
 template<typename Node,
          typename std::enable_if<
-           std::is_same<Node, h5gt::File>::value |
-           std::is_same<Node, h5gt::Group>::value>::type*>
+           std::is_same<Node, File>::value |
+           std::is_same<Node, Group>::value>::type*>
 inline Group NodeTraits<Derivate>::createLink(
     const Node& target,
     const std::string& linkName,

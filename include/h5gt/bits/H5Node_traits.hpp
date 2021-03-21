@@ -180,8 +180,8 @@ public:
 
   template<typename Node,
            typename std::enable_if<
-             std::is_same<Node, h5gt::File>::value |
-             std::is_same<Node, h5gt::Group>::value>::type* = nullptr>
+             std::is_same<Node, File>::value |
+             std::is_same<Node, Group>::value>::type* = nullptr>
   Group createLink(
       const Node& target, const std::string& linkName, const LinkType& linkType,
       const LinkCreateProps& linkCreateProps = LinkCreateProps(),
