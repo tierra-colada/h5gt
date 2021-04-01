@@ -1404,6 +1404,22 @@ TEST(H5GTBase, ExternalLink) {
   ASSERT_EQ(val_out, val_in);
 }
 
+TEST(H5GTBase, getParent) {
+  File file("getParent_test.h5", File::ReadWrite | File::Create | File::Truncate);
+  
+  Group group = file.createGroup("/path/to/group");
+  EXPECT_EQ(group.getParent().getPath(), "/path/to");
+  EXPECT_EQ(group.getParent().getParent().getPath(), "/path");
+  EXPECT_EQ(group.getParent().getParent().getParent().getPath(), "/");
+  EXPECT_THROW(group.getParent().getParent().getParent().getParent().getPath(), h5gt::GroupException);
+
+  DataSet dataset = file.createDataSet("/path/to/data", DataSpace(1), AtomicType<int>());
+  EXPECT_EQ(dataset.getParent().getPath(), "/path/to");
+  EXPECT_EQ(dataset.getParent().getParent().getPath(), "/path");
+  EXPECT_EQ(dataset.getParent().getParent().getParent().getPath(), "/");
+  EXPECT_THROW(dataset.getParent().getParent().getParent().getParent().getPath(), h5gt::GroupException);
+}
+
 TEST(H5GTBase, Rename) {
 
   File file("move_test.h5", File::ReadWrite | File::Create | File::Truncate);

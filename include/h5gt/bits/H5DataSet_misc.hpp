@@ -67,6 +67,22 @@ inline std::string DataSet::getTargetPath(
   return getPath();
 }
 
+inline Group DataSet::getParent(const GroupAccessProps& groupAccessProps) const {
+  std::string path = getPath();
+  if (path == "/")
+    HDF5ErrMapper::ToException<DataSetException>(
+      std::string(path + " has no parent"));
+
+  std::string objName;
+  std::string parentPath = details::splitPathToParentAndObj(path, objName);
+  if (parentPath.empty())
+    HDF5ErrMapper::ToException<DataSetException>(
+      std::string(objName + " has no parent"));
+
+  File file = File::FromId(getFileId(true));
+  return file.getGroup(parentPath, groupAccessProps);
+}
+
 inline uint64_t DataSet::getOffset() const {
   uint64_t addr = H5Dget_offset(_hid);
   if (addr == HADDR_UNDEF) {

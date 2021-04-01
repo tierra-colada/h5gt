@@ -74,6 +74,7 @@ public:
   std::string getTargetPath(
       const LinkAccessProps& accessProp = LinkAccessProps()) const;
 
+  Group getParent(const GroupAccessProps& groupAccessProps = GroupAccessProps()) const;
 
   /// \brief Change the size of the dataset
   ///

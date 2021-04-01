@@ -76,6 +76,7 @@ else ()
   # if successful this would set EIGEN3_INCLUDE_DIRS and the rest of
   # the script will work as usual
   find_package(Eigen3 ${Eigen3_FIND_VERSION} NO_MODULE QUIET)
+  message("")
 
   if(NOT EIGEN3_INCLUDE_DIRS)
     find_path(EIGEN3_INCLUDE_DIRS NAMES signature_of_eigen3_matrix_library

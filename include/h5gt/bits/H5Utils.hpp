@@ -295,6 +295,63 @@ inline std::string get_name(T fct) {
   return std::string(bigBuffer.data(), length);
 }
 
+/// \brief splitPathSplit path of type /path///to/where/things/happen//
+/// to output vector {"path", "to", "where", "things", "happen"}.
+/// Path that starts from `/` is treated as absolute
+/// \param path
+/// \return
+inline std::vector<std::string> splitPath(
+    std::string path){
+  std::vector<std::string> results;
+
+  size_t cutAt;
+  while ((cutAt = path.find_first_of('/')) != path.npos){
+    if(cutAt > 0)
+      results.push_back(path.substr (0,cutAt));
+    path = path.substr(cutAt+1);
+  }
+
+  if (path.length () > 0)
+    results.push_back(path);
+
+  return results;
+}
+
+/// \brief splitPathToParentAndObj Return path to parent
+/// and object name. E.g. if `path = /a/s` then it returns
+/// `/a` as path and `s` as object name.
+/// If path is empty or `path = /` then both output path
+/// and object name are empty strings.
+/// \param path
+/// \param objName
+/// \return
+inline std::string splitPathToParentAndObj(
+  const std::string& path, 
+  std::string& objName) {
+  if (path.empty())
+    return std::string();
+
+  std::vector<std::string> pathVec = splitPath(path);
+  if(pathVec.empty()){
+    objName.clear();
+    return std::string();
+  }
+
+  std::string parentPath;
+  if (path[0] == '/')
+    parentPath = '/';
+
+  for (size_t i = 0; i < pathVec.size()-1; i++){
+    if (i < pathVec.size()-2)
+      parentPath += pathVec[i] + '/';
+    else
+      parentPath += pathVec[i];
+  }
+
+  objName = pathVec.back();
+  return parentPath;
+}
+
 }  // namespace details
 }  // namespace h5gt
 

@@ -56,6 +56,21 @@ public:
     return getPath();
   }
 
+  Group getParent(const GroupAccessProps& groupAccessProps = GroupAccessProps()) const {
+    std::string path = getPath();
+    if (path == "/")
+      HDF5ErrMapper::ToException<GroupException>(
+        std::string(path + " has no parent"));
+
+    std::string objName;
+    std::string parentPath = details::splitPathToParentAndObj(path, objName);
+    if (parentPath.empty())
+      HDF5ErrMapper::ToException<GroupException>(
+        std::string(objName + " has no parent"));
+
+    return getGroup(parentPath, groupAccessProps);
+  }
+
   /// \brief operator == Check if objects reside in the same file and equal to each other
   /// \param other
   /// \return
