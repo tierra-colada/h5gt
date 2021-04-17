@@ -111,7 +111,7 @@ env:
   - EIGEN3_ROOT=${TRAVIS_BUILD_DIR}/../eigen
 
 before_install:
-  - git clone --branch 3.4 https://gitlab.com/libeigen/eigen.git $EIGEN3_ROOT
+  - git clone --branch 3.4.0-rc1 https://gitlab.com/libeigen/eigen.git $EIGEN3_ROOT
   - export PATH=$EIGEN3_ROOT:$PATH
 
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 
