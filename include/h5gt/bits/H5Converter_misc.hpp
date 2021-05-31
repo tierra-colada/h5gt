@@ -125,7 +125,10 @@ struct data_converter {
 
     static_assert((std::is_arithmetic<Scalar>::value ||
         std::is_enum<Scalar>::value ||
-        std::is_same<std::string, Scalar>::value),
+        std::is_same<std::vector<const char*>, Scalar>::value ||
+        std::is_same<std::string, Scalar>::value ||
+        std::is_same<std::complex<float>, Scalar>::value ||
+        std::is_same<std::complex<double>, Scalar>::value),
         "supported datatype should be an arithmetic value, a "
                       "std::string or a container/array");
   }

@@ -60,7 +60,7 @@ public:
 
   ///
   /// \brief getMemSpace
-  /// \return same than getSpace for DataSet, compatibility with Selection
+  /// \return same as getSpace for DataSet, compatibility with Selection
   /// class
   ///
   DataSpace getMemSpace() const;

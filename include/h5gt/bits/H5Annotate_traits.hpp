@@ -19,57 +19,57 @@ template <typename Derivate>
 class AnnotateTraits {
 public:
   ///
-  /// \brief create a new attribute with the name attribute_name
-  /// \param attribute_name identifier of the attribute
+  /// \brief create a new attribute with the name attr_name
+  /// \param attr_name identifier of the attribute
   /// \param space Associated \ref DataSpace
   /// \param type
   /// \return the attribute object
   ///
-  Attribute createAttribute(const std::string& attribute_name,
+  Attribute createAttribute(const std::string& attr_name,
                             const DataSpace& space,
                             const DataType& type);
 
   ///
   /// \brief createAttribute create a new attribute on the current dataset with
   /// size specified by space
-  /// \param attribute_name identifier of the attribute
+  /// \param attr_name identifier of the attribute
   /// \param space Associated DataSpace
   /// informations
   /// \return Attribute Object
   template <typename Type>
-  Attribute createAttribute(const std::string& attribute_name,
+  Attribute createAttribute(const std::string& attr_name,
                             const DataSpace& space);
 
   ///
   /// \brief createAttribute create a new attribute on the current dataset and
   /// write to it, inferring the DataSpace from data.
-  /// \param attribute_name identifier of the attribute
+  /// \param attr_name identifier of the attribute
   /// \param data Associated data to write, must support DataSpace::From, see
   /// \ref DataSpace for more information
   /// \return Attribute Object
   ///
   template <typename T>
-  Attribute createAttribute(const std::string& attribute_name,
+  Attribute createAttribute(const std::string& attr_name,
                             const T& data);
 
   ///
   /// \brief deleteAttribute let you delete an attribute by its name.
-  /// \param attribute_name identifier of the attribute
-  void deleteAttribute(const std::string& attribute_name);
+  /// \param attr_name identifier of the attribute
+  void deleteAttribute(const std::string& attr_name);
 
   ///
-  /// \brief open an existing attribute with the name attribute_name
-  /// \param attribute_name identifier of the attribute
+  /// \brief open an existing attribute with the name attr_name
+  /// \param attr_name identifier of the attribute
   /// \return the attribute object
-  Attribute getAttribute(const std::string& attribute_name) const;
+  Attribute getAttribute(const std::string& attr_name) const;
 
   ///
-  /// \brief return the number of attributes of the node / group
+  /// \brief return the number of attributes of the object
   /// \return number of attributes
   size_t getNumberAttributes() const;
 
   ///
-  /// \brief list all attribute name of the node / group
+  /// \brief list all attribute name of the object
   /// \return number of attributes
   std::vector<std::string> listAttributeNames() const;
 

@@ -41,7 +41,8 @@ enum class DataTypeClass {
 ///
 class DataType : public Object {
 public:
-  DataType(){};
+
+  DataType() = default;
 
   /// \brief isTypeEqual Unlike `==` operator this only checks if
   /// the data types are equal and do not check if they belong

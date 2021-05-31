@@ -22,15 +22,15 @@ namespace h5gt {
 
 template <typename Derivate>
 inline Attribute
-AnnotateTraits<Derivate>::createAttribute(const std::string& attribute_name,
+AnnotateTraits<Derivate>::createAttribute(const std::string& attr_name,
                                           const DataSpace& space,
                                           const DataType& dtype) {
   Attribute attribute;
   if ((attribute._hid = H5Acreate2(
-         static_cast<Derivate*>(this)->getId(false), attribute_name.c_str(),
+         static_cast<Derivate*>(this)->getId(false), attr_name.c_str(),
          dtype._hid, space._hid, H5P_DEFAULT, H5P_DEFAULT)) < 0) {
     HDF5ErrMapper::ToException<AttributeException>(
-          std::string("Unable to create the attribute \"") + attribute_name + "\":");
+          std::string("Unable to create the attribute \"") + attr_name + "\":");
   }
   return attribute;
 }
@@ -38,18 +38,18 @@ AnnotateTraits<Derivate>::createAttribute(const std::string& attribute_name,
 template <typename Derivate>
 template <typename Type>
 inline Attribute
-AnnotateTraits<Derivate>::createAttribute(const std::string& attribute_name,
+AnnotateTraits<Derivate>::createAttribute(const std::string& attr_name,
                                           const DataSpace& space) {
-  return createAttribute(attribute_name, space, create_and_check_datatype<Type>());
+  return createAttribute(attr_name, space, create_and_check_datatype<Type>());
 }
 
 template <typename Derivate>
 template <typename T>
 inline Attribute
-AnnotateTraits<Derivate>::createAttribute(const std::string& attribute_name,
+AnnotateTraits<Derivate>::createAttribute(const std::string& attr_name,
                                           const T& data) {
   Attribute att = createAttribute(
-        attribute_name,
+        attr_name,
         DataSpace::From(data),
         create_and_check_datatype<typename details::inspector<T>::base_type>());
   att.write(data);
@@ -58,21 +58,21 @@ AnnotateTraits<Derivate>::createAttribute(const std::string& attribute_name,
 
 template<typename Derivate>
 inline void
-AnnotateTraits<Derivate>::deleteAttribute(const std::string& attribute_name) {
-  if (H5Adelete(static_cast<const Derivate*>(this)->getId(false), attribute_name.c_str()) < 0) {
+AnnotateTraits<Derivate>::deleteAttribute(const std::string& attr_name) {
+  if (H5Adelete(static_cast<const Derivate*>(this)->getId(false), attr_name.c_str()) < 0) {
     HDF5ErrMapper::ToException<AttributeException>(
-          std::string("Unable to delete attribute \"") + attribute_name + "\":");
+          std::string("Unable to delete attribute \"") + attr_name + "\":");
   }
 }
 
 template <typename Derivate>
 inline Attribute AnnotateTraits<Derivate>::getAttribute(
-    const std::string& attribute_name) const {
+    const std::string& attr_name) const {
   Attribute attribute;
   if ((attribute._hid = H5Aopen(static_cast<const Derivate*>(this)->getId(false),
-                                attribute_name.c_str(), H5P_DEFAULT)) < 0) {
+                                attr_name.c_str(), H5P_DEFAULT)) < 0) {
     HDF5ErrMapper::ToException<AttributeException>(
-          std::string("Unable to open the attribute \"") + attribute_name +
+          std::string("Unable to open the attribute \"") + attr_name +
           "\":");
   }
   return attribute;

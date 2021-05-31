@@ -22,6 +22,7 @@ namespace h5gt {
 template <typename Derivate>
 class NodeTraits {
 public:
+
   ///
   /// \brief createDataSet Create a new dataset in the current file of
   /// datatype type and of size space
@@ -33,8 +34,6 @@ public:
   /// \param dsetCreateProps A dataset property list with data set creation properties
   /// \param dsetAccessProps A dataset property list with data set access properties
   /// \return DataSet Object
-  // Fake <- make it templated is needed by pybind11 to allow py::overload_cast<>()
-  template<typename Fake = void>
   DataSet
   createDataSet(const std::string& dataset_name,
                 const DataSpace& space,
@@ -188,8 +187,6 @@ public:
       const LinkAccessProps& linkAccessProps = LinkAccessProps(),
       const GroupAccessProps& groupAccessProps = GroupAccessProps());
 
-  // Fake <- make it templated is needed by pybind11 to allow py::overload_cast<>()
-  template<typename Fake = void>
   DataSet createLink(
       const DataSet& target, const std::string& linkName, const LinkType& linkType,
       const LinkCreateProps& linkCreateProps = LinkCreateProps(),

@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.15.0)
 
+# C++14 is required by pybind and xtensor
+# C++17 is required by python src -> pack fold
 if(NOT DEFINED CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14) # C++14 is required by pybind and xtensor
+  set(CMAKE_CXX_STANDARD 17)
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -35,7 +37,12 @@ option(HDF5_USE_STATIC_LIBRARIES "Use static hdf5 lib" OFF)
 
 set(gtest_force_shared_crt ON CACHE BOOL "Prevent overriding the parent project's compiler/linker settings on Windows")
 
-add_library(h5gt INTERFACE)
+file(GLOB_RECURSE hpp_files
+     RELATIVE ${PROJECT_SOURCE_DIR}
+     ${PROJECT_SOURCE_DIR}/include/h5gt/*.hpp
+     )
+
+add_library(h5gt INTERFACE ${hpp_files})
 target_include_directories(h5gt INTERFACE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
@@ -57,7 +64,7 @@ find_package(ZLIB REQUIRED)
 target_link_libraries(h5gt INTERFACE ZLIB::ZLIB)
 
 if(H5GT_BUILD_h5gtpy)
-  add_subdirectory(src/python)
+  add_subdirectory(src/h5gtpy)
 endif()
 
 if(H5GT_USE_EIGEN)

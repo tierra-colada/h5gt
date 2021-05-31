@@ -56,6 +56,19 @@ TEST(H5GTBase, Basic) {
 
   EXPECT_EQ(file.getObjectName(0), DATASET_NAME + "_double");
 
+  DataSet dataset_vec = file.createDataSet(DATASET_NAME + "_vec", {2, 3},
+                                              AtomicType<double>());
+
+  EXPECT_TRUE(file.exist(DATASET_NAME + "_vec"));
+
+//  auto atomic = create_atomic(AtomicClass::AtomicChar);
+
+//  auto atomic = AtomicType<AtomicClass::AtomicChar>(AtomicClass::AtomicChar);
+
+//  AtomicType<AtomicClass::AtomicDouble> atomic = AtomicType<AtomicClass::AtomicDouble>::FromClass(AtomicClass::AtomicDouble);
+
+
+
   {
     // check if it exist again
     dataset_exist = file.exist(DATASET_NAME + "_double");
@@ -721,6 +734,7 @@ TEST(H5GTBase, ReadWriteAttributeVector) {
   readWriteAttributeVectorTest<ptrdiff_t>();
   readWriteAttributeVectorTest<float>();
   readWriteAttributeVectorTest<double>();
+  readWriteAttributeVectorTest<std::complex<float> >();
   readWriteAttributeVectorTest<std::complex<double> >();
 }
 
@@ -814,6 +828,7 @@ TEST(H5GTBase, selectionArraySimple) {
   selectionArraySimpleTest<ptrdiff_t>();
   selectionArraySimpleTest<float>();
   selectionArraySimpleTest<double>();
+  selectionArraySimpleTest<std::complex<float> >();
   selectionArraySimpleTest<std::complex<double> >();
 }
 
@@ -903,6 +918,7 @@ TEST(H5GTBase, columnSelectionTest) {
   columnSelectionTest<ptrdiff_t>();
   columnSelectionTest<float>();
   columnSelectionTest<double>();
+  columnSelectionTest<std::complex<float> >();
   columnSelectionTest<std::complex<double> >();
 }
 
@@ -1054,6 +1070,7 @@ TEST(H5GTBase, readWriteShuffleDeflateTest) {
   readWriteShuffleDeflateTest<ptrdiff_t>();
   readWriteShuffleDeflateTest<float>();
   readWriteShuffleDeflateTest<double>();
+  readWriteShuffleDeflateTest<std::complex<float> >();
   readWriteShuffleDeflateTest<std::complex<double> >();
 }
 
@@ -1300,7 +1317,7 @@ TEST(H5GTBase, SoftLink) {
   DataSet dset = group.createDataSet<int>("data", DataSpace(1));
   dset.write(val_in);
 
-  DataSet dset_out = file.createLink<DataSet>(dset, "myDsetLink", LinkType::Soft);
+  DataSet dset_out = file.createLink(dset, "myDsetLink", LinkType::Soft);
   ASSERT_EQ(dset_out.getLinkInfo().getLinkType(), LinkType::Soft);
   ASSERT_EQ(dset_out.getTargetPath(), "/path/to/group/data");
   ASSERT_EQ(dset_out.getPath(), "/myDsetLink");

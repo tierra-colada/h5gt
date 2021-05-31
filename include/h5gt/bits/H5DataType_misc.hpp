@@ -153,6 +153,12 @@ inline AtomicType<std::string>::AtomicType() {
   _hid = create_string(H5T_VARIABLE);
 }
 
+// std string
+template <>
+inline AtomicType<const char*>::AtomicType() {
+  _hid = create_string(H5T_VARIABLE);
+}
+
 // Fixed-Length strings
 // require class specialization templated for the char length
 template <size_t StrLen>
@@ -175,6 +181,19 @@ inline AtomicType<std::complex<double> >::AtomicType() {
       // h5py/numpy compatible datatype
       H5Tinsert(_hid, "r", 0, H5T_NATIVE_DOUBLE);
       H5Tinsert(_hid, "i", sizeof(double), H5T_NATIVE_DOUBLE);
+    };
+  } complexType;
+  _hid = H5Tcopy(complexType.getId(false));
+}
+
+template <>
+inline AtomicType<std::complex<float> >::AtomicType() {
+  static struct ComplexType : public Object {
+    ComplexType() {
+      _hid = H5Tcreate(H5T_COMPOUND, sizeof(std::complex<float>));
+      // h5py/numpy compatible datatype
+      H5Tinsert(_hid, "r", 0, H5T_NATIVE_FLOAT);
+      H5Tinsert(_hid, "i", sizeof(float), H5T_NATIVE_FLOAT);
     };
   } complexType;
   _hid = H5Tcopy(complexType.getId(false));
@@ -403,7 +422,6 @@ template <typename T>
 inline DataType create_datatype() {
   return AtomicType<T>();
 }
-
 
 /// \brief Create a DataType instance representing type T and perform a sanity check on its size
 template <typename T>

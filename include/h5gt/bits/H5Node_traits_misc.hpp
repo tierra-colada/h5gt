@@ -32,7 +32,6 @@ namespace h5gt {
 
 
 template <typename Derivate>
-template<typename Fake>
 inline DataSet
 NodeTraits<Derivate>::createDataSet(const std::string& dataset_name,
                                     const DataSpace& space,
@@ -300,7 +299,6 @@ inline Group NodeTraits<Derivate>::createLink(
 }
 
 template <typename Derivate>
-template<typename Fake>
 inline DataSet NodeTraits<Derivate>::createLink(
     const DataSet& target,
     const std::string& linkName,

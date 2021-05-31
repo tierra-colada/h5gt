@@ -39,13 +39,15 @@ template <>
 struct string_type_checker<void> {
   inline static DataType getDataType(const DataType& element_type, bool) {
     return element_type;
-  }};
+  }
+};
 
 template <std::size_t FixedLen>
 struct string_type_checker<char[FixedLen]> {
   inline static DataType getDataType(const DataType& element_type, bool ds_fixed_str) {
     return ds_fixed_str ? AtomicType<char[FixedLen]>() : element_type;
-  }};
+  }
+};
 
 template <>
 struct string_type_checker<char*> {
@@ -53,7 +55,17 @@ struct string_type_checker<char*> {
     if (ds_fixed_str)
       throw DataSetException("Can't output variable-length to fixed-length strings");
     return AtomicType<std::string>();
-  }};
+  }
+};
+
+//template <> // added by kerim, do I need this?
+//struct string_type_checker<const char*> {
+//  inline static DataType getDataType(const DataType&, bool ds_fixed_str) {
+//    if (ds_fixed_str)
+//      throw DataSetException("Can't output variable-length to fixed-length strings");
+//    return AtomicType<std::string>();
+//  }
+//};
 
 template <typename T>
 BufferInfo<T>::BufferInfo(const DataType& dtype)

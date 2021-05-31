@@ -30,23 +30,27 @@ public:
   /// \return the name of the attribute
   std::string getName() const;
 
+  ///
+  /// \brief getStorageSize
+  /// \return returns the amount of storage allocated for an attribute.
+  ///
   size_t getStorageSize() const;
 
   ///
   /// \brief getDataType
-  /// \return return the datatype associated with this dataset
+  /// \return return the datatype associated with this attribute
   ///
   DataType getDataType() const;
 
   ///
   /// \brief getSpace
-  /// \return return the dataspace associated with this dataset
+  /// \return return the dataspace associated with this attribute
   ///
   DataSpace getSpace() const;
 
   ///
   /// \brief getMemSpace
-  /// \return same than getSpace for DataSet, compatibility with Selection
+  /// \return same as getSpace for attribute, compatibility with Selection
   /// class
   ///
   DataSpace getMemSpace() const;
