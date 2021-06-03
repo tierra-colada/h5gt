@@ -11,6 +11,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 cmake_policy(SET CMP0074 NEW)
 cmake_policy(SET CMP0077 NEW)
 
+# `COMMON_PROJECT_VERSION` is also used when configuring `setup.py.in`
 set(COMMON_PROJECT_VERSION 0.1.0)
 project(h5gt VERSION ${COMMON_PROJECT_VERSION} LANGUAGES C CXX)
 message("project: ${CMAKE_PROJECT_NAME}")

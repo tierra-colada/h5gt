@@ -1,10 +1,11 @@
-import subprocess
+# import subprocess
 
-subprocess.run(["pybind11-stubgen", "-o../../build-MSVC2019-Release/src/h5gtpy/Debug", "h5gtpy"])  # NO SPACE IN -oPATH!
+# subprocess.run(["pybind11-stubgen", "-o../../build-MSVC2019-Release/src/h5gtpy/Debug", "_h5gt"])  # NO SPACE IN -oPATH!
+# subprocess.run(["pybind11-stubgen", "-o../../build-MSVC2019-Release/src/h5gtpy/Debug", "h5gtpy._h5gt"])  # NO SPACE IN -oPATH!
 # subprocess.run(["pybind11-stubgen", "-obuild-MSVC2019-Release/src/h5gtpy/Debug", "h5gtpy"])  # NO SPACE IN -oPATH!
 
 import numpy as np
-import h5gtpy as h5gt
+from h5gtpy import h5gt
 from enum import Flag, auto     # allow bitwise operations on enum
 import os.path
 import unittest

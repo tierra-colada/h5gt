@@ -1,4 +1,4 @@
-#include "h5gtpy.h"
+#include "h5gt_py.h"
 
 namespace h5gtpy {
 
