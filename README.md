@@ -4,7 +4,7 @@
 HDF5 C++ wrapper based on [HighFive project](https://github.com/BlueBrain/HighFive.git)
 
 Includes python bindings that you can install with cmake.
-It uses **pybind11** to make python bindings and there may be some perfomance penalty when copying matrices from C++ `Eigen3` matrices to `numpy` (or `std::vector` to `py::list`). I have not done any perfomance testing.
+It uses [pybind11](https://github.com/pybind/pybind11) to make python bindings and there may be some perfomance penalty when copying matrices from C++ `Eigen3` matrices to `numpy` (or `std::vector` to `py::list`). I have not done any perfomance testing.
 
 This project is aimed for developers who uses C++, python and **HDF5** library. If you only need python HDF5 library please refer to [h5py](https://github.com/h5py/h5py) project.
 
@@ -36,10 +36,12 @@ Then you can find h5gtpy in **site-packages** of your python env.
 After installation you need to make sure that linked (on WIndows it is `hdf5.dll`) module is in the `PATH` env variable.
 
 ## Usage
-Test is given in **h5gtpy** folder in **site-packages**
 Importing is done via:
+```python
+from h5gtpy import h5gt
+```
 
-`from h5gtpy import h5gt`
+A test is also given in **site-packages/h5gtpy**
 
 ## Integrating with VS Code
 There is stub file `h5gtpy/h5gt.pyi`. You need to set VS Code setting `"python.analysis.stubPath": "some/relative/path/to/stub-storage"`: where **stub-storage** is supposed to contain folder `h5gtpy` with `h5gt.pyi` file.

@@ -1137,14 +1137,14 @@ class DataSet(Object, _DsetSlice, _AnnotateDataSet):
         same as getSpace for DataSet, compatibility with Selection
         """
     @typing.overload
-    def getOffset(self) -> DataType: 
+    def getOffset(self) -> int: 
         """
         returns DataSet address in file
 
         return the datatype associated with this dataset
         """
     @typing.overload
-    def getOffset(self) -> int: ...
+    def getOffset(self) -> DataType: ...
     def getParent(self, groupAccessProps: GroupAccessProps = GroupAccessProps()) -> Group: ...
     def getSpace(self) -> DataSpace: 
         """
