@@ -43,7 +43,7 @@ file(GLOB_RECURSE hpp_files
      ${PROJECT_SOURCE_DIR}/include/h5gt/*.hpp
      )
 
-if(${CMAKE_VERSION} VERSION_LESS "3.2.0")
+if(${CMAKE_VERSION} VERSION_LESS "3.19.0")
   add_library(h5gt INTERFACE)
 else()
   add_library(h5gt INTERFACE ${hpp_files})
