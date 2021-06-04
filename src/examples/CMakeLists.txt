@@ -15,7 +15,7 @@ function(compile_example exemple_source)
     endif()
 
     if(${example_filename} MATCHES ".*parallel_hdf5.*")
-        if(NOT H5GT_PARALLEL_HDF5)
+        if(NOT HDF5_PREFER_PARALLEL)
             return()
         endif()
     endif()

@@ -6,7 +6,7 @@ set(src_files_test
   tests_h5gt_multi_dims.cpp
   )
 
-if(H5GT_PARALLEL_HDF5)
+if(HDF5_PREFER_PARALLEL)
   list(APPEND src_files_test tests_h5gt_parallel.cpp)
 endif()
 

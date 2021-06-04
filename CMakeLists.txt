@@ -32,9 +32,9 @@ option(H5GT_USE_XTENSOR "Enable xtensor testing" OFF)
 option(H5GT_USE_OPENCV "Enable OpenCV testing" OFF)
 option(H5GT_BUILD_TESTS "Build tests" ON)
 option(H5GT_EXAMPLES "Compile examples" ON)
-option(H5GT_PARALLEL_HDF5 "Enable Parallel HDF5 support" OFF)
 option(H5GT_BUILD_h5gtpy "Build python wrapper (make sure to disable HDF5_USE_STATIC_LIBRARIES and enable H5GT_USE_EIGEN)" ON)
 option(HDF5_USE_STATIC_LIBRARIES "Use static hdf5 lib" OFF)
+option(HDF5_PREFER_PARALLEL "Prefer parallel hdf5 if available" OFF)
 
 set(gtest_force_shared_crt ON CACHE BOOL "Prevent overriding the parent project's compiler/linker settings on Windows")
 
@@ -56,9 +56,9 @@ target_include_directories(h5gt INTERFACE
 install(TARGETS h5gt DESTINATION lib EXPORT h5gt-targets)
 
 find_package(HDF5 REQUIRED)
-if(H5GT_PARALLEL_HDF5 AND HDF5_IS_PARALLEL)
+if(HDF5_PREFER_PARALLEL AND HDF5_IS_PARALLEL)
   target_compile_definitions(h5gt INTERFACE H5GT_PARALLEL)
-elseif(H5GT_PARALLEL_HDF5 AND NOT HDF5_IS_PARALLEL)
+elseif(HDF5_PREFER_PARALLEL AND NOT HDF5_IS_PARALLEL)
   message(SEND_ERROR "Parallel requested but chosen hdf5 doesnt support it")
 endif()
 
@@ -92,7 +92,7 @@ if(H5GT_USE_OPENCV)
   target_compile_definitions(h5gt INTERFACE H5GT_USE_OPENCV)
 endif()
 
-if(H5GT_PARALLEL_HDF5)
+if(HDF5_PREFER_PARALLEL)
   find_package(MPI REQUIRED)
   target_include_directories(h5gt INTERFACE ${MPI_CXX_INCLUDE_PATH})
   target_link_libraries(h5gt INTERFACE ${MPI_CXX_LIBRARIES})

@@ -12,7 +12,7 @@ matrix:
         - H5GT_USE_OPENCV=False
         - H5GT_BUILD_TESTS=True
         - H5GT_EXAMPLES=True
-        - H5GT_PARALLEL_HDF5=True
+        - HDF5_PREFER_PARALLEL=True
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
         - CMAKE_GENERATOR="Ninja"
@@ -33,7 +33,7 @@ matrix:
         - H5GT_USE_OPENCV=False
         - H5GT_BUILD_TESTS=True
         - H5GT_EXAMPLES=True
-        - H5GT_PARALLEL_HDF5=True
+        - HDF5_PREFER_PARALLEL=True
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
         - CMAKE_GENERATOR="Ninja"
@@ -54,7 +54,7 @@ matrix:
         - H5GT_USE_OPENCV=False
         - H5GT_BUILD_TESTS=True
         - H5GT_EXAMPLES=True
-        - H5GT_PARALLEL_HDF5=True
+        - HDF5_PREFER_PARALLEL=True
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
         - CMAKE_GENERATOR="Ninja"
@@ -72,7 +72,7 @@ matrix:
         - H5GT_USE_OPENCV=True
         - H5GT_BUILD_TESTS=True
         - H5GT_EXAMPLES=True
-        - H5GT_PARALLEL_HDF5=False
+        - HDF5_PREFER_PARALLEL=False
         - H5GT_BUILD_h5gtpy=True
         - HDF5_USE_STATIC_LIBRARIES=False
         - CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
@@ -85,7 +85,7 @@ matrix:
         - H5GT_USE_OPENCV=True
         - H5GT_BUILD_TESTS=True
         - H5GT_EXAMPLES=True
-        - H5GT_PARALLEL_HDF5=False
+        - HDF5_PREFER_PARALLEL=False
         - H5GT_BUILD_h5gtpy=False
         - HDF5_USE_STATIC_LIBRARIES=True
         - CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
@@ -100,7 +100,7 @@ matrix:
         - H5GT_USE_OPENCV=True
         - H5GT_BUILD_TESTS=True
         - H5GT_EXAMPLES=True
-        - H5GT_PARALLEL_HDF5=False
+        - HDF5_PREFER_PARALLEL=False
         - H5GT_BUILD_h5gtpy=False
         - HDF5_USE_STATIC_LIBRARIES=False
         - CMAKE_GENERATOR="Ninja"
@@ -153,7 +153,7 @@ script:
     -DH5GT_USE_OPENCV:BOOL=${H5GT_USE_OPENCV}
     -DH5GT_UNIT_TESTS:BOOL=${H5GT_BUILD_TESTS}
     -DH5GT_EXAMPLES:BOOL=${H5GT_EXAMPLES}
-    -DH5GT_PARALLEL_HDF5:BOOL=${H5GT_PARALLEL_HDF5}
+    -DHDF5_PREFER_PARALLEL:BOOL=${HDF5_PREFER_PARALLEL}
     -DH5GT_BUILD_h5gtpy=${H5GT_BUILD_h5gtpy}
     -DHDF5_USE_STATIC_LIBRARIES=${HDF5_USE_STATIC_LIBRARIES}  
     -G "${CMAKE_GENERATOR}" ../
