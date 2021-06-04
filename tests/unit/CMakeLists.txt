@@ -1,5 +1,5 @@
 set(src_files_test
-  main.cxx
+  main.cpp
   tests_h5gt.hpp
   tests_h5gt_base.cpp
   tests_h5gt_easy.cpp
