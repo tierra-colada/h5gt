@@ -73,6 +73,26 @@ std::vector<std::string> read_eigen_names{
   "readCFloat", "readCDouble",
 };
 
+class Point {
+
+private:
+  double m_x;
+  double m_y;
+  double m_z;
+
+public:
+  Point()= default;
+  Point(double x, double y, double z){
+    m_x = x;
+    m_y = y;
+    m_z = z;
+  }
+
+  double getX() const{return m_x;}
+  double getY() const{return m_y;}
+  double getZ() const{return m_z;}
+};
+
 namespace h5gtpy {
 
 PYBIND11_MODULE(_h5gt, m) {
@@ -279,6 +299,13 @@ PYBIND11_MODULE(_h5gt, m) {
 
   //DATASET -> H5DataSet_py.cpp
   Attribute_py(pyAttr);
+
+
+  py::class_<Point>(m, "Point")
+      .def(py::init<double, double, double>())
+      .def("getX", &Point::getX)
+      .def("getY", &Point::getY)
+      .def("getZ", &Point::getZ);
 
 }
 

@@ -140,12 +140,14 @@ before_script:
     fi
   - cmake --version
   - python --version
+  - mkdir ${TRAVIS_BUILD_DIR}/../install
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir -p build && pushd build
   - >
     cmake --warn-uninitialized --debug-output
+    -DCMAKE_BUILD_TYPE=Release
     -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
     -DEigen3_ROOT:PATH=$EIGEN3_ROOT 
     -DH5GT_USE_EIGEN:BOOL=${H5GT_USE_EIGEN}
@@ -157,7 +159,8 @@ script:
     -DH5GT_BUILD_h5gtpy=${H5GT_BUILD_h5gtpy}
     -DHDF5_USE_STATIC_LIBRARIES=${HDF5_USE_STATIC_LIBRARIES}  
     -G "${CMAKE_GENERATOR}" ../
-  - cmake --build .
+  - cmake --build . --config Release
   - CTEST_OUTPUT_ON_FAILURE=1 cmake --build . --target ${TESTS_TARGET}
+  - cmake --install . --prefix ../install --config Release
   # - popd
   # - bash tests/test_project_integration.sh;

@@ -29,7 +29,13 @@ configure_file(${INIT_PY_IN} ${INIT_PY_OUT} COPYONLY)
 configure_file(${TEST_PY_IN} ${TEST_PY_OUT} COPYONLY)
 configure_file(${STUBS_INIT_IN} ${STUBS_INIT_OUT} COPYONLY)
 
-file(GLOB_RECURSE _h5gt_modules @CMAKE_CURRENT_BINARY_DIR@/${MODULE_PATTERN})
+if(CMAKE_GENERATOR MATCHES "Visual Studio") # if(@MSVC@) -> I guess generator defines whether to add Release/Debug folder and not a compiler
+  set(_h5gt_module_dir @CMAKE_CURRENT_BINARY_DIR@/@CMAKE_BUILD_TYPE@)
+else()
+  set(_h5gt_module_dir @CMAKE_CURRENT_BINARY_DIR@)
+endif()
+
+file(GLOB_RECURSE _h5gt_modules ${_h5gt_module_dir}/${MODULE_PATTERN})
 
 list(LENGTH _h5gt_modules _h5gt_modules_len)
 if (${_h5gt_modules_len} LESS 1)
