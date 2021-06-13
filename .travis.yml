@@ -160,7 +160,7 @@ script:
     -DHDF5_USE_STATIC_LIBRARIES=${HDF5_USE_STATIC_LIBRARIES}  
     -G "${CMAKE_GENERATOR}" ../
   - cmake --build . --config Release
-  - CTEST_OUTPUT_ON_FAILURE=1 cmake --build . --target ${TESTS_TARGET}
+  - CTEST_OUTPUT_ON_FAILURE=1 cmake --build . --target ${TESTS_TARGET} --config Release
   - cmake --install . --prefix ../install --config Release
   # - popd
   # - bash tests/test_project_integration.sh;
