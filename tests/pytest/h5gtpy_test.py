@@ -9,16 +9,17 @@ from h5gtpy import h5gt
 from enum import Flag, auto     # allow bitwise operations on enum
 import os.path
 import unittest
+import pathlib
 
 class h5gtpy_test(unittest.TestCase):
 
     def test_file_creation(self):
-        file_name = "test_file_creation.h5"
+        file_name = "tmp/test_file_creation.h5"
         file = h5gt.File(file_name, h5gt.OpenFlag(h5gt.ReadWrite | h5gt.Create | h5gt.Truncate))
         self.assertTrue(os.path.isfile(file_name))
 
     def test_object_creation(self):
-        file_name = "test_object_creation.h5"
+        file_name = "tmp/test_object_creation.h5"
         file = h5gt.File(file_name, h5gt.OpenFlag(h5gt.ReadWrite | h5gt.Create | h5gt.Truncate))
 
         group_name = "g"
@@ -34,7 +35,7 @@ class h5gtpy_test(unittest.TestCase):
         self.assertTrue(dset.hasAttribute(attr.getName()))
 
     def test_node_functionality(self):
-        file_name = "test_node_functionality.h5"
+        file_name = "tmp/test_node_functionality.h5"
         file = h5gt.File(file_name, h5gt.OpenFlag(h5gt.ReadWrite | h5gt.Create | h5gt.Truncate))
 
         dset1 = file.createDataSet("data1", h5gt.DataSpace([3, 5]), h5gt.AtomicDouble())
@@ -72,14 +73,14 @@ class h5gtpy_test(unittest.TestCase):
         dlink_hard = file.createLink(dset1, "dlink_hard", h5gt.LinkType.Hard)
         self.assertEqual(dlink_hard.getLinkInfo().getLinkType(), h5gt.LinkType.Hard)
 
-        file_name2 = "test_node_functionality_ext_link.h5"
+        file_name2 = "tmp/test_node_functionality_ext_link.h5"
         file2 = h5gt.File(file_name2, h5gt.OpenFlag(h5gt.ReadWrite | h5gt.Create | h5gt.Truncate))
 
         flink_ext = file2.createLink(file, "external_file", h5gt.LinkType.External)
         self.assertTrue(file != file2)
 
     def test_read_write_dataset(self):
-        file_name = "test_read_write_dataset.h5"
+        file_name = "tmp/test_read_write_dataset.h5"
 
         file = h5gt.File(file_name, h5gt.OpenFlag(h5gt.ReadWrite | h5gt.Create | h5gt.Truncate))
 
@@ -165,7 +166,7 @@ class h5gtpy_test(unittest.TestCase):
         self.assertListEqual(s, ss)
 
     def test_read_write_attribute(self):
-        file_name = "test_read_write_attribute.h5"
+        file_name = "tmp/test_read_write_attribute.h5"
 
         file = h5gt.File(file_name, h5gt.OpenFlag(h5gt.ReadWrite | h5gt.Create | h5gt.Truncate))
 
@@ -205,7 +206,7 @@ class h5gtpy_test(unittest.TestCase):
         self.assertListEqual(s, ss)
 
     def test_exception(self):
-        file_name = "test_exception.h5"
+        file_name = "tmp/test_exception.h5"
 
         file = h5gt.File(file_name, h5gt.OpenFlag(h5gt.ReadWrite | h5gt.Create | h5gt.Truncate))
 
@@ -216,4 +217,5 @@ class h5gtpy_test(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    pathlib.Path('tmp').mkdir(exist_ok=True)
     unittest.main()

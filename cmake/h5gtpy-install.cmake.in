@@ -7,11 +7,11 @@ set(MANIFEST_OUT @CMAKE_CURRENT_BINARY_DIR@/MANIFEST.in)
 set(INIT_PY_IN @CMAKE_SOURCE_DIR@/cmake/__init__.py.in)
 set(INIT_PY_OUT @CMAKE_CURRENT_BINARY_DIR@/h5gtpy/__init__.py)
 
-set(TEST_PY_IN @CMAKE_SOURCE_DIR@/tests/pytest/h5gtpy_test.py)
-set(TEST_PY_OUT @CMAKE_CURRENT_BINARY_DIR@/h5gtpy/h5gtpy_test.py)
-
 set(STUBS_INIT_IN @CMAKE_SOURCE_DIR@/stubs/h5gtpy/_h5gt-stubs/h5gt.pyi)
 set(STUBS_INIT_OUT @CMAKE_CURRENT_BINARY_DIR@/h5gtpy/h5gtpy/h5gt.pyi)
+
+file(GLOB_RECURSE TEST_PY_IN_LIST @CMAKE_SOURCE_DIR@/tests/pytest/*.py)
+set(TEST_PY_OUT_DIR @CMAKE_CURRENT_BINARY_DIR@/h5gtpy/tests)
 
 file(MAKE_DIRECTORY @CMAKE_CURRENT_BINARY_DIR@/h5gtpy)
 file(MAKE_DIRECTORY @CMAKE_CURRENT_BINARY_DIR@/h5gtpy/h5gtpy)
@@ -26,8 +26,12 @@ endif()
 configure_file(${SETUP_PY_IN} ${SETUP_PY_OUT})
 configure_file(${MANIFEST_IN} ${MANIFEST_OUT})
 configure_file(${INIT_PY_IN} ${INIT_PY_OUT} COPYONLY)
-configure_file(${TEST_PY_IN} ${TEST_PY_OUT} COPYONLY)
 configure_file(${STUBS_INIT_IN} ${STUBS_INIT_OUT} COPYONLY)
+
+foreach(TEST_PY_IN ${TEST_PY_IN_LIST})
+  get_filename_component(file_name ${TEST_PY_IN} NAME)
+  configure_file(${TEST_PY_IN} ${TEST_PY_OUT_DIR}/${file_name} COPYONLY)
+endforeach(TEST_PY_IN)
 
 if(CMAKE_GENERATOR MATCHES "Visual Studio") # if(@MSVC@) -> I guess generator defines whether to add Release/Debug folder and not a compiler
   set(_h5gt_module_dir @CMAKE_CURRENT_BINARY_DIR@/@CMAKE_BUILD_TYPE@)

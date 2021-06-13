@@ -1,2 +1,3 @@
 include h5gtpy/${MODULE_PATTERN}
+include h5gtpy/tests/*.py
 include h5gtpy/h5gtpy/h5gt.pyi
