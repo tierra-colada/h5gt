@@ -11,7 +11,7 @@ import os.path
 import unittest
 import pathlib
 
-class h5gtpy_test(unittest.TestCase):
+class test_h5gtpy(unittest.TestCase):
     def setUp(self):
         global trig
         if not trig:
