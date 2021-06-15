@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15.0)
+cmake_minimum_required(VERSION 3.16.0)
 
 # C++14 is required by pybind and xtensor
 # C++17 is required by python src -> pack fold
@@ -10,11 +10,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 cmake_policy(SET CMP0074 NEW)
 cmake_policy(SET CMP0077 NEW)
+cmake_policy(SET CMP0087 NEW) # add generator expressions to `install` command
 
 # `COMMON_PROJECT_VERSION` is also used when configuring `setup.py.in`
 set(COMMON_PROJECT_VERSION 0.1.0)
 project(h5gt VERSION ${COMMON_PROJECT_VERSION} LANGUAGES C CXX)
-message("project: ${CMAKE_PROJECT_NAME}")
+message("project: ${CMAKE_PROJECT_NAME} ${COMMON_PROJECT_VERSION}")
 
 if(CMAKE_CXX_COMPILER_IS_ICC)
   # ICC gets mad if we shorten "int"s

@@ -1,3 +1,66 @@
+# CMP001 is somehow connected with wether to use policy
+# set from child projects to parents (i.e. connected with
+# scope of policies)
+cmake_policy(SET CMP0011 NEW)
+# CMP0012 is needed in situations like `if(ON)` or `if(TRUE)`
+# and this policy must be set in this file or it won't work
+cmake_policy(SET CMP0012 NEW)
+
+#-----------------------------------------------------------------------------
+# Finding RUNTIME DEPS (i.e. hdf5.dll)
+#-----------------------------------------------------------------------------
+message(STATUS "Resolving h5gtpy RUNTIME dependencies...")
+
+file(GET_RUNTIME_DEPENDENCIES
+  LIBRARIES $<TARGET_FILE:_h5gt>
+  RESOLVED_DEPENDENCIES_VAR res_deps
+  UNRESOLVED_DEPENDENCIES_VAR unres_deps
+  CONFLICTING_DEPENDENCIES_PREFIX confl_deps
+  DIRECTORIES
+    @HDF5_RUNTIME_DIR@
+  PRE_INCLUDE_REGEXES "^.*([Hh][Dd][Ff][5]).*$"
+  PRE_EXCLUDE_REGEXES "[^\n]+"
+)
+
+foreach(_file ${res_deps})
+  message(STATUS "Dependency Resolved: ${_file}")
+endforeach()
+
+foreach(_file ${unres_deps})
+  message(STATUS "Dependency Unresolved: ${_file}")
+endforeach()
+
+foreach(_file ${confl_deps_FILENAMES})
+  message(STATUS "Found conflicting dependency: ${_file}")
+
+  foreach(_file_path ${confl_deps_${_file}})
+    message(${_file_path})
+  endforeach()
+endforeach()
+
+list(LENGTH unres_deps unres_deps_LEN)
+if(${unres_deps_LEN} GREATER 0)
+  message(FATAL_ERROR "There are UNRESOLVED runtime dependencies.
+  Try setting `HDF5_RUNTIME_DIR` and rerun `cmake .` and `cmake --install .`
+  (you don't have to rebuild the project)")
+endif()
+
+list(LENGTH confl_deps confl_deps_LEN)
+if(${confl_deps_LEN} GREATER 0)
+  message(FATAL_ERROR "There are CNFLICTING runtime dependencies.
+  Try setting `HDF5_RUNTIME_DIR` and rerun `cmake .` and `cmake --install .`
+  (you don't have to rebuild the project)")
+endif()
+
+
+#-----------------------------------------------------------------------------
+# Setting variables needed to configure in-files
+#-----------------------------------------------------------------------------
+set(H5GTPY_DIR @CMAKE_CURRENT_BINARY_DIR@/h5gtpy)
+
+file(MAKE_DIRECTORY ${H5GTPY_DIR})
+file(MAKE_DIRECTORY ${H5GTPY_DIR}/h5gtpy)
+
 set(SETUP_PY_IN @CMAKE_SOURCE_DIR@/cmake/setup.py.in)
 set(SETUP_PY_OUT @CMAKE_CURRENT_BINARY_DIR@/setup.py)
 
@@ -5,50 +68,71 @@ set(MANIFEST_IN @CMAKE_SOURCE_DIR@/cmake/MANIFEST.in.in)
 set(MANIFEST_OUT @CMAKE_CURRENT_BINARY_DIR@/MANIFEST.in)
 
 set(INIT_PY_IN @CMAKE_SOURCE_DIR@/cmake/__init__.py.in)
-set(INIT_PY_OUT @CMAKE_CURRENT_BINARY_DIR@/h5gtpy/__init__.py)
+set(INIT_PY_OUT ${H5GTPY_DIR}/__init__.py)
 
 set(STUBS_INIT_IN @CMAKE_SOURCE_DIR@/stubs/h5gtpy/_h5gt-stubs/h5gt.pyi)
-set(STUBS_INIT_OUT @CMAKE_CURRENT_BINARY_DIR@/h5gtpy/h5gtpy/h5gt.pyi)
+set(STUBS_INIT_OUT ${H5GTPY_DIR}/h5gtpy/h5gt.pyi)
 
 file(GLOB_RECURSE TEST_PY_IN_LIST @CMAKE_SOURCE_DIR@/tests/pytest/*.py)
-set(TEST_PY_OUT_DIR @CMAKE_CURRENT_BINARY_DIR@/h5gtpy/tests)
-
-file(MAKE_DIRECTORY @CMAKE_CURRENT_BINARY_DIR@/h5gtpy)
-file(MAKE_DIRECTORY @CMAKE_CURRENT_BINARY_DIR@/h5gtpy/h5gtpy)
+set(TEST_PY_OUT_DIR ${H5GTPY_DIR}/tests)
 
 # `MODULE_PATTERN` is also used when configuring `MANIFEST.in.in`
 if(WIN32)
   set(MODULE_PATTERN "*.pyd")
+  set(ADD_TO_MANIFEST "include h5gtpy/*.dll")
 else()
   set(MODULE_PATTERN "*.so")
+  set(ADD_TO_MANIFEST "")
 endif()
+
+
+#-----------------------------------------------------------------------------
+# Configuring in-files
+#-----------------------------------------------------------------------------
+
+# copy runtime deps or change __init__.py file to modify ENV PATH
+if(@COPY_H5GTPY_RUNTIME_DEPS@)
+  foreach(_file ${res_deps})
+    configure_file(${_file} ${H5GTPY_DIR} COPYONLY)
+  endforeach()
+else()
+  foreach(_file ${res_deps})
+    get_filename_component(_file_we ${_file} NAME_WE) # NAME_WE - without extension
+    if(${_file_we} MATCHES "^.*hdf5.*$")
+      get_filename_component(hdf5_dep ${_file} DIRECTORY)
+    endif()
+  endforeach()
+
+  get_filename_component(CMAKE_ABS_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} ABSOLUTE)
+
+# `PYTHON_INIT_PATH_VAR` is used to configure `INIT_PY_IN` file
+#----------------------DONT TOUCH SPACES HERE!----------------------
+set(PYTHON_INIT_PATH_VAR
+"
+import os
+
+if not os.environ['PATH'].__contains__('${hdf5_dep}'):
+    os.environ['PATH'] += ';${hdf5_dep}'
+"
+)
+#--------------------------END OF WARNING---------------------------
+
+endif()
+
 
 configure_file(${SETUP_PY_IN} ${SETUP_PY_OUT})
 configure_file(${MANIFEST_IN} ${MANIFEST_OUT})
-configure_file(${INIT_PY_IN} ${INIT_PY_OUT} COPYONLY)
+configure_file(${INIT_PY_IN} ${INIT_PY_OUT})
 configure_file(${STUBS_INIT_IN} ${STUBS_INIT_OUT} COPYONLY)
+configure_file($<TARGET_FILE:_h5gt> ${H5GTPY_DIR} COPYONLY)
 
-foreach(TEST_PY_IN ${TEST_PY_IN_LIST})
-  get_filename_component(file_name ${TEST_PY_IN} NAME)
-  configure_file(${TEST_PY_IN} ${TEST_PY_OUT_DIR}/${file_name} COPYONLY)
-endforeach(TEST_PY_IN)
+# copy pytests
+foreach(_file ${TEST_PY_IN_LIST})
+  configure_file(${_file} ${TEST_PY_OUT_DIR} COPYONLY)
+endforeach()
 
-if(CMAKE_GENERATOR MATCHES "Visual Studio") # if(@MSVC@) -> I guess generator defines whether to add Release/Debug folder and not a compiler
-  set(_h5gt_module_dir @CMAKE_CURRENT_BINARY_DIR@/@CMAKE_BUILD_TYPE@)
-else()
-  set(_h5gt_module_dir @CMAKE_CURRENT_BINARY_DIR@)
-endif()
 
-file(GLOB_RECURSE _h5gt_modules ${_h5gt_module_dir}/${MODULE_PATTERN})
-
-list(LENGTH _h5gt_modules _h5gt_modules_len)
-if (${_h5gt_modules_len} LESS 1)
-  message(FATAL_ERROR "Can't find compiled _h5gt.version${MODULE_PATTERN} module to copy it in python package!")
-else()
-  list(GET _h5gt_modules 0 _h5gt_module)
-  message(_h5gt_module: ${_h5gt_module})
-endif()
-
-configure_file(${_h5gt_module} @CMAKE_CURRENT_BINARY_DIR@/h5gtpy COPYONLY)
-
+#-----------------------------------------------------------------------------
+# Pip install
+#-----------------------------------------------------------------------------
 execute_process(COMMAND @PYTHON_EXECUTABLE@ -m pip install @CMAKE_CURRENT_BINARY_DIR@)
