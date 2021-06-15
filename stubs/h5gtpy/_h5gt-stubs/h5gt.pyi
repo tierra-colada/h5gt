@@ -52,6 +52,7 @@ __all__ = [
     "OpenFlag",
     "OpenOrCreate",
     "Overwrite",
+    "Point",
     "PropertyType",
     "ReadOnly",
     "ReadWrite",
@@ -690,6 +691,12 @@ class OpenFlag():
     Truncate: h5gtpy._h5gt.OpenFlag # value = <OpenFlag.Truncate: 2>
     __members__: dict # value = {'ReadOnly': <OpenFlag.ReadOnly: 0>, 'ReadWrite': <OpenFlag.ReadWrite: 1>, 'Truncate': <OpenFlag.Truncate: 2>, 'Excl': <OpenFlag.Excl: 4>, 'Debug': <OpenFlag.Debug: 8>, 'Create': <OpenFlag.Create: 16>, 'Overwrite': <OpenFlag.Truncate: 2>, 'OpenOrCreate': <OpenFlag.OpenOrCreate: 17>}
     pass
+class Point():
+    def __init__(self, arg0: float, arg1: float, arg2: float) -> None: ...
+    def getX(self) -> float: ...
+    def getY(self) -> float: ...
+    def getZ(self) -> float: ...
+    pass
 class PropertyType():
     """
     Members:
@@ -1137,14 +1144,14 @@ class DataSet(Object, _DsetSlice, _AnnotateDataSet):
         same as getSpace for DataSet, compatibility with Selection
         """
     @typing.overload
-    def getOffset(self) -> int: 
+    def getOffset(self) -> DataType: 
         """
         returns DataSet address in file
 
         return the datatype associated with this dataset
         """
     @typing.overload
-    def getOffset(self) -> DataType: ...
+    def getOffset(self) -> int: ...
     def getParent(self, groupAccessProps: GroupAccessProps = GroupAccessProps()) -> Group: ...
     def getSpace(self) -> DataSpace: 
         """

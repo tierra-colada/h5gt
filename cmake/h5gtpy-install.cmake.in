@@ -70,6 +70,9 @@ set(MANIFEST_OUT @CMAKE_CURRENT_BINARY_DIR@/MANIFEST.in)
 set(INIT_PY_IN @CMAKE_SOURCE_DIR@/cmake/__init__.py.in)
 set(INIT_PY_OUT ${H5GTPY_DIR}/__init__.py)
 
+set(INIT_PY_IN_TEST @CMAKE_SOURCE_DIR@/cmake/__init__.py.in.test)
+set(INIT_PY_OUT_TEST ${H5GTPY_DIR}/tests/__init__.py)
+
 set(STUBS_INIT_IN @CMAKE_SOURCE_DIR@/stubs/h5gtpy/_h5gt-stubs/h5gt.pyi)
 set(STUBS_INIT_OUT ${H5GTPY_DIR}/h5gtpy/h5gt.pyi)
 
@@ -123,6 +126,7 @@ endif()
 configure_file(${SETUP_PY_IN} ${SETUP_PY_OUT})
 configure_file(${MANIFEST_IN} ${MANIFEST_OUT})
 configure_file(${INIT_PY_IN} ${INIT_PY_OUT})
+configure_file(${INIT_PY_IN_TEST} ${INIT_PY_OUT_TEST} COPYONLY)
 configure_file(${STUBS_INIT_IN} ${STUBS_INIT_OUT} COPYONLY)
 configure_file($<TARGET_FILE:_h5gt> ${H5GTPY_DIR} COPYONLY)
 
