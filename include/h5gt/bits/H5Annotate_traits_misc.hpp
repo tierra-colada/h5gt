@@ -82,8 +82,9 @@ template <typename Derivate>
 inline size_t AnnotateTraits<Derivate>::getNumberAttributes() const {
   int res = H5Aget_num_attrs(static_cast<const Derivate*>(this)->getId(false));
   if (res < 0) {
-    HDF5ErrMapper::ToException<AttributeException>(std::string(
-                                                     "Unable to count attributes in existing group or file"));
+    HDF5ErrMapper::ToException<AttributeException>(
+          std::string(
+            "Unable to count attributes in existing group or file"));
   }
   return static_cast<size_t>(res);
 }
