@@ -21,8 +21,16 @@ To build with python support you need:
 
 then do something like:
 
-```shell
-cmake .. -DH5GT_BUILD_h5gtpy=ON -DPYTHON_EXECUTABLE=/path/to/python.exe -DH5GT_USE_EIGEN=ON -DEigen3_ROOT=/path/to/eigen3 -DHDF5_DIR=/path/to/hdf5-config.cmake -DHDF5_RUNTIME_DIR=/path/to/hdf5-runtime -DCOPY_H5GEOPY_RUNTIME_DEPS=ON
+```cmake
+mkdir build
+cd build
+cmake .. 
+  -DH5GT_BUILD_h5gtpy=ON 
+  -DPYTHON_EXECUTABLE=/path/to/python.exe 
+  -DH5GT_USE_EIGEN=ON 
+  -DEigen3_ROOT=/path/to/eigen3 
+  -DHDF5_DIR=/path/to/hdf5-config.cmake 
+  -DHDF5_RUNTIME_DIR=/path/to/hdf5-runtime   -DCOPY_H5GEOPY_RUNTIME_DEPS=ON
 cmake --build . 
 ```
 If your HDF5 depends on ZLIB or MPI you may also need to add it.
@@ -32,13 +40,15 @@ To run **h5gtpy** python must know where HDF5-runtime is. You may choose whether
 
 ## Installation h5gtpy
 
-`h5gtpy` installation is done the same way one usually install cmake project:
+`h5gtpy` installation is done the same way one usually installs cmake project:
 
-`cmake --install . --prefix /some/path --config Release`
+```cmake
+cmake --install . --prefix /some/path --config Release`
+```
 
-Then you can find h5gtpy in `site-packages` of your python env.
+Then you can find **h5gtpy** in `site-packages` of your python env.
 
-After installation you need to make sure that linked (on WIndows it is `hdf5.dll`) module is in the `PATH` env variable.
+**NOTE:** cmake tries to find runtime dependencies at `install` step. If there are unresolved or conflict dependencies then you need to modify `PATH` env, rerun `cmake ..` and `cmake --install . --prefix /some/path --config Release`. **You don't have to rebuild the project!**
 
 ## Usage
 Importing is done via:
