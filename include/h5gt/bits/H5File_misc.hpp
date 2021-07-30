@@ -72,7 +72,7 @@ inline File::File(const std::string& filename, unsigned openFlags,
                         fileAccessProps.getId(false))) < 0) {
     HDF5ErrMapper::ToException<FileException>(
           std::string("Unable to create file " + filename +
-                      ". Probably there are opened files still exist?"));
+                      ". Probably you don't have permissions, incorrect directory or the file is busy by another process"));
   }
 }
 
