@@ -139,4 +139,5 @@ endforeach()
 #-----------------------------------------------------------------------------
 # Pip install
 #-----------------------------------------------------------------------------
+execute_process(COMMAND @PYTHON_EXECUTABLE@ -m pip install --upgrade pip)   # is very necessary
 execute_process(COMMAND @PYTHON_EXECUTABLE@ -m pip install @CMAKE_CURRENT_BINARY_DIR@ --use-feature=in-tree-build)
