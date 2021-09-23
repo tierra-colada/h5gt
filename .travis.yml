@@ -1,5 +1,7 @@
 language: cpp
 
+# python wrapper needs shared dependencies!
+
 matrix:
   include:
     # MPI 3.1
