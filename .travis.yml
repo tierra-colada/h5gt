@@ -179,7 +179,7 @@ script:
     -DCOPY_H5GTPY_RUNTIME_DEPS=${COPY_H5GTPY_RUNTIME_DEPS}
     -DHDF5_USE_STATIC_LIBRARIES=${HDF5_USE_STATIC_LIBRARIES}  
     -G "${CMAKE_GENERATOR}" ../
-  - cmake --build . --config Release
+  - cmake --build . --config Release -j
   - CTEST_OUTPUT_ON_FAILURE=1 cmake --build . --target ${TESTS_TARGET} --config Release
   - cmake --install . --prefix ../install --config Release
   - ${PYTEST_COMMAND}
