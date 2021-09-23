@@ -75,7 +75,7 @@ if(H5GT_BUILD_h5gtpy)
 endif()
 
 if(H5GT_USE_EIGEN)
-  find_package(Eigen3 PACKAGE_FIND_VERSION_MIN_MAJOR 3 REQUIRED)
+  find_package(Eigen3 REQUIRED)
   target_include_directories(h5gt INTERFACE ${EIGEN3_INCLUDE_DIRS})
   target_compile_definitions(h5gt INTERFACE H5GT_USE_EIGEN)
 endif()
