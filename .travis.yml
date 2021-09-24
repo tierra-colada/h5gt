@@ -156,7 +156,7 @@ before_install:
       echo $HOME/miniconda/include ls;
       cd $HOME/miniconda/include;
       ls;
-      cd $HOME/miniconda/condabin/conda;
+      cd $HOME/miniconda/condabin;
       echo create py37;
       ./conda create --name py37 python=3.7;
       echo activate py37;
