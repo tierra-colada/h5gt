@@ -144,6 +144,10 @@ before_install:
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
       wget "http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh" -O miniconda.sh;
       bash miniconda.sh -b -p $HOME/miniconda;
+      cd $HOME/miniconda;
+      ls;
+      cd $HOME/miniconda/bin;
+      ls;
       source $HOME/miniconda/bin/activate;
       hash -r;
       conda config --set always_yes yes --set changeps1 no;
