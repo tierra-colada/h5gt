@@ -36,7 +36,7 @@ pybind11_add_module(_h5gt
 target_include_directories(_h5gt PRIVATE ${CMAKE_SOURCE_DIR}/include)
 target_link_directories(_h5gt PRIVATE pybind11)
 
-if(NOT HDF5_USE_STATIC_LIBRARIES)
+if(NOT HDF5_USE_STATIC_LIBRARIES AND H5GT_USE_EIGEN)
   target_link_libraries(_h5gt PRIVATE h5gt)
 else()
   message(FATAL_ERROR "To build h5gtpy shared hdf5 lib and Eigen must be found!")

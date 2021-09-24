@@ -28,7 +28,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 # OPTIONS
-option(H5GT_USE_EIGEN "Enable Eigen testing" ON)
+option(H5GT_USE_EIGEN "Enable Eigen testing (also needed for `h5gtpy`)" ON)
 option(H5GT_USE_XTENSOR "Enable xtensor testing" OFF)
 option(H5GT_USE_OPENCV "Enable OpenCV testing" OFF)
 option(H5GT_BUILD_TESTS "Build tests" ON)
