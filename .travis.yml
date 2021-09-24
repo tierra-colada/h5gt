@@ -118,13 +118,13 @@ matrix:
         - H5GT_BUILD_TESTS=True
         - H5GT_EXAMPLES=True
         - HDF5_PREFER_PARALLEL=False
-        - H5GT_BUILD_h5gtpy=False
-        - HDF5_RUNTIME_DIR=""
+        - H5GT_BUILD_h5gtpy=True
+        - HDF5_RUNTIME_DIR="/Users/travis/miniconda/bin"
         - COPY_H5GTPY_RUNTIME_DEPS=False
         - HDF5_USE_STATIC_LIBRARIES=False
         - CMAKE_GENERATOR="Ninja"
         - TESTS_TARGET="test"
-        - PYTEST_COMMAND=""
+        - PYTEST_COMMAND="python -m unittest discover h5gtpy.tests"
 
 env:
   global:
