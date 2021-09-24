@@ -144,7 +144,7 @@ before_install:
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
       wget "http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh" -O miniconda.sh;
       bash miniconda.sh -b -p $HOME/miniconda;
-      ./$HOME/miniconda/condabin/conda create --name py37 python=3.7 --yes;
+      . $HOME/miniconda/condabin/conda create --name py37 python=3.7 --yes;
       source $HOME/miniconda/bin/activate py37;
       hash -r;
       conda config --set always_yes yes --set changeps1 no;
