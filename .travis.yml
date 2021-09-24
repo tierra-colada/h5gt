@@ -156,7 +156,10 @@ before_install:
       echo $HOME/miniconda/include ls;
       cd $HOME/miniconda/include;
       ls;
-      source $HOME/miniconda/condabin/conda create --name py37 python=3.7;
+      cd $HOME/miniconda/condabin/conda;
+      echo create py37;
+      ./conda create --name py37 python=3.7;
+      echo activate py37;
       source $HOME/miniconda/condabin/activate py37;
       hash -r;
       conda config --set always_yes yes --set changeps1 no;
