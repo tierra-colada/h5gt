@@ -68,7 +68,6 @@ if (EIGEN3_INCLUDE_DIRS)
   # in cache already
   _eigen3_check_version()
   set(EIGEN3_FOUND ${EIGEN3_VERSION_OK})
-  set(Eigen3_FOUND ${EIGEN3_VERSION_OK})
 
 else ()
   

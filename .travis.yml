@@ -112,7 +112,7 @@ matrix:
       osx_image: xcode12.2
       compiler: clang
       env:
-        - H5GT_USE_EIGEN=False
+        - H5GT_USE_EIGEN=True
         - H5GT_USE_XTENSOR=True
         - H5GT_USE_OPENCV=True
         - H5GT_BUILD_TESTS=True
@@ -132,7 +132,7 @@ env:
   - EIGEN3_ROOT=${TRAVIS_BUILD_DIR}/../eigen
 
 before_install:
-  - git clone --branch 3.4.0-rc1 https://gitlab.com/libeigen/eigen.git $EIGEN3_SRC
+  - git clone --branch 3.4.0 https://gitlab.com/libeigen/eigen.git $EIGEN3_SRC
 
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 
       choco install --yes miniconda3;
