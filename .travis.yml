@@ -142,6 +142,7 @@ before_install:
       conda install -c conda-forge mamba;
       mamba install -c conda-forge xtl xsimd xtensor libopencv opencv zlib hdf5;
     elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
+      brew update && brew uninstall --ignore-dependencies python3 && brew install python3;
       wget "http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh" -O miniconda.sh;
       bash miniconda.sh -b -p $HOME/miniconda;
       source $HOME/miniconda/bin/activate;
@@ -150,7 +151,6 @@ before_install:
       conda update -q conda;
       conda install -c conda-forge mamba;
       mamba install -c conda-forge xtl xsimd xtensor libopencv opencv zlib hdf5 ninja;
-      brew update && brew rm python3 && brew install python3;
     fi
 
 before_script:
