@@ -160,7 +160,7 @@ before_install:
       echo create py37;
       ./conda create --name py37 python=3.7 --yes;
       echo activate py37;
-      source activate py37;
+      source $HOME/miniconda/bin/activate py37;
       hash -r;
       conda config --set always_yes yes --set changeps1 no;
       conda update -q conda;
