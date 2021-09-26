@@ -4,109 +4,109 @@ language: cpp
 
 matrix:
   include:
-    # # MPI 3.1
-    # - os: linux
-    #   dist: focal
-    #   compiler: gcc
-    #   env:
-    #     - H5GT_USE_EIGEN=True
-    #     - H5GT_USE_XTENSOR=False
-    #     - H5GT_USE_OPENCV=False
-    #     - H5GT_BUILD_TESTS=True
-    #     - H5GT_EXAMPLES=True
-    #     - HDF5_PREFER_PARALLEL=True
-    #     - H5GT_BUILD_h5gtpy=True
-    #     - HDF5_RUNTIME_DIR=""
-    #     - COPY_H5GTPY_RUNTIME_DEPS=True
-    #     - HDF5_USE_STATIC_LIBRARIES=False
-    #     - CMAKE_GENERATOR="Ninja"
-    #     - TESTS_TARGET="test"
-    #     - PYTEST_COMMAND="python -m unittest discover h5gtpy.tests"
-    #   addons:
-    #     apt:
-    #       packages:
-    #         - libhdf5-mpi-dev
-    #         - ninja-build
+    # MPI 3.1
+    - os: linux
+      dist: focal
+      compiler: gcc
+      env:
+        - H5GT_USE_EIGEN=True
+        - H5GT_USE_XTENSOR=False
+        - H5GT_USE_OPENCV=False
+        - H5GT_BUILD_TESTS=True
+        - H5GT_EXAMPLES=True
+        - HDF5_PREFER_PARALLEL=True
+        - H5GT_BUILD_h5gtpy=True
+        - HDF5_RUNTIME_DIR=""
+        - COPY_H5GTPY_RUNTIME_DEPS=True
+        - HDF5_USE_STATIC_LIBRARIES=False
+        - CMAKE_GENERATOR="Ninja"
+        - TESTS_TARGET="test"
+        - PYTEST_COMMAND="python -m unittest discover h5gtpy.tests"
+      addons:
+        apt:
+          packages:
+            - libhdf5-mpi-dev
+            - ninja-build
 
-    # # MPICH 3.1
-    # - os: linux
-    #   dist: focal
-    #   compiler: clang
-    #   env:
-    #     - H5GT_USE_EIGEN=True
-    #     - H5GT_USE_XTENSOR=False
-    #     - H5GT_USE_OPENCV=False
-    #     - H5GT_BUILD_TESTS=True
-    #     - H5GT_EXAMPLES=True
-    #     - HDF5_PREFER_PARALLEL=True
-    #     - H5GT_BUILD_h5gtpy=True
-    #     - HDF5_RUNTIME_DIR=""
-    #     - COPY_H5GTPY_RUNTIME_DEPS=True
-    #     - HDF5_USE_STATIC_LIBRARIES=False
-    #     - CMAKE_GENERATOR="Ninja"
-    #     - TESTS_TARGET="test"
-    #     - PYTEST_COMMAND="python -m unittest discover h5gtpy.tests"
-    #   addons:
-    #     apt:
-    #       packages:
-    #         - libhdf5-mpich-dev
-    #         - ninja-build
+    # MPICH 3.1
+    - os: linux
+      dist: focal
+      compiler: clang
+      env:
+        - H5GT_USE_EIGEN=True
+        - H5GT_USE_XTENSOR=False
+        - H5GT_USE_OPENCV=False
+        - H5GT_BUILD_TESTS=True
+        - H5GT_EXAMPLES=True
+        - HDF5_PREFER_PARALLEL=True
+        - H5GT_BUILD_h5gtpy=True
+        - HDF5_RUNTIME_DIR=""
+        - COPY_H5GTPY_RUNTIME_DEPS=True
+        - HDF5_USE_STATIC_LIBRARIES=False
+        - CMAKE_GENERATOR="Ninja"
+        - TESTS_TARGET="test"
+        - PYTEST_COMMAND="python -m unittest discover h5gtpy.tests"
+      addons:
+        apt:
+          packages:
+            - libhdf5-mpich-dev
+            - ninja-build
 
-    # # OpenMPI 3.1
-    # - os: linux
-    #   dist: focal
-    #   compiler: clang
-    #   env:
-    #     - H5GT_USE_EIGEN=True
-    #     - H5GT_USE_XTENSOR=False
-    #     - H5GT_USE_OPENCV=False
-    #     - H5GT_BUILD_TESTS=True
-    #     - H5GT_EXAMPLES=True
-    #     - HDF5_PREFER_PARALLEL=True
-    #     - H5GT_BUILD_h5gtpy=True
-    #     - HDF5_RUNTIME_DIR=""
-    #     - COPY_H5GTPY_RUNTIME_DEPS=False
-    #     - HDF5_USE_STATIC_LIBRARIES=False
-    #     - CMAKE_GENERATOR="Ninja"
-    #     - TESTS_TARGET="test"
-    #     - PYTEST_COMMAND="python -m unittest discover h5gtpy.tests"
-    #   addons:
-    #     apt:
-    #       packages:
-    #         - libhdf5-openmpi-dev
-    #         - ninja-build
+    # OpenMPI 3.1
+    - os: linux
+      dist: focal
+      compiler: clang
+      env:
+        - H5GT_USE_EIGEN=True
+        - H5GT_USE_XTENSOR=False
+        - H5GT_USE_OPENCV=False
+        - H5GT_BUILD_TESTS=True
+        - H5GT_EXAMPLES=True
+        - HDF5_PREFER_PARALLEL=True
+        - H5GT_BUILD_h5gtpy=True
+        - HDF5_RUNTIME_DIR=""
+        - COPY_H5GTPY_RUNTIME_DEPS=False
+        - HDF5_USE_STATIC_LIBRARIES=False
+        - CMAKE_GENERATOR="Ninja"
+        - TESTS_TARGET="test"
+        - PYTEST_COMMAND="python -m unittest discover h5gtpy.tests"
+      addons:
+        apt:
+          packages:
+            - libhdf5-openmpi-dev
+            - ninja-build
 
-    # - os: windows
-    #   env:
-    #     - H5GT_USE_EIGEN=True
-    #     - H5GT_USE_XTENSOR=True
-    #     - H5GT_USE_OPENCV=True
-    #     - H5GT_BUILD_TESTS=True
-    #     - H5GT_EXAMPLES=True
-    #     - HDF5_PREFER_PARALLEL=False
-    #     - H5GT_BUILD_h5gtpy=True
-    #     - HDF5_RUNTIME_DIR="C:/Tools/miniconda3/Library/bin"
-    #     - COPY_H5GTPY_RUNTIME_DEPS=True
-    #     - HDF5_USE_STATIC_LIBRARIES=False
-    #     - CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
-    #     - TESTS_TARGET="RUN_TESTS"
-    #     - PYTEST_COMMAND="python -m unittest discover h5gtpy.tests"
+    - os: windows
+      env:
+        - H5GT_USE_EIGEN=True
+        - H5GT_USE_XTENSOR=True
+        - H5GT_USE_OPENCV=True
+        - H5GT_BUILD_TESTS=True
+        - H5GT_EXAMPLES=True
+        - HDF5_PREFER_PARALLEL=False
+        - H5GT_BUILD_h5gtpy=True
+        - HDF5_RUNTIME_DIR="C:/Tools/miniconda3/Library/bin"
+        - COPY_H5GTPY_RUNTIME_DEPS=True
+        - HDF5_USE_STATIC_LIBRARIES=False
+        - CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
+        - TESTS_TARGET="RUN_TESTS"
+        - PYTEST_COMMAND="python -m unittest discover h5gtpy.tests"
 
-    # - os: windows
-    #   env:
-    #     - H5GT_USE_EIGEN=True
-    #     - H5GT_USE_XTENSOR=True
-    #     - H5GT_USE_OPENCV=True
-    #     - H5GT_BUILD_TESTS=True
-    #     - H5GT_EXAMPLES=True
-    #     - HDF5_PREFER_PARALLEL=False
-    #     - H5GT_BUILD_h5gtpy=True
-    #     - HDF5_RUNTIME_DIR="C:/Tools/miniconda3/Library/bin"
-    #     - COPY_H5GTPY_RUNTIME_DEPS=False
-    #     - HDF5_USE_STATIC_LIBRARIES=False
-    #     - CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
-    #     - TESTS_TARGET="RUN_TESTS"
-    #     - PYTEST_COMMAND="python -m unittest discover h5gtpy.tests"
+    - os: windows
+      env:
+        - H5GT_USE_EIGEN=True
+        - H5GT_USE_XTENSOR=True
+        - H5GT_USE_OPENCV=True
+        - H5GT_BUILD_TESTS=True
+        - H5GT_EXAMPLES=True
+        - HDF5_PREFER_PARALLEL=False
+        - H5GT_BUILD_h5gtpy=True
+        - HDF5_RUNTIME_DIR="C:/Tools/miniconda3/Library/bin"
+        - COPY_H5GTPY_RUNTIME_DEPS=False
+        - HDF5_USE_STATIC_LIBRARIES=False
+        - CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
+        - TESTS_TARGET="RUN_TESTS"
+        - PYTEST_COMMAND="python -m unittest discover h5gtpy.tests"
 
     - os: osx
       osx_image: xcode12.2
