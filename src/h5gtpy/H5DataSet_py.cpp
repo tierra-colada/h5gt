@@ -22,6 +22,8 @@ void DataSet_py(py::class_<DataSet, Object, SliceTraits<DataSet>, AnnotateTraits
 "link points to. Otherwise it works the same way as `getPath()`")
       .def("getParent", &DataSet::getParent,
            py::arg_v("groupAccessProps", GroupAccessProps(), "GroupAccessProps()"))
+      .def("getCreateProps", &DataSet::getCreateProps)
+      .def("getAccessProps", &DataSet::getAccessProps)
       .def("resize", &DataSet::resize,
            py::arg("dims"),
            "This requires that the dataset was created with chunking, and you would"

@@ -16,6 +16,15 @@ void setChunk_wrap2(
   self.setChunk(dim);
 }
 
+std::tuple<size_t, size_t, double> getChunkCache(
+    DataSetAccessProps& self){
+  size_t numSlots;
+  size_t cacheSize;
+  double w0;
+  self.getChunkCache(numSlots, cacheSize, w0);
+  return std::make_tuple(std::move(numSlots), std::move(cacheSize), std::move(w0));
+}
+
 } // ext
 
 
@@ -57,22 +66,38 @@ void GroupAccessProps_py(py::class_<GroupAccessProps, PropertyList<PropertyType:
 void DataSetCreateProps_py(py::class_<DataSetCreateProps, PropertyList<PropertyType::DATASET_CREATE> > &py_obj){
   py_obj
       .def(py::init<>())
+      .def_static("FromId", &DataSetCreateProps::FromId,
+                  py::arg("id"),
+                  py::arg_v("increaseRefCount", false, "false"),
+                  "Create new object from ID")
       .def("setShuffle", &DataSetCreateProps::setShuffle)
       .def("setChunk", &ext::setChunk_wrap1,
            py::arg("dims"))
       .def("setChunk", &ext::setChunk_wrap2,
-           py::arg("dim"));
+           py::arg("dim"))
+      .def("getChunk", &DataSetCreateProps::getChunk,
+           py::arg("max_ndims"))
+      .def("getLayoutType", &DataSetCreateProps::getLayoutType)
+      .def("isCompact", &DataSetCreateProps::isCompact)
+      .def("isContiguous", &DataSetCreateProps::isContiguous)
+      .def("isChunked", &DataSetCreateProps::isChunked)
+      .def("isVirtual", &DataSetCreateProps::isVirtual);
 }
 
 void DataSetAccessProps_py(py::class_<DataSetAccessProps, PropertyList<PropertyType::DATASET_ACCESS> > &py_obj){
   py_obj
       .def(py::init<>())
+      .def_static("FromId", &DataSetAccessProps::FromId,
+                  py::arg("id"),
+                  py::arg_v("increaseRefCount", false, "false"),
+                  "Create new object from ID")
       .def("setChunkCache", &DataSetAccessProps::setChunkCache,
            py::arg("numSlots"),
            py::arg("cacheSize"),
            py::arg_v("w0", static_cast<double>(H5D_CHUNK_CACHE_W0_DEFAULT), "static_cast<double>(H5D_CHUNK_CACHE_W0_DEFAULT)"))
       .def("setExternalLinkPrefix", &DataSetAccessProps::setExternalLinkPrefix,
-           py::arg("prefix"));
+           py::arg("prefix"))
+      .def("getChunkCache", &ext::getChunkCache);
 }
 
 void DataTypeCreateProps_py(py::class_<DataTypeCreateProps, PropertyList<PropertyType::DATATYPE_CREATE> > &py_obj){
