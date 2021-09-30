@@ -19,6 +19,31 @@
 namespace h5gt {
 
 ///
+/// \brief Types dataset layout
+///
+enum class LayoutType : int {
+  COMPACT,
+  CONTIGUOUS,
+  CHUNKED,
+  VIRTUAL,
+};
+
+static inline LayoutType _convert_layout_type(const H5D_layout_t& h5type) {
+  switch (h5type) {
+  case H5D_COMPACT:
+    return LayoutType::COMPACT;
+  case H5D_CONTIGUOUS:
+    return LayoutType::CONTIGUOUS;
+  case H5D_CHUNKED:
+    return LayoutType::CHUNKED;
+  case H5D_VIRTUAL:
+    return LayoutType::VIRTUAL;
+  default:
+    return static_cast<LayoutType>(-1);
+  }
+}
+
+///
 /// \brief Types of property lists
 ///
 enum class PropertyType : int {
@@ -89,14 +114,11 @@ public:
   }
 
 protected:
-  void setCreateIntermediateGroup(unsigned val);
+  PropertyList(const hid_t& hid) noexcept : _hid(hid) {}
+
   void setExternalLinkPrefix(const std::string& prefix);
-  void setShuffle();
-  void setDeflate(const unsigned& level);
-  void setChunk(const std::vector<hsize_t>& dims);
-  void setChunkCache(
-      const size_t& numSlots, const size_t& cacheSize,
-      const double& w0);
+
+  std::vector<hsize_t> getChunk(int max_ndims);
 
   void initializeId();
 
@@ -109,9 +131,7 @@ public:
     setCreateIntermediateGroup(1);  // create intermediate groups ON by default
   }
 
-  void setCreateIntermediateGroup(unsigned val){
-    PropertyList::setCreateIntermediateGroup(val);
-  }
+  void setCreateIntermediateGroup(unsigned val);
 };
 
 class LinkAccessProps : public PropertyList<PropertyType::LINK_ACCESS> {
@@ -151,13 +171,26 @@ class DataSetCreateProps : public PropertyList<PropertyType::DATASET_CREATE> {
 public:
   DataSetCreateProps(){}
 
-  void setShuffle(){
-    PropertyList::setShuffle();
-  }
+  static DataSetCreateProps FromId(const hid_t& id, const bool& increaseRefCount = false){
+    hid_t prop_class_id = H5Pget_class(id);
 
-  void setDeflate(const unsigned& level){
-    PropertyList::setDeflate(level);
-  }
+    if (prop_class_id < 0){
+      HDF5ErrMapper::ToException<PropertyException>(
+            "Unable to get property class");
+    }
+    if (H5Pequal(prop_class_id, H5P_DATASET_CREATE) <= 0){
+      HDF5ErrMapper::ToException<PropertyException>(
+            "Property id is of different class");
+    }
+    if (increaseRefCount)
+      H5Iinc_ref(id);
+
+    return DataSetCreateProps(id);
+  };
+
+  void setShuffle();
+
+  void setDeflate(const unsigned& level);
 
   void setChunk(const std::initializer_list<hsize_t>& items){
     std::vector<hsize_t> dims{items};
@@ -170,25 +203,55 @@ public:
     setChunk(dims);
   }
 
-  void setChunk(const std::vector<hsize_t>& dims){
-    PropertyList::setChunk(dims);
-  }
+  void setChunk(const std::vector<hsize_t>& dims);
+
+  std::vector<hsize_t> getChunk(int max_ndims);
+
+  LayoutType getLayoutType();
+
+  bool isCompact();
+  bool isContiguous();
+  bool isChunked();
+  bool isVirtual();
+
+  // this allows to inherit all constructors `PropertyList(id)` for example
+  // https://stackoverflow.com/questions/347358/inheriting-constructors
+  using PropertyList::PropertyList;
 };
 
 class DataSetAccessProps : public PropertyList<PropertyType::DATASET_ACCESS> {
 public:
   DataSetAccessProps(){}
 
+  static DataSetAccessProps FromId(const hid_t& id, const bool& increaseRefCount = false){
+    hid_t prop_class_id = H5Pget_class(id);
+
+    if (prop_class_id < 0){
+      HDF5ErrMapper::ToException<PropertyException>(
+            "Unable to get property class");
+    }
+    if (H5Pequal(prop_class_id, H5P_DATASET_ACCESS) <= 0){
+      HDF5ErrMapper::ToException<PropertyException>(
+            "Property id is of different class");
+    }
+    if (increaseRefCount)
+      H5Iinc_ref(id);
+
+    return DataSetAccessProps(id);
+  };
+
   void setChunkCache(
       const size_t& numSlots, const size_t& cacheSize,
-      const double& w0 = static_cast<double>(H5D_CHUNK_CACHE_W0_DEFAULT))
-  {
-    PropertyList::setChunkCache(numSlots, cacheSize, w0);
-  }
+      const double& w0 = static_cast<double>(H5D_CHUNK_CACHE_W0_DEFAULT));
 
   void setExternalLinkPrefix(const std::string& prefix){
     PropertyList::setExternalLinkPrefix(prefix);
   }
+
+  void getChunkCache(
+      size_t& numSlots, size_t& cacheSize, double& w0);
+
+  using PropertyList::PropertyList;
 };
 
 class DataTypeCreateProps : public PropertyList<PropertyType::DATATYPE_CREATE> {

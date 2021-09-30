@@ -76,6 +76,9 @@ public:
 
   Group getParent(const GroupAccessProps& groupAccessProps = GroupAccessProps()) const;
 
+  DataSetCreateProps getCreateProps() const;
+  DataSetAccessProps getAccessProps() const;
+
   /// \brief Change the size of the dataset
   ///
   /// This requires that the dataset was created with chunking, and you would

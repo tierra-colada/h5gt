@@ -83,6 +83,24 @@ inline Group DataSet::getParent(const GroupAccessProps& groupAccessProps) const 
   return file.getGroup(parentPath, groupAccessProps);
 }
 
+inline DataSetCreateProps DataSet::getCreateProps() const{
+  hid_t prop_id = H5Dget_create_plist(_hid);
+  if (prop_id < 0) {
+    HDF5ErrMapper::ToException<DataSetException>(
+          "Cannot get creation property list for a DataSet");
+  }
+  return DataSetCreateProps::FromId(prop_id, false);
+}
+
+inline DataSetAccessProps DataSet::getAccessProps() const{
+  hid_t prop_id = H5Dget_access_plist(_hid);
+  if (prop_id < 0) {
+    HDF5ErrMapper::ToException<DataSetException>(
+          "Cannot get access property list for a DataSet");
+  }
+  return DataSetAccessProps::FromId(prop_id, false);
+}
+
 inline uint64_t DataSet::getOffset() const {
   uint64_t addr = H5Dget_offset(_hid);
   if (addr == HADDR_UNDEF) {

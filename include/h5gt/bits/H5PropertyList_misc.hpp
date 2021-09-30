@@ -65,14 +65,6 @@ inline void PropertyList<T>::initializeId() {
 }
 
 template <PropertyType T>
-inline void PropertyList<T>::setCreateIntermediateGroup(unsigned val) {
-  if (H5Pset_create_intermediate_group(_hid, val) < 0){
-    HDF5ErrMapper::ToException<PropertyException>(
-          "Unable to set property");
-  }
-}
-
-template <PropertyType T>
 ///
 /// \brief setExternalLinkPrefix Let’s say you’ve created an external link
 /// in foo.h5 and the external link refers to a path name in file bar.h5.
@@ -87,12 +79,36 @@ template <PropertyType T>
 inline void PropertyList<T>::setExternalLinkPrefix(const std::string& prefix) {
   if (H5Pset_elink_prefix(_hid, prefix.c_str()) < 0){
     HDF5ErrMapper::ToException<PropertyException>(
-          "Unable to set property");
+          "Unable to set external link prefix property");
   }
 }
 
-template <PropertyType T>
-inline void PropertyList<T>::setShuffle() {
+inline void LinkCreateProps::setCreateIntermediateGroup(unsigned val) {
+  if (H5Pset_create_intermediate_group(_hid, val) < 0){
+    HDF5ErrMapper::ToException<PropertyException>(
+          "Unable to set create intermediate group property");
+  }
+}
+
+inline void DataSetAccessProps::setChunkCache(
+    const size_t& numSlots, const size_t& cacheSize, const double& w0)
+{
+  if (H5Pset_chunk_cache(_hid, numSlots, cacheSize, w0) < 0){
+    HDF5ErrMapper::ToException<PropertyException>(
+          "Unable to set chunk cache property");
+  }
+}
+
+inline void DataSetAccessProps::getChunkCache(
+    size_t& numSlots, size_t& cacheSize, double& w0)
+{
+  if (H5Pget_chunk_cache(_hid, &numSlots, &cacheSize, &w0) < 0){
+    HDF5ErrMapper::ToException<PropertyException>(
+          "Unable to get chunk cache property");
+  }
+}
+
+inline void DataSetCreateProps::setShuffle() {
   if (!H5Zfilter_avail(H5Z_FILTER_SHUFFLE)){
     HDF5ErrMapper::ToException<PropertyException>(
           "Z-FILTER is unavailable");
@@ -100,12 +116,11 @@ inline void PropertyList<T>::setShuffle() {
 
   if (H5Pset_shuffle(_hid) < 0){
     HDF5ErrMapper::ToException<PropertyException>(
-          "Unable to set property");
+          "Unable to set shuffle property");
   }
 }
 
-template <PropertyType T>
-inline void PropertyList<T>::setDeflate(const unsigned& level) {
+inline void DataSetCreateProps::setDeflate(const unsigned& level) {
   if (!H5Zfilter_avail(H5Z_FILTER_SHUFFLE)){
     HDF5ErrMapper::ToException<PropertyException>(
           "Z-FILTER is unavailable");
@@ -113,26 +128,65 @@ inline void PropertyList<T>::setDeflate(const unsigned& level) {
 
   if (H5Pset_deflate(_hid, level) < 0){
     HDF5ErrMapper::ToException<PropertyException>(
-          "Unable to set property");
+          "Unable to set deflate property");
   }
 }
 
-template <PropertyType T>
-inline void PropertyList<T>::setChunk(const std::vector<hsize_t>& dims) {
+inline void DataSetCreateProps::setChunk(const std::vector<hsize_t>& dims) {
   if (H5Pset_chunk(_hid, static_cast<int>(dims.size()), dims.data()) < 0){
     HDF5ErrMapper::ToException<PropertyException>(
-          "Unable to set property");
+          "Unable to set chunk property");
   }
 }
 
-template <PropertyType T>
-inline void PropertyList<T>::setChunkCache(
-    const size_t& numSlots, const size_t& cacheSize, const double& w0)
+inline std::vector<hsize_t> DataSetCreateProps::getChunk(int max_ndims)
 {
-  if (H5Pset_chunk_cache(_hid, numSlots, cacheSize, w0) < 0){
+  // initialize with zeros
+  hsize_t* dims = (hsize_t *) calloc(max_ndims, sizeof(hsize_t*));
+  if (H5Pget_chunk(_hid, max_ndims, dims) < 0 ){
     HDF5ErrMapper::ToException<PropertyException>(
-          "Unable to set property");
+          "Unable to get chunk property");
   }
+  std::vector<hsize_t> v;
+  v.reserve(max_ndims);
+  for (int i = 0; i < max_ndims; i++){
+    if (dims[i] == 0)
+      break;
+    v.push_back(dims[i]);
+  }
+
+  v.shrink_to_fit();
+  free(dims);
+  return v;
+}
+
+inline LayoutType DataSetCreateProps::getLayoutType()
+{
+  return _convert_layout_type(H5Pget_layout(_hid));
+}
+
+inline bool DataSetCreateProps::isCompact(){
+  if (getLayoutType() == LayoutType::COMPACT)
+    return true;
+  return false;
+}
+
+inline bool DataSetCreateProps::isContiguous(){
+  if (getLayoutType() == LayoutType::CONTIGUOUS)
+    return true;
+  return false;
+}
+
+inline bool DataSetCreateProps::isChunked(){
+  if (getLayoutType() == LayoutType::CHUNKED)
+    return true;
+  return false;
+}
+
+inline bool DataSetCreateProps::isVirtual(){
+  if (getLayoutType() == LayoutType::VIRTUAL)
+    return true;
+  return false;
 }
 
 

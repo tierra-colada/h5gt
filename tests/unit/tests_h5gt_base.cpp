@@ -1306,6 +1306,22 @@ TEST(H5GTBase, CheckIdFunctionality) {
   ASSERT_EQ(file3.getIdRefCount(), 3);
 }
 
+TEST(H5GTBase, GetDatasetProps) {
+  std::vector<hsize_t> c_dims({2,3});
+  File file("getProps.h5", File::ReadWrite | File::Create | File::Truncate);
+  DataSetCreateProps dsetCreateProps;
+  dsetCreateProps.setChunk(c_dims);
+  DataSet dset = file.createDataSet<double>(
+        "data", DataSpace({10,10}), LinkCreateProps(), dsetCreateProps);
+  std::vector<hsize_t> v = dset.getCreateProps().getChunk(4);
+  ASSERT_TRUE(dset.getCreateProps().isChunked());
+  ASSERT_THAT(v, ::testing::ElementsAreArray(c_dims));
+
+  dset = file.createDataSet<double>(
+        "data1", DataSpace({10,10}));
+  ASSERT_TRUE(dset.getCreateProps().isContiguous());
+}
+
 TEST(H5GTBase, SoftLink) {
   int val_in = 371;
   int val_out = 0;

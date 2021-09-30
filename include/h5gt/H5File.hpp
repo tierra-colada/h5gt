@@ -73,8 +73,8 @@ public:
   bool operator!=(const File& other) const;
 
   static File FromId(const hid_t& id, const bool& increaseRefCount = false){
-      Object obj = Object(id, ObjectType::File, increaseRefCount);
-      return File(obj);
+    Object obj = Object(id, ObjectType::File, increaseRefCount);
+    return File(obj);
   };
 
 protected:
