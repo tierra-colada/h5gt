@@ -153,7 +153,8 @@ public:
   /// \param linkAccessProps A link property list with data set access properties
   /// \return true if a dataset/group with the associated name exists, or false
   bool exist(const std::string& obj_name,
-             const LinkAccessProps& linkAccessProps = LinkAccessProps()) const;
+             const LinkAccessProps& linkAccessProps = LinkAccessProps(),
+             bool raise_errors = false) const;
 
   bool hasObject(const std::string& objName, const ObjectType& objType,
                  const LinkAccessProps& linkAccessProps = LinkAccessProps()) const;
@@ -201,7 +202,7 @@ private:
   // errors to exceptions
   bool _exist(const std::string& node_name,
               const LinkAccessProps& accessProps = LinkAccessProps(),
-              bool raise_errors = true) const;
+              bool raise_errors = false) const;
 
   // Opens an arbitrary object to obtain info
   Object _open(const std::string& node_name,

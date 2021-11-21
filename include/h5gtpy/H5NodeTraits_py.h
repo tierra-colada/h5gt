@@ -111,6 +111,7 @@ void NodeTraits_py(py::class_<NodeTraits<Derivate> >& py_obj) {
       .def("exist", &NodeTraits<Derivate>::exist,
            py::arg("obj_name"),
            py::arg_v("linkAccessProps", LinkAccessProps(), "LinkAccessProps()"),
+           py::arg_v("raise_errors", false, "False"),
            "Check a dataset or group exists in the current node / group")
       .def("hasObject", &NodeTraits<Derivate>::hasObject,
            py::arg("objName"),

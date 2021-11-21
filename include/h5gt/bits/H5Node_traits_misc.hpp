@@ -225,7 +225,8 @@ inline bool NodeTraits<Derivate>::_exist(const std::string& node_name,
 
 template <typename Derivate>
 inline bool NodeTraits<Derivate>::exist(const std::string& group_path,
-                                        const LinkAccessProps& linkAccessProps) const {
+                                        const LinkAccessProps& linkAccessProps,
+                                        bool raise_errors) const {
   // When there are slashes, first check everything is fine
   // so that subsequent errors are only due to missing intermediate groups
   if (group_path.find('/') != std::string::npos) {
@@ -233,7 +234,7 @@ inline bool NodeTraits<Derivate>::exist(const std::string& group_path,
     // Unless "/" (already checked), verify path exists (not thowing errors)
     return (group_path == "/") ? true : _exist(group_path, linkAccessProps, false);
   }
-  return _exist(group_path, linkAccessProps);
+  return _exist(group_path, linkAccessProps, raise_errors);
 }
 
 template <typename Derivate>
