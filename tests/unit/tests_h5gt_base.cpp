@@ -1585,13 +1585,7 @@ TEST(H5GTBase, Compounds) {
     dataset3.write(csl3);
 
     auto dtype = dataset3.getDataType();
-    char* field0 =  H5Tget_member_name(dtype.getId(), 0);
-    char* field1 =  H5Tget_member_name(dtype.getId(), 1);
-    char* field2 =  H5Tget_member_name(dtype.getId(), 2);
-    char* field3 =  H5Tget_member_name(dtype.getId(), 3);
-    if (!dtype.isTypeEqual(create_compound_csl3())){
-      std::cout << "SUKA" << std::endl;
-    }
+    EXPECT_TRUE(dtype.isTypeEqual(create_compound_csl3()));
 
     file.flush();
 
