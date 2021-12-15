@@ -37,7 +37,18 @@ inline size_t DataType::getSize() const {
   return H5Tget_size(_hid);
 }
 
+/// if the type is var lengh then `H5Tequal` doesn't work:
+/// https://forum.hdfgroup.org/t/reading-compound-datasets-recursively/6846/7?u=kerim.khemraev
 inline bool DataType::isTypeEqual(const DataType& other) const {
+  htri_t isT1_VarLen = H5Tis_variable_str(_hid);
+  htri_t isT2_VarLen = H5Tis_variable_str(other._hid);
+  if (isT1_VarLen > 0 && isT2_VarLen > 0)
+    return true;
+
+  if (isT1_VarLen > 0 && isT1_VarLen <= 0 ||
+      isT1_VarLen <= 0 && isT1_VarLen > 0)
+    return false;
+
   return (H5Tequal(_hid, other._hid) > 0);
 }
 

@@ -1208,6 +1208,13 @@ typedef struct {
   CSL1 csl1;
 } CSL2;
 
+typedef struct {
+  double x;
+  double y;
+  double z;
+  const char* name;
+} CSL3;
+
 TEST(H5GTBase, GetPath) {
   File file("getpath.h5", File::ReadWrite | File::Create | File::Truncate);
 
@@ -1518,22 +1525,38 @@ CompoundType create_compound_csl2() {
   return t2;
 }
 
+CompoundType create_compound_csl3() {
+  CompoundType t3(
+        {
+          {"x", AtomicType<double>{}},
+          {"y", AtomicType<double>{}},
+          {"z", AtomicType<double>{}},
+          {"name", AtomicType<std::string>{}}
+        });
+
+  return t3;
+}
+
 H5GT_REGISTER_TYPE(CSL1, create_compound_csl1)
 H5GT_REGISTER_TYPE(CSL2, create_compound_csl2)
+H5GT_REGISTER_TYPE(CSL3, create_compound_csl3)
 
 TEST(H5GTBase, Compounds) {
   const std::string FILE_NAME("compounds_test.h5");
   const std::string DATASET_NAME1("/a");
   const std::string DATASET_NAME2("/b");
+  const std::string DATASET_NAME3("/c");
 
   File file(FILE_NAME, File::ReadWrite | File::Create | File::Truncate);
 
-  auto t3 = AtomicType<int>();
   CompoundType t1 = create_compound_csl1();
   t1.commit(file, "my_type");
 
   CompoundType t2 = create_compound_csl2();
   t2.commit(file, "my_type2");
+
+  CompoundType t3 = create_compound_csl3();
+  t3.commit(file, "H5Points");
 
   {  // Not nested
     auto dataset = file.createDataSet(DATASET_NAME1, DataSpace(2), t1);
@@ -1553,6 +1576,23 @@ TEST(H5GTBase, Compounds) {
     EXPECT_EQ(result[1].m1, 2);
     EXPECT_EQ(result[1].m2, 3);
     EXPECT_EQ(result[1].m3, 4);
+
+    std::vector<CSL3> csl3 = {
+      {1, 1, 1, "one"},
+      {2, 3, 4, "two"}
+    };
+    auto dataset3 = file.createDataSet(DATASET_NAME3, DataSpace::From(csl3), t3);
+    dataset3.write(csl3);
+
+    auto dtype = dataset3.getDataType();
+    if (!dtype.isTypeEqual(AtomicType<CSL3>())){
+      std::cout << "SUKA" << std::endl;
+    }
+
+    file.flush();
+
+    std::vector<CSL3> result3;
+    dataset.select({0}, {2}).read(result3);
   }
 
   {  // Nested

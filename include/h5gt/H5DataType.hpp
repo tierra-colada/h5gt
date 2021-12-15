@@ -47,7 +47,7 @@ public:
   /// \brief isTypeEqual Unlike `==` operator this only checks if
   /// the data types are equal and do not check if they belong
   /// to the same h5 file
-  bool isTypeEqual(const DataType& other) const;
+  virtual bool isTypeEqual(const DataType& other) const;
 
   ///
   /// \brief Return the fundamental type.
