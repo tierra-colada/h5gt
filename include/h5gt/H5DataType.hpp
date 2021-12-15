@@ -46,7 +46,7 @@ public:
 
   /// \brief isTypeEqual Unlike `==` operator this only checks if
   /// the data types are equal and do not check if they belong
-  /// to the same h5 file
+  /// It is virtual as checking compound type is something different
   virtual bool isTypeEqual(const DataType& other) const;
 
   ///
@@ -178,6 +178,15 @@ public:
     return members;
   }
 
+  DataTypeClass getMemberClass(const unsigned& member_no) const;
+  int getMemberIndex(const std::string& field_name) const;
+  std::string getMemberName(const unsigned& field_idx) const;
+  size_t getMemberOffset(const unsigned& memb_no) const;
+  /// return predefined type specified by hdf5 macro like: H5T_C_S1, H5T_NATIVE_INT, H5T_IEEE_F32BE etc.
+  hid_t getMemberType(const unsigned& field_idx) const;
+  int getNMembers() const;
+
+
   static CompoundType FromId(const hid_t& id, const bool& increaseRefCount = false){
     DataType obj = DataType::FromId(id, increaseRefCount);
     return CompoundType(obj);
@@ -245,6 +254,11 @@ public:
   /// \param object Location to commit object into
   /// \param name Name to give the datatype
   void commit(const Object& object, const std::string& name) const;
+
+  int getMemberIndex(const std::string& field_name) const;
+  std::string getMemberName(const unsigned& field_idx) const;
+  void getMemberValue(const unsigned& memb_no, void *value) const;
+  int getNMembers() const;
 
   static EnumType FromId(const hid_t& id, const bool& increaseRefCount = false){
     DataType obj = DataType::FromId(id, increaseRefCount);

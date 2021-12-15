@@ -327,6 +327,32 @@ inline void CompoundType::commit(const Object& object, const std::string& name) 
   H5Tcommit2(object.getId(false), name.c_str(), getId(false), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 }
 
+inline DataTypeClass CompoundType::getMemberClass(const unsigned& member_no) const {
+  return convert_type_class(H5Tget_member_class(_hid, member_no));
+}
+
+inline int CompoundType::getMemberIndex(const std::string& field_name) const {
+  return H5Tget_member_index(_hid, field_name.c_str());
+}
+
+inline std::string CompoundType::getMemberName(const unsigned& field_idx) const {
+  return std::string(H5Tget_member_name(_hid, field_idx));
+}
+
+inline size_t CompoundType::getMemberOffset(const unsigned& memb_no) const {
+  return H5Tget_member_offset(_hid, memb_no);
+}
+
+inline hid_t CompoundType::getMemberType(const unsigned& field_idx) const {
+  return H5Tget_member_type(_hid, field_idx);
+}
+
+inline int CompoundType::getNMembers() const {
+  return H5Tget_nmembers(_hid);
+}
+
+
+
 template<typename T>
 inline void EnumType<T>::create() {
   // Create the HDF5 type
@@ -349,6 +375,32 @@ template<typename T>
 inline void EnumType<T>::commit(const Object& object, const std::string& name) const {
   H5Tcommit2(object.getId(false), name.c_str(), getId(false), H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 }
+
+template<typename T>
+inline int EnumType<T>::getMemberIndex(const std::string& field_name) const {
+  return H5Tget_member_index(_hid, field_name.c_str());
+}
+
+template<typename T>
+inline std::string EnumType<T>::getMemberName(const unsigned& field_idx) const {
+  return std::string(H5Tget_member_name(_hid, field_idx));
+}
+
+template<typename T>
+inline void EnumType<T>::getMemberValue(const unsigned& memb_no, void *value) const {
+  if (H5Tget_member_value(_hid, memb_no, value) < 0){
+    HDF5ErrMapper::ToException<DataTypeException>(
+          "Could not get member value for this enum datatype"
+          );
+  }
+}
+
+template<typename T>
+inline int EnumType<T>::getNMembers() const {
+  return H5Tget_nmembers(_hid);
+}
+
+
 
 namespace {
 
