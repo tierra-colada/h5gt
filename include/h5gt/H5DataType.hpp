@@ -138,6 +138,8 @@ class CompoundType : public DataType {
 public:
   ///
   /// \brief Use for defining a sub-type of compound type
+  /// If your dtype contains 'std::string' then you need to explicitely set
+  /// 't_offset' in bytest like 'HOFFSET(STRUCT_NAME, MEMBER_NAME)'
   struct member_def {
     member_def(std::string t_name, DataType t_base_type, size_t t_offset = 0)
       : name(std::move(t_name))
@@ -153,15 +155,17 @@ public:
   ///
   /// \brief Initializes a compound type from a vector of member definitions
   /// \param t_members
-  /// \param size
+  /// \param size 'sizeof(STRUCT_NAME)' (must be set if you data contains 'std::string')
   inline CompoundType(const std::vector<member_def>& t_members, size_t size = 0)
     : members(t_members) {
     create(size);
   }
+  /// \param size 'sizeof(STRUCT_NAME)' (must be set if you data contains 'std::string')
   inline CompoundType(std::vector<member_def>&& t_members, size_t size = 0)
     : members(std::move(t_members)) {
     create(size);
   }
+  /// \param size 'sizeof(STRUCT_NAME)' (must be set if you data contains 'std::string')
   inline CompoundType(const std::initializer_list<member_def>& t_members,
                       size_t size = 0)
     : members(t_members) {
@@ -414,13 +418,11 @@ private:
 /// }
 /// H5GT_REGISTER_TYPE(FooBar, create_enum_foobar)
 /// \endcode
-#define H5GT_REGISTER_TYPE(type, function)    \
-  namespace h5gt {                            \
-  template<>                                  \
-  inline DataType create_datatype<type>() {   \
-  return function();                          \
-  }                                           \
-  }
+#define H5GT_REGISTER_TYPE(type, function)                \
+  template<>                                              \
+  inline h5gt::DataType h5gt::create_datatype<type>() {   \
+  return function();                                      \
+  }                                                       \
 
 #include "bits/H5DataType_misc.hpp"
 

@@ -1198,23 +1198,6 @@ TEST(H5GTBase, Inspect) {
   ASSERT_TRUE(ds.getObjectInfo().getHardLinkRefCount() == 1);
 }
 
-typedef struct {
-  int m1;
-  int m2;
-  int m3;
-} CSL1;
-
-typedef struct {
-  CSL1 csl1;
-} CSL2;
-
-typedef struct {
-  double x;
-  double y;
-  double z;
-  const char* name;
-} CSL3;
-
 TEST(H5GTBase, GetPath) {
   File file("getpath.h5", File::ReadWrite | File::Create | File::Truncate);
 
@@ -1510,6 +1493,33 @@ TEST(H5GTBase, RenameRelative) {
   }
 }
 
+#define H5GEO_CHAR_ARRAY_SIZE 50
+
+typedef struct {
+  int m1;
+  int m2;
+  int m3;
+} CSL1;
+
+typedef struct {
+  CSL1 csl1;
+} CSL2;
+
+typedef struct {
+  double x;
+  double y;
+  double z;
+  std::string name;
+} CSL3;
+
+typedef struct {
+  double x;
+  double y;
+  double z;
+  char name[H5GEO_CHAR_ARRAY_SIZE];
+} CSL4;
+
+
 CompoundType create_compound_csl1() {
   auto t2 = AtomicType<int>();
   CompoundType t1({{"m1", AtomicType<int>{}}, {"m2", AtomicType<int>{}}, {"m3", t2}});
@@ -1525,14 +1535,28 @@ CompoundType create_compound_csl2() {
   return t2;
 }
 
+/// as 'CSL3' contains 'std::string' we must explicitely set
+/// offset for each member and for the struct itself
 CompoundType create_compound_csl3() {
   CompoundType t3(
         {
-          {"x", AtomicType<double>{}},
-          {"y", AtomicType<double>{}},
-          {"z", AtomicType<double>{}},
-          {"name", AtomicType<std::string>{}}
-        });
+          {"x", AtomicType<double>{}, HOFFSET(CSL3, x)},
+          {"y", AtomicType<double>{}, HOFFSET(CSL3, y)},
+          {"z", AtomicType<double>{}, HOFFSET(CSL3, z)},
+          {"name", AtomicType<std::string>{}, HOFFSET(CSL3, name)}
+        }, sizeof(CSL3));
+
+  return t3;
+}
+
+CompoundType create_compound_csl4() {
+  CompoundType t3(
+        {
+          {"x", AtomicType<double>{}, HOFFSET(CSL4, x)},
+          {"y", AtomicType<double>{}, HOFFSET(CSL4, y)},
+          {"z", AtomicType<double>{}, HOFFSET(CSL4, z)},
+          {"name", AtomicType<FixedLenStringArray<H5GEO_CHAR_ARRAY_SIZE>>{}, HOFFSET(CSL4, name)}
+        }, sizeof(CSL4));
 
   return t3;
 }
@@ -1540,12 +1564,14 @@ CompoundType create_compound_csl3() {
 H5GT_REGISTER_TYPE(CSL1, create_compound_csl1)
 H5GT_REGISTER_TYPE(CSL2, create_compound_csl2)
 H5GT_REGISTER_TYPE(CSL3, create_compound_csl3)
+H5GT_REGISTER_TYPE(CSL4, create_compound_csl4)
 
 TEST(H5GTBase, Compounds) {
   const std::string FILE_NAME("compounds_test.h5");
   const std::string DATASET_NAME1("/a");
   const std::string DATASET_NAME2("/b");
   const std::string DATASET_NAME3("/c");
+  const std::string DATASET_NAME4("/d");
 
   File file(FILE_NAME, File::ReadWrite | File::Create | File::Truncate);
 
@@ -1556,7 +1582,10 @@ TEST(H5GTBase, Compounds) {
   t2.commit(file, "my_type2");
 
   CompoundType t3 = create_compound_csl3();
-  t3.commit(file, "H5Points");
+  t3.commit(file, "H5Points3");
+
+  CompoundType t4 = create_compound_csl4();
+  t4.commit(file, "H5Points4");
 
   {  // Not nested
     auto dataset = file.createDataSet(DATASET_NAME1, DataSpace(2), t1);
@@ -1578,19 +1607,55 @@ TEST(H5GTBase, Compounds) {
     EXPECT_EQ(result[1].m3, 4);
 
     std::vector<CSL3> csl3 = {
-      {1, 1, 1, "one"},
-      {2, 3, 4, "two"}
+      {1, 2, 3, "one"},
+      {4, 5, 6, "two"}
     };
+
     auto dataset3 = file.createDataSet(DATASET_NAME3, DataSpace::From(csl3), t3);
     dataset3.write(csl3);
 
-    auto dtype = dataset3.getDataType();
-    EXPECT_TRUE(dtype.isTypeEqual(create_compound_csl3()));
+    auto dtype3 = dataset3.getDataType();
+    EXPECT_TRUE(dtype3.isTypeEqual(create_compound_csl3()));
 
     file.flush();
 
-    std::vector<CSL3> result3;
-    dataset.select({0}, {2}).read(result3);
+    std::vector<CSL3> result3(2);
+    dataset3.read(result3.data(), dtype3);
+
+//    EXPECT_EQ(result3.size(), 2);
+//    EXPECT_EQ(result3[0].x, csl3[0].x);
+//    EXPECT_EQ(result3[0].y, csl3[0].y);
+//    EXPECT_EQ(result3[0].z, csl3[0].z);
+//    EXPECT_EQ(result3[0].name, csl3[0].name);
+//    EXPECT_EQ(result3[1].x, csl3[1].x);
+//    EXPECT_EQ(result3[1].y, csl3[1].y);
+//    EXPECT_EQ(result3[1].z, csl3[1].z);
+//    EXPECT_EQ(result3[1].name, csl3[1].name);
+
+    CSL4 cls41, cls42;
+    cls41.x = 1;
+    cls41.z = 1;
+    cls41.y = 1;
+    strncpy(cls41.name, "one", sizeof(cls41.name));
+    cls41.name[sizeof(cls41.name) - 1] = 0;
+    cls42.x = 2;
+    cls42.z = 2;
+    cls42.y = 2;
+    strncpy(cls42.name, "two", sizeof(cls42.name));
+    cls42.name[sizeof(cls42.name) - 1] = 0;
+
+    std::vector<CSL4> csl4 = {cls41, cls42};
+
+    auto dataset4 = file.createDataSet(DATASET_NAME4, DataSpace::From(csl4), t4);
+    dataset4.write(csl4);
+
+    auto dtype4 = dataset4.getDataType();
+    EXPECT_TRUE(dtype4.isTypeEqual(create_compound_csl4()));
+
+    file.flush();
+
+    std::vector<CSL4> result4(2);
+    dataset4.read(result4.data(), dtype4);
   }
 
   {  // Nested
@@ -1633,7 +1698,8 @@ std::ostream& operator<<(std::ostream& ost, const Direction& dir) {
   return ost;
 }
 
-EnumType<Position> create_enum_position() {
+#include <type_traits>
+EnumType<std::underlying_type<Position>::type> create_enum_position() {
   return {{"FIRST", Position::FIRST},
     {"SECOND", Position::SECOND},
     {"THIRD", Position::THIRD},
@@ -1641,11 +1707,12 @@ EnumType<Position> create_enum_position() {
 }
 H5GT_REGISTER_TYPE(Position, create_enum_position)
 
-EnumType<Direction> create_enum_direction() {
-  return {{"FORWARD", Direction::FORWARD},
-    {"BACKWARD", Direction::BACKWARD},
-    {"LEFT", Direction::LEFT},
-    {"RIGHT", Direction::RIGHT}};
+typedef std::underlying_type<Direction>::type DirectionUType;
+EnumType<DirectionUType> create_enum_direction() {
+  return {{"FORWARD", static_cast<DirectionUType>(Direction::FORWARD)},
+    {"BACKWARD", static_cast<DirectionUType>(Direction::BACKWARD)},
+    {"LEFT", static_cast<DirectionUType>(Direction::LEFT)},
+    {"RIGHT", static_cast<DirectionUType>(Direction::RIGHT)}};
 }
 H5GT_REGISTER_TYPE(Direction, create_enum_direction)
 

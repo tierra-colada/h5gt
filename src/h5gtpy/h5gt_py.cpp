@@ -12,6 +12,12 @@
 #include "../../include/h5gtpy/H5Selection_py.h"
 #include "../../include/h5gtpy/H5SliceTraits_py.h"
 
+PYBIND11_MAKE_OPAQUE(std::vector<CompoundType::member_def>);
+PYBIND11_MAKE_OPAQUE(std::vector<EnumType<int>::member_def>);
+PYBIND11_MAKE_OPAQUE(std::vector<EnumType<unsigned>::member_def>);
+PYBIND11_MAKE_OPAQUE(std::vector<EnumType<long long>::member_def>);
+PYBIND11_MAKE_OPAQUE(std::vector<EnumType<unsigned long long>::member_def>);
+
 
 using py_types = std::tuple<
 bool,
@@ -180,6 +186,21 @@ PYBIND11_MODULE(_h5gt, m) {
   auto pyAtomicCDouble = py::class_<AtomicType<std::complex<double>>, DataType>(m, "AtomicCDouble");
   auto pyAtomicStr = py::class_<AtomicType<std::string>, DataType>(m, "AtomicStr");
 
+  // CPMPOUND TYPE
+  auto pyCompoundMember = py::class_<CompoundType::member_def>(m, "CompoundMember");
+  auto pyCompoundType = py::class_<CompoundType, DataType>(m, "CompoundType");
+
+  // ENUM TYPES
+  auto pyEnumMemberInt = py::class_<EnumType<int>::member_def>(m, "EnumMemberInt");
+  auto pyEnumMemberUInt = py::class_<EnumType<unsigned>::member_def>(m, "EnumMemberUInt");
+  auto pyEnumMemberLLong = py::class_<EnumType<long long>::member_def>(m, "EnumMemberLLong");
+  auto pyEnumMemberULLong = py::class_<EnumType<unsigned long long>::member_def>(m, "EnumMemberULLong");
+
+  auto pyEnumTypeInt = py::class_<EnumType<int>, DataType>(m, "EnumTypeInt");
+  auto pyEnumTypeUInt = py::class_<EnumType<unsigned>, DataType>(m, "EnumTypeUInt");
+  auto pyEnumTypeLLong = py::class_<EnumType<long long>, DataType>(m, "EnumTypeLLong");
+  auto pyEnumTypeULLong = py::class_<EnumType<unsigned long long>, DataType>(m, "EnumTypeULLong");
+
   // DATASPACE -> H5DataSpace_py.cpp
   auto pyDSpace = py::class_<DataSpace, Object>(m, "DataSpace");
 
@@ -275,6 +296,25 @@ PYBIND11_MODULE(_h5gt, m) {
   AtomicType_py(pyAtomicCFloat);
   AtomicType_py(pyAtomicCDouble);
   AtomicType_py(pyAtomicStr);
+
+  // COMPOUND TYPE
+  CompoundMember_py(pyCompoundMember);
+  py::bind_vector<std::vector<CompoundType::member_def>>(m, "CompoundMemberArray");
+  CompoundType_py(pyCompoundType);
+
+  // ENUM TYPES
+  EnumMember_py<int>(pyEnumMemberInt);
+  EnumMember_py<unsigned>(pyEnumMemberUInt);
+  EnumMember_py<long long>(pyEnumMemberLLong);
+  EnumMember_py<unsigned long long>(pyEnumMemberULLong);
+  py::bind_vector<std::vector<EnumType<int>::member_def>>(m, "EnumMemberArrayInt");
+  py::bind_vector<std::vector<EnumType<unsigned>::member_def>>(m, "EnumMemberArrayUInt");
+  py::bind_vector<std::vector<EnumType<long long>::member_def>>(m, "EnumMemberArrayLLong");
+  py::bind_vector<std::vector<EnumType<unsigned long long>::member_def>>(m, "EnumMemberArrayULLong");
+  EnumType_py(pyEnumTypeInt);
+  EnumType_py(pyEnumTypeUInt);
+  EnumType_py(pyEnumTypeLLong);
+  EnumType_py(pyEnumTypeULLong);
 
   // DATASPACE -> H5DataSpace_py.cpp
   DataSpace_py(pyDSpace);

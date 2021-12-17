@@ -356,7 +356,7 @@ inline int CompoundType::getNMembers() const {
 template<typename T>
 inline void EnumType<T>::create() {
   // Create the HDF5 type
-  if((_hid = H5Tenum_create(AtomicType<typename std::underlying_type<T>::type>{}.getId(false))) < 0) {
+  if((_hid = H5Tenum_create(AtomicType<T>{}.getId(false))) < 0) {
     HDF5ErrMapper::ToException<DataTypeException>(
           "Could not create new enum datatype");
   }
