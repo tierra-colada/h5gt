@@ -1506,11 +1506,17 @@ typedef struct {
 } CSL2;
 
 typedef struct {
-  double x;
-  double y;
-  double z;
-  std::string name;
-} CSL3;
+    double x;
+    std::string name;
+    std::string family;
+    std::string middlename;
+} CT1;
+
+typedef struct {
+    int y;
+    std::string film;
+    CT1 ct1;
+} CT2;
 
 typedef struct {
   double x;
@@ -1535,22 +1541,35 @@ CompoundType create_compound_csl2() {
   return t2;
 }
 
-/// as 'CSL3' contains 'std::string' we must explicitely set
+/// as 'CT1' contains 'std::string' we must explicitely set
 /// offset for each member and for the struct itself
-CompoundType create_compound_csl3() {
-  CompoundType t3(
+CompoundType create_compound_CT1() {
+  CompoundType t(
         {
-          {"x", AtomicType<double>{}, HOFFSET(CSL3, x)},
-          {"y", AtomicType<double>{}, HOFFSET(CSL3, y)},
-          {"z", AtomicType<double>{}, HOFFSET(CSL3, z)},
-          {"name", AtomicType<std::string>{}, HOFFSET(CSL3, name)}
-        }, sizeof(CSL3));
+          {"x", AtomicType<double>{}, HOFFSET(CT1, x)}, // HOFFSET(CT1, x) expands to offsetof(CT1, x)
+          {"name", AtomicType<std::string>{}, HOFFSET(CT1, name)},
+          {"family", AtomicType<std::string>{}, HOFFSET(CT1, family)},
+          {"middlename", AtomicType<std::string>{}, HOFFSET(CT1, middlename)}
+        }, sizeof(CT1));
 
-  return t3;
+  return t;
+}
+
+/// as 'CT2' contains 'std::string' we must explicitely set
+/// offset for each member and for the struct itself
+inline CompoundType create_compound_CT2() {
+  CompoundType t(
+        {
+          {"y", AtomicType<int>{}, HOFFSET(CT2, y)},
+          {"film", AtomicType<std::string>{}, HOFFSET(CT2, film)},
+          {"ct1", create_compound_CT1(), HOFFSET(CT2, ct1)}
+        }, sizeof(CT2));
+
+  return t;
 }
 
 CompoundType create_compound_csl4() {
-  CompoundType t3(
+  CompoundType t4(
         {
           {"x", AtomicType<double>{}, HOFFSET(CSL4, x)},
           {"y", AtomicType<double>{}, HOFFSET(CSL4, y)},
@@ -1558,12 +1577,13 @@ CompoundType create_compound_csl4() {
           {"name", AtomicType<FixedLenStringArray<H5GEO_CHAR_ARRAY_SIZE>>{}, HOFFSET(CSL4, name)}
         }, sizeof(CSL4));
 
-  return t3;
+  return t4;
 }
 
 H5GT_REGISTER_TYPE(CSL1, create_compound_csl1)
 H5GT_REGISTER_TYPE(CSL2, create_compound_csl2)
-H5GT_REGISTER_TYPE(CSL3, create_compound_csl3)
+H5GT_REGISTER_TYPE(CT1, create_compound_CT1)
+H5GT_REGISTER_TYPE(CT2, create_compound_CT2)
 H5GT_REGISTER_TYPE(CSL4, create_compound_csl4)
 
 TEST(H5GTBase, Compounds) {
@@ -1581,8 +1601,11 @@ TEST(H5GTBase, Compounds) {
   CompoundType t2 = create_compound_csl2();
   t2.commit(file, "my_type2");
 
-  CompoundType t3 = create_compound_csl3();
-  t3.commit(file, "H5Points3");
+  CompoundType t_ct1 = create_compound_CT1();
+  t_ct1.commit(file, "CT1");
+
+  CompoundType t_ct2 = create_compound_CT2();
+  t_ct2.commit(file, "CT2");
 
   CompoundType t4 = create_compound_csl4();
   t4.commit(file, "H5Points4");
@@ -1606,31 +1629,30 @@ TEST(H5GTBase, Compounds) {
     EXPECT_EQ(result[1].m2, 3);
     EXPECT_EQ(result[1].m3, 4);
 
-    std::vector<CSL3> csl3 = {
-      {1, 2, 3, "one"},
-      {4, 5, 6, "two"}
-    };
+    std::vector<CT2> ct2_vec_in{
+        {3, "Gone with the wind", {1.1, "John", "Travolta", "Olegovich"}},
+        {4, "Fast and dead", {2.2, "Clint", "Eastwood", "Vasilievich"}}
+        };
 
-    auto dataset3 = file.createDataSet(DATASET_NAME3, DataSpace::From(csl3), t3);
-    dataset3.write(csl3);
-
-    auto dtype3 = dataset3.getDataType();
-    EXPECT_TRUE(dtype3.isTypeEqual(create_compound_csl3()));
+    auto dataset_ct2 = file.createDataSet("dset_vec_CT2", DataSpace::From(ct2_vec_in), t_ct2);
+    dataset_ct2.write(ct2_vec_in);
 
     file.flush();
 
-    std::vector<CSL3> result3(2);
-    dataset3.read(result3.data(), dtype3);
+    std::vector<CT2> ct2_vec_out;
+    dataset_ct2.read(ct2_vec_out);
 
-//    EXPECT_EQ(result3.size(), 2);
-//    EXPECT_EQ(result3[0].x, csl3[0].x);
-//    EXPECT_EQ(result3[0].y, csl3[0].y);
-//    EXPECT_EQ(result3[0].z, csl3[0].z);
-//    EXPECT_EQ(result3[0].name, csl3[0].name);
-//    EXPECT_EQ(result3[1].x, csl3[1].x);
-//    EXPECT_EQ(result3[1].y, csl3[1].y);
-//    EXPECT_EQ(result3[1].z, csl3[1].z);
-//    EXPECT_EQ(result3[1].name, csl3[1].name);
+    EXPECT_EQ(ct2_vec_out.size(), 2);
+    EXPECT_EQ(ct2_vec_out[0].y, ct2_vec_in[0].y);
+    EXPECT_EQ(ct2_vec_out[0].film, ct2_vec_in[0].film);
+    EXPECT_EQ(ct2_vec_out[0].ct1.x, ct2_vec_in[0].ct1.x);
+    EXPECT_EQ(ct2_vec_out[0].ct1.name, ct2_vec_in[0].ct1.name);
+    EXPECT_EQ(ct2_vec_out[0].ct1.family, ct2_vec_in[0].ct1.family);
+    EXPECT_EQ(ct2_vec_out[1].y, ct2_vec_in[1].y);
+    EXPECT_EQ(ct2_vec_out[1].film, ct2_vec_in[1].film);
+    EXPECT_EQ(ct2_vec_out[1].ct1.x, ct2_vec_in[1].ct1.x);
+    EXPECT_EQ(ct2_vec_out[1].ct1.name, ct2_vec_in[1].ct1.name);
+    EXPECT_EQ(ct2_vec_out[1].ct1.family, ct2_vec_in[1].ct1.family);
 
     CSL4 cls41, cls42;
     cls41.x = 1;

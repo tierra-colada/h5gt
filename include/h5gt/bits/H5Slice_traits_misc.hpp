@@ -167,7 +167,10 @@ inline void SliceTraits<Derivate>::read(T& array) const {
            << buffer_info.n_dimensions;
     throw DataSpaceException(ss.str());
   }
-  details::data_converter<T> converter(mem_space);
+  details::data_converter<T> converter(mem_space, buffer_info.data_type);
+  if (buffer_info.data_type.getClass() == DataTypeClass::Compound){
+    
+  }
   read(converter.transform_read(array), buffer_info.data_type);
   // re-arrange results
   converter.process_result(array);
@@ -176,6 +179,12 @@ inline void SliceTraits<Derivate>::read(T& array) const {
 
 template <typename Derivate>
 template <typename T>
+///
+/// \brief SliceTraits::read DONT USE THIS WITH VARIABLE LENGTH STRING
+/// (i.e. with std::string or std::vector<std::string>) as you will need
+/// to manually free allocated `const char *` memory (using H5Treclaim())
+/// \param array
+/// \param dtype
 inline void SliceTraits<Derivate>::read(T* array, const DataType& dtype) const {
   static_assert(!std::is_const<T>::value,
       "read() requires a non-const structure to read data into");
@@ -208,7 +217,7 @@ inline void SliceTraits<Derivate>::write(const T& buffer) {
        << " into dataset of dimensions " << mem_space.getNumberDimensions();
     throw DataSpaceException(ss.str());
   }
-  details::data_converter<T> converter(mem_space);
+  details::data_converter<T> converter(mem_space, buffer_info.data_type);
   write_raw(converter.transform_write(buffer), buffer_info.data_type);
 }
 

@@ -44,7 +44,7 @@ struct data_converter<Eigen::Matrix<T, M, N>, void> {
 
   typedef Eigen::Matrix<T, M, N> MatrixTMN;
 
-  inline data_converter(const DataSpace& space)
+  inline data_converter(const DataSpace& space, const DataType& type)
     : _dims(space.getDimensions()) {
     assert(_dims.size() == 2);
   }
@@ -86,7 +86,7 @@ struct data_converter<std::vector<Eigen::Matrix<T,M,N>>, void> {
 
   typedef Eigen::Matrix<T, M, N> MatrixTMN;
 
-  inline data_converter(const DataSpace& space)
+  inline data_converter(const DataSpace& space, const DataType& type)
     : _dims(space.getDimensions()), _space(space) {
     assert(_dims.size() == 3);
   }
@@ -135,7 +135,7 @@ template <typename T, int M, int N, std::size_t Dims>
 struct data_converter<boost::multi_array<Eigen::Matrix<T, M, N>, Dims>, void> {
   typedef typename boost::multi_array<Eigen::Matrix<T, M, N>, Dims> MultiArrayEigen;
 
-  inline data_converter(const DataSpace& space)
+  inline data_converter(const DataSpace& space, const DataType& type)
     : _dims(space.getDimensions())
     , _space(space) {
     assert(_dims.size() == Dims + 2);

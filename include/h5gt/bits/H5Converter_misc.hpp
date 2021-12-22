@@ -16,6 +16,7 @@
 #include <sstream>
 #include <string>
 #include <array>
+#include <type_traits>
 
 #ifdef H5GT_USE_BOOST
 // starting Boost 1.64, serialization header must come before ublas
@@ -121,7 +122,7 @@ single_buffer_to_vectors(typename std::vector<U>::const_iterator begin_buffer,
 // apply conversion operations to basic scalar type
 template <typename Scalar, class Enable>
 struct data_converter {
-  inline data_converter(const DataSpace&) noexcept {
+  inline data_converter(const DataSpace&, const DataType&) noexcept {
 
     static_assert((std::is_arithmetic<Scalar>::value ||
         std::is_enum<Scalar>::value ||
@@ -150,7 +151,7 @@ struct data_converter {
 template <typename CArray>
 struct data_converter<CArray,
     typename std::enable_if<(is_c_array<CArray>::value)>::type> {
-  inline data_converter(const DataSpace&) noexcept {}
+  inline data_converter(const DataSpace&, const DataType&) noexcept {}
 
   inline CArray& transform_read(CArray& datamem) const noexcept {
     return datamem;
@@ -163,20 +164,48 @@ struct data_converter<CArray,
   inline void process_result(CArray&) const noexcept {}
 };
 
+
 // Generic container converter
 template <typename Container, typename T = typename inspector<Container>::base_type>
 struct container_converter {
   typedef T value_type;
 
-  inline container_converter(const DataSpace& space)
-    : _space(space) {}
+  inline container_converter(const DataSpace& space, const DataType& type)
+    : _space(space), _type(type) {}
+
+  inline void getVLenMemberAndOffsets(const DataType& type, std::vector<int>& vlen_members, std::vector<size_t>& member_offsets){
+    int nmembers = H5Tget_nmembers(type.getId());
+    int start_offset = 0;
+    for (int i = 0; i < nmembers; i++){
+      H5T_class_t memberclass = H5Tget_member_class(type.getId(), i);
+      if (memberclass == H5T_STRING){
+        DataType str_type = DataType::FromId(H5Tget_member_type(type.getId(), i), false);
+        if (str_type.isVariableStr()){
+          vlen_members.push_back(member_offsets.size());
+        }
+      } else if (memberclass == H5T_COMPOUND){
+        DataType nested_compound_type = DataType::FromId(H5Tget_member_type(type.getId(), i), false);
+        member_offsets.push_back(start_offset + H5Tget_member_offset(type.getId(), i));
+        getVLenMemberAndOffsets(nested_compound_type, vlen_members, member_offsets);
+        continue;
+      }
+      
+      if (i == 0 && member_offsets.size() != 0){
+        start_offset = member_offsets[member_offsets.size()-1];
+        continue;
+      }
+
+      member_offsets.push_back(start_offset + H5Tget_member_offset(type.getId(), i));      
+    }
+  }
 
   // Ship (pseudo)1D implementation
-  inline value_type* transform_read(Container& vec) const {
+  inline value_type* transform_read(Container& vec) {
     auto&& dims = _space.getDimensions();
     if (!is_1D(dims))
       throw DataSpaceException("Dataset cant be converted to 1D");
     vec.resize(compute_total_size(dims));
+
     return vec.data();
   }
 
@@ -184,9 +213,36 @@ struct container_converter {
     return vec.data();
   }
 
-  inline void process_result(Container&) const noexcept {}
+  inline void process_result(Container& vec) noexcept {
+    if (_type.getClass() != DataTypeClass::Compound)
+      return;
+
+    // check if compound contains variable length string
+    std::vector<int> vlen_members;
+    std::vector<size_t> member_offsets;
+    getVLenMemberAndOffsets(_type, vlen_members, member_offsets);
+
+    if (vlen_members.size() < 1)
+      return; // no variable length string
+
+    size_t nmembers = member_offsets.size();
+    size_t type_size = _type.getSize();
+    const char * str_ptr;
+    for (size_t i = 0; i < vec.size(); i++){
+      int ind = 0;
+      for (int member = 0; member < nmembers; member++){
+        if (ind < vlen_members.size() && 
+            member == vlen_members[ind]){
+          memcpy(&str_ptr, (const char *) vec.data() + member_offsets[member] + type_size*i, sizeof(str_ptr));
+          *reinterpret_cast<std::string *>((char *) vec.data() + member_offsets[member] + type_size*i) = str_ptr;
+          ind++;
+        }
+      }
+    }
+  }
 
   const DataSpace& _space;
+  const DataType& _type;
 };
 
 
@@ -199,8 +255,7 @@ struct data_converter<
     !std::is_same<T, Reference>::value
     )>::type>
   : public container_converter<std::vector<T>> {
-
-             using container_converter<std::vector<T>>::container_converter;
+  using container_converter<std::vector<T>>::container_converter;
 };
 
 
@@ -212,7 +267,8 @@ struct data_converter<
     std::is_same<T, typename inspector<T>::base_type>::value)>::type>
   : public container_converter<std::array<T, S>>
 {
-inline data_converter(const DataSpace& space) : container_converter<std::array<T, S>>(space)
+inline data_converter(const DataSpace& space, const DataType& type) 
+  : container_converter<std::array<T, S>>(space, type)
 {
   auto&& dims = space.getDimensions();
   if (!is_1D(dims)) {
@@ -260,7 +316,7 @@ struct data_converter<boost::numeric::ublas::matrix<T>, void>
   using Matrix = boost::numeric::ublas::matrix<T>;
   using value_type = typename inspector<T>::base_type;
 
-  inline data_converter(const DataSpace& space) : container_converter<Matrix>(space) {
+  inline data_converter(const DataSpace& space, const DataType& type) : container_converter<Matrix>(space) {
     assert(space.getDimensions().size() == 2);
   }
 
@@ -287,7 +343,7 @@ struct data_converter<std::vector<T>,
     typename std::enable_if<(is_container<T>::value)>::type> {
   using value_type = typename inspector<T>::base_type;
 
-  inline data_converter(const DataSpace& space)
+  inline data_converter(const DataSpace& space, const DataType& type)
     : _dims(space.getDimensions()) {}
 
   inline value_type* transform_read(std::vector<T>&) {
@@ -316,7 +372,7 @@ template <>
 struct data_converter<std::string, void> {
   using value_type = const char*;  // char data is const, mutable pointer
 
-  inline data_converter(const DataSpace& space) noexcept
+  inline data_converter(const DataSpace& space, const DataType& type) noexcept
     : _c_vec(nullptr)
     , _space(space) {}
 
@@ -351,7 +407,7 @@ template <>
 struct data_converter<std::vector<std::string>, void> {
   using value_type = const char*;
 
-  inline data_converter(const DataSpace& space) noexcept
+  inline data_converter(const DataSpace& space, const DataType& type) noexcept
     : _space(space) {}
 
   // create a C vector adapted to HDF5
@@ -391,12 +447,12 @@ struct data_converter<std::vector<std::string>, void> {
 template <std::size_t N>
 struct data_converter<FixedLenStringArray<N>, void>
     : public container_converter<FixedLenStringArray<N>, char> {
-  using container_converter<FixedLenStringArray<N>, char>::container_converter;
+    using container_converter<FixedLenStringArray<N>, char>::container_converter;
 };
 
 template <>
 struct data_converter<std::vector<Reference>, void> {
-  inline data_converter(const DataSpace& space)
+  inline data_converter(const DataSpace& space, const DataType& type)
     : _dims(space.getDimensions()) {
     if (!is_1D(_dims)) {
       throw DataSpaceException("Only 1D std::array supported currently.");
@@ -429,6 +485,7 @@ struct data_converter<std::vector<Reference>, void> {
   std::vector<typename inspector<hobj_ref_t>::base_type> _vec_align;
 };
 
+
 }  // namespace details
 
 }  // namespace h5gt
@@ -436,5 +493,7 @@ struct data_converter<std::vector<Reference>, void> {
 #ifdef H5GT_USE_EIGEN
 #include "H5ConverterEigen_misc.hpp"
 #endif
+
+// #include "H5ConverterCompound_misc.hpp"
 
 #endif // H5CONVERTER_MISC_HPP

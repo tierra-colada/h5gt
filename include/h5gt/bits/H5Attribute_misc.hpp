@@ -74,7 +74,7 @@ inline void Attribute::read(T& array) const {
   const DataType mem_datatype = create_and_check_datatype<element_type>();
 
   // Apply pre read conversions
-  details::data_converter<T> converter(mem_space);
+  details::data_converter<T> converter(mem_space, mem_datatype);
 
   if (H5Aread(getId(false), mem_datatype.getId(false),
               static_cast<void*>(converter.transform_read(array))) < 0) {
@@ -115,7 +115,7 @@ inline void Attribute::write(const T& buffer) {
   }
 
   const DataType mem_datatype = create_and_check_datatype<element_type>();
-  details::data_converter<T> converter(mem_space);
+  details::data_converter<T> converter(mem_space, mem_datatype);
 
   if (H5Awrite(getId(false), mem_datatype.getId(false),
                static_cast<const void*>(converter.transform_write(buffer))) < 0) {
