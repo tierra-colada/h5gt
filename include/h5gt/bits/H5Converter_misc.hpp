@@ -227,14 +227,15 @@ struct container_converter {
 
     size_t nmembers = member_offsets.size();
     size_t type_size = _type.getSize();
-    const char * str_ptr;
+    char * str_ptr;
     for (size_t i = 0; i < vec.size(); i++){
       int ind = 0;
       for (int member = 0; member < nmembers; member++){
         if (ind < vlen_members.size() && 
             member == vlen_members[ind]){
-          memcpy(&str_ptr, (const char *) vec.data() + member_offsets[member] + type_size*i, sizeof(str_ptr));
-          *reinterpret_cast<std::string *>((char *) vec.data() + member_offsets[member] + type_size*i) = str_ptr;
+          memcpy(&str_ptr, (char *) vec.data() + member_offsets[member] + type_size*i, sizeof(str_ptr));
+          ::new((char *) vec.data() + member_offsets[member] + type_size*i) std::string(str_ptr); // placement new
+          std::free(str_ptr); // important
           ind++;
         }
       }
