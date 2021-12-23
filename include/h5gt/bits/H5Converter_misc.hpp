@@ -495,6 +495,4 @@ struct data_converter<std::vector<Reference>, void> {
 #include "H5ConverterEigen_misc.hpp"
 #endif
 
-// #include "H5ConverterCompound_misc.hpp"
-
 #endif // H5CONVERTER_MISC_HPP
