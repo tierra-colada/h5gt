@@ -166,11 +166,39 @@ struct data_converter<CArray,
 
 
 // Generic container converter
-template <typename Container, typename T = typename inspector<Container>::base_type>
+template <typename Container,
+          typename T = typename inspector<Container>::base_type>
 struct container_converter {
   typedef T value_type;
 
   inline container_converter(const DataSpace& space, const DataType& type)
+    : _space(space), _type(type) {}
+
+  // Ship (pseudo)1D implementation
+  inline value_type* transform_read(Container& vec) {
+    auto&& dims = _space.getDimensions();
+    if (!is_1D(dims))
+      throw DataSpaceException("Dataset cant be converted to 1D");
+    vec.resize(compute_total_size(dims));
+    return vec.data();
+  }
+
+  inline const value_type* transform_write(const Container& vec) const noexcept {
+    return vec.data();
+  }
+
+  inline void process_result(Container&) noexcept {}
+
+  const DataSpace& _space;
+  const DataType& _type;
+};
+
+// Generic container filled with struct (or class) converter
+template <typename Container, typename T = typename inspector<Container>::base_type>
+struct container_of_struct_converter {
+  typedef T value_type;
+
+  inline container_of_struct_converter(const DataSpace& space, const DataType& type)
     : _space(space), _type(type) {}
 
   inline void getVLenMemberAndOffsets(const DataType& type, std::vector<int>& vlen_members, std::vector<size_t>& member_offsets){
@@ -195,7 +223,7 @@ struct container_converter {
         continue;
       }
 
-      member_offsets.push_back(start_offset + H5Tget_member_offset(type.getId(), i));      
+      member_offsets.push_back(start_offset + H5Tget_member_offset(type.getId(), i));
     }
   }
 
@@ -205,6 +233,11 @@ struct container_converter {
     if (!is_1D(dims))
       throw DataSpaceException("Dataset cant be converted to 1D");
     vec.resize(compute_total_size(dims));
+    // we must explicitly call destructors as we probably will use placement new (for Compound with string)
+    // https://www.cyberforum.ru/cpp-beginners/thread2924904-page2.html
+    for (size_t i = 0; i < vec.size(); i++){
+      vec[i].~value_type();
+    }
 
     return vec.data();
   }
@@ -231,7 +264,7 @@ struct container_converter {
     for (size_t i = 0; i < vec.size(); i++){
       int ind = 0;
       for (int member = 0; member < nmembers; member++){
-        if (ind < vlen_members.size() && 
+        if (ind < vlen_members.size() &&
             member == vlen_members[ind]){
           memcpy(&str_ptr, (char *) vec.data() + member_offsets[member] + type_size*i, sizeof(str_ptr));
           ::new((char *) vec.data() + member_offsets[member] + type_size*i) std::string(str_ptr); // placement new
@@ -253,10 +286,25 @@ struct data_converter<
     std::vector<T>,
     typename std::enable_if<(
     std::is_same<T, typename inspector<T>::base_type>::value &&
-    !std::is_same<T, Reference>::value
+    !std::is_same<T, Reference>::value &&
+    !std::is_class<T>::value
     )>::type>
   : public container_converter<std::vector<T>> {
   using container_converter<std::vector<T>>::container_converter;
+};
+
+
+// apply conversion for vectors 1D filled with struct (class)
+template <typename T>
+struct data_converter<
+    std::vector<T>,
+    typename std::enable_if<(
+    std::is_same<T, typename inspector<T>::base_type>::value &&
+    !std::is_same<T, Reference>::value &&
+    std::is_class<T>::value
+    )>::type>
+  : public container_of_struct_converter<std::vector<T>> {
+  using container_of_struct_converter<std::vector<T>>::container_of_struct_converter;
 };
 
 
