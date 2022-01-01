@@ -118,14 +118,13 @@ protected:
   explicit Object(const hid_t&);
   explicit Object(const hid_t&, const ObjectType&, const bool&);
 
-  ///
   /// \brief getLinkInfo Cant't be applied to file or an exception appears.
   /// That is why it is protected
   /// \return
-  ///
   LinkInfo getLinkInfo() const;
 
   Object& operator=(const Object& other);
+  /// When coparing objects h5gt::File must be open
   bool operator==(const Object& other) const;
 
   hid_t _hid;

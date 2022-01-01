@@ -1230,18 +1230,26 @@ TEST(H5GTBase, Refresh) {
 TEST(H5GTBase, EqualityOperator) {
   File file1("equality_operator_1.h5", File::ReadWrite | File::Create | File::Truncate);
   File file2("equality_operator_2.h5", File::ReadWrite | File::Create | File::Truncate);
+  File file3("equality_operator_1.h5", File::ReadWrite | File::ReadOnly);
+  File file4("equality_operator_2.h5", File::ReadWrite | File::ReadOnly);
 
   ASSERT_TRUE(file1 == file1);
-  ASSERT_FALSE(file1 == file2);
+  ASSERT_TRUE(file1 == file3);
+  ASSERT_TRUE(file1 != file2);
+  ASSERT_TRUE(file2 == file4);
 
   Group group11 = file1.createGroup("group_1");
   Group group12 = file1.createGroup("group_2");
+  Group group13 = file1.getGroup("group_1");
   Group group21 = file2.createGroup("group_1");
   Group group22 = file2.createGroup("group_2");
+  Group group23 = file2.getGroup("group_1");
 
   ASSERT_TRUE(group11 == group11);
-  ASSERT_FALSE(group11 == group12);
-  ASSERT_FALSE(group11 == group21);
+  ASSERT_TRUE(group11 == group13);
+  ASSERT_TRUE(group21 == group23);
+  ASSERT_TRUE(group11 != group12);
+  ASSERT_TRUE(group11 != group21);
 
   DataSet dset11 = file1.createDataSet<int>("data_1", DataSpace(1));
   DataSet dset12 = file1.createDataSet<int>("data_2", DataSpace(1));
@@ -1249,8 +1257,8 @@ TEST(H5GTBase, EqualityOperator) {
   DataSet dset22 = file2.createDataSet<int>("data_2", DataSpace(1));
 
   ASSERT_TRUE(dset11 == dset11);
-  ASSERT_FALSE(dset11 == dset12);
-  ASSERT_FALSE(dset11 == dset21);
+  ASSERT_TRUE(dset11 != dset12);
+  ASSERT_TRUE(dset11 != dset21);
 }
 
 TEST(H5GTBase, CheckIdFunctionality) {
