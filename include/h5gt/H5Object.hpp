@@ -54,6 +54,9 @@ public:
   /// \brief flush
   ///
   /// Flushes all buffers associated with an object to disk.
+  /// Object is used only to identify the file i.e. there is no
+  /// difference whether to flush the dataset or group if they
+  /// both belong to the same file.
   /// Scope may be global (flushes the entire virtual file) and
   /// local (flushes only the specified file)
   void flush(bool globalScope = true);
