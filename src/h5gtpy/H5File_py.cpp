@@ -8,8 +8,6 @@ void File_py(py::class_<File, Object, NodeTraits<File>, AnnotateTraits<File> > &
            py::arg("file_name"),
            py::arg("open_flag"),
            "Open or create new h5 file")
-      .def("flush", &File::flush,
-           "Flushes all buffers associated with a file to disk")
       .def_static("FromId", &File::FromId,
                   py::arg("id"),
                   py::arg_v("increaseRefCount", false, "false"),

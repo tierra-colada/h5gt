@@ -76,13 +76,6 @@ inline File::File(const std::string& filename, unsigned openFlags,
   }
 }
 
-inline void File::flush() {
-  if (H5Fflush(_hid, H5F_SCOPE_GLOBAL) < 0) {
-    HDF5ErrMapper::ToException<FileException>(
-          std::string("Unable to flush file " + getFileName()));
-  }
-}
-
 inline bool File::operator==(const File& other) const {
 #if (H5_VERS_MAJOR >= 1 && H5_VERS_MINOR >= 12)
   unsigned long fileNumLeft, fileNumRight;

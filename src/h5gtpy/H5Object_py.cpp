@@ -35,6 +35,7 @@ void LinkInfo_py(py::class_<LinkInfo> &py_obj){
 
 void Object_py(py::class_<Object> &py_obj){
   py_obj
+      .def("flush", &Object::flush)
       .def("isValid", &Object::isValid)
       .def("refresh", &Object::refresh,
            "Usually you don't need to use it.")

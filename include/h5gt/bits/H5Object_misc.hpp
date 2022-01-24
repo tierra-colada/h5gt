@@ -134,6 +134,18 @@ inline Object::~Object() {
   }
 }
 
+inline void Object::flush(bool globalScope) {
+  H5F_scope_t scope;
+  if (globalScope)
+    scope = H5F_scope_t::H5F_SCOPE_GLOBAL;
+  else
+    scope = H5F_scope_t::H5F_SCOPE_LOCAL;
+  if (H5Fflush(_hid, scope) < 0) {
+    HDF5ErrMapper::ToException<ObjectException>(
+          std::string("Unable to flush object " + getPath()));
+  }
+}
+
 inline bool Object::isValid() const noexcept {
   return (_hid != H5I_INVALID_HID) && (H5Iis_valid(_hid) != false);
 }

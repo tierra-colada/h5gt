@@ -51,6 +51,14 @@ public:
   ~Object();
 
   ///
+  /// \brief flush
+  ///
+  /// Flushes all buffers associated with an object to disk.
+  /// Scope may be global (flushes the entire virtual file) and
+  /// local (flushes only the specified file)
+  void flush(bool globalScope = true);
+
+  ///
   /// \brief isValid
   /// \return true if current Object is a valid HDF5Object
   ///

@@ -62,13 +62,6 @@ public:
   explicit File(const std::string& filename, unsigned openFlags = ReadOnly,
                 const FileAccessProps& fileAccessProps = FileDriver());
 
-  ///
-  /// \brief flush
-  ///
-  /// Flushes all buffers associated with a file to disk
-  ///
-  void flush();
-
   bool operator==(const File& other) const;
   bool operator!=(const File& other) const;
 
