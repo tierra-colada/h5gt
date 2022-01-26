@@ -113,6 +113,9 @@ AnnotateTraits<Derivate>::listAttributeNames() const {
 template <typename Derivate>
 inline bool
 AnnotateTraits<Derivate>::hasAttribute(const std::string& attr_name) const {
+  if (attr_name.empty())
+    return false;
+
   int res = H5Aexists(static_cast<const Derivate*>(this)->getId(false),
                       attr_name.c_str());
   if (res < 0) {

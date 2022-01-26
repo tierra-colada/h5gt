@@ -206,6 +206,9 @@ template <typename Derivate>
 inline bool NodeTraits<Derivate>::_exist(const std::string& node_name,
                                          const LinkAccessProps& accessProps,
                                          bool raise_errors) const {
+  if (node_name.empty())
+    return false;
+
   SilenceHDF5 silencer{!raise_errors};
   const auto val = H5Lexists(static_cast<const Derivate*>(this)->getId(false),
                              node_name.c_str(), accessProps.getId(false));
