@@ -138,6 +138,7 @@ PYBIND11_MODULE(_h5gt, m) {
   auto pyDataSetAccessPropsBase = py::class_<PropertyList<PropertyType::DATASET_ACCESS> >(m, "_DataSetAccessProps");
   auto pyDataTypeCreatePropsBase = py::class_<PropertyList<PropertyType::DATATYPE_CREATE> >(m, "_DataTypeCreateProps");
   auto pyDataTypeAccessPropsBase = py::class_<PropertyList<PropertyType::DATATYPE_ACCESS> >(m, "_DataTypeAccessProps");
+  auto pyObjectCopyPropsBase = py::class_<PropertyList<PropertyType::OBJECT_COPY> >(m, "_ObjectCopyProps");
 
   auto pyLinkCreateProps = py::class_<LinkCreateProps, PropertyList<PropertyType::LINK_CREATE> >(m, "LinkCreateProps");
   auto pyLinkAccessProps = py::class_<LinkAccessProps, PropertyList<PropertyType::LINK_ACCESS> >(m, "LinkAccessProps");
@@ -149,6 +150,8 @@ PYBIND11_MODULE(_h5gt, m) {
   auto pyDsetAccessProps = py::class_<DataSetAccessProps, PropertyList<PropertyType::DATASET_ACCESS> >(m, "DataSetAccessProps");
   auto pyDTypeCreateProps = py::class_<DataTypeCreateProps, PropertyList<PropertyType::DATATYPE_CREATE> >(m, "DataTypeCreateProps");
   auto pyDTypeAccessProps = py::class_<DataTypeAccessProps, PropertyList<PropertyType::DATATYPE_ACCESS> >(m, "DataTypeAccessProps");
+  auto pyObjectCopyProps = py::class_<ObjectCopyProps, PropertyList<PropertyType::OBJECT_COPY> >(m, "ObjectCopyProps");
+
 
   // OBJECT -> H5Object_py.cpp
   auto pyObjectInfo = py::class_<ObjectInfo>(m, "ObjectInfo");
@@ -260,6 +263,7 @@ PYBIND11_MODULE(_h5gt, m) {
   DataSetAccessProps_py(pyDsetAccessProps);
   DataTypeCreateProps_py(pyDTypeCreateProps);
   DataTypeAccessProps_py(pyDTypeAccessProps);
+  ObjectCopyProps_py(pyObjectCopyProps);
 
   // OBJECT -> H5Object_py.cpp
   ObjectInfo_py(pyObjectInfo);

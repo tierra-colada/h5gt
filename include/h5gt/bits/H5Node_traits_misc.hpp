@@ -285,6 +285,42 @@ inline ObjectType NodeTraits<Derivate>::getObjectType(const std::string& obj_nam
 }
 
 template <typename Derivate>
+Group NodeTraits<Derivate>::copy(
+    const Group& obj, const std::string& objNewName,
+    const ObjectCopyProps& copyProps,
+    const LinkCreateProps& linkCreateProps,
+    const GroupAccessProps& groupAccessProps)
+{
+  _copy(obj, objNewName, copyProps, linkCreateProps);
+  return static_cast<const Derivate*>(this)->getGroup(
+        objNewName, groupAccessProps);
+}
+
+template <typename Derivate>
+DataSet NodeTraits<Derivate>::copy(
+    const DataSet& obj, const std::string& objNewName,
+    const ObjectCopyProps& copyProps,
+    const LinkCreateProps& linkCreateProps,
+    const DataSetAccessProps& dsetAccessProps)
+{
+  _copy(obj, objNewName, copyProps, linkCreateProps);
+  return static_cast<const Derivate*>(this)->getDataSet(
+        objNewName, dsetAccessProps);
+}
+
+template <typename Derivate>
+DataType NodeTraits<Derivate>::copy(
+    const DataType& obj, const std::string& objNewName,
+    const ObjectCopyProps& copyProps,
+    const LinkCreateProps& linkCreateProps,
+    const DataTypeAccessProps& dtypeAccessProps)
+{
+  _copy(obj, objNewName, copyProps, linkCreateProps);
+  return static_cast<const Derivate*>(this)->getDataType(
+        objNewName, dtypeAccessProps);
+}
+
+template <typename Derivate>
 template<typename Node,
          typename std::enable_if<
            std::is_same<Node, File>::value |
@@ -316,6 +352,20 @@ inline DataSet NodeTraits<Derivate>::createLink(
 }
 
 template <typename Derivate>
+inline DataType NodeTraits<Derivate>::createLink(
+    const DataType& target,
+    const std::string& linkName,
+    const LinkType& linkType,
+    const LinkCreateProps& linkCreateProps,
+    const LinkAccessProps& linkAccessProps,
+    const DataTypeAccessProps& dtypeAccessProps)
+{
+  _createLink(target, linkName, linkType, linkCreateProps, linkAccessProps);
+  return static_cast<const Derivate*>(this)->getDataType(linkName, dtypeAccessProps);
+}
+
+
+template <typename Derivate>
 inline Object NodeTraits<Derivate>::_open(const std::string& node_name,
                                           const LinkAccessProps& accessProps) const {
   hid_t id = H5Oopen(static_cast<const Derivate*>(this)->getId(false),
@@ -326,6 +376,24 @@ inline Object NodeTraits<Derivate>::_open(const std::string& node_name,
           std::string("Unable to open \"") + node_name + "\":");
   }
   return Object(id);
+}
+
+template <typename Derivate>
+template<typename T>
+inline void NodeTraits<Derivate>::_copy(
+    const T& obj, const std::string& newName,
+    const ObjectCopyProps& copyProps,
+    const LinkCreateProps& linkCreateProps)
+{
+  herr_t status = H5Ocopy(
+        obj.getFileId(false), obj.getPath().c_str(),
+        static_cast<const Derivate*>(this)->getId(false), newName.c_str(),
+        copyProps.getId(false), linkCreateProps.getId(false));
+
+  if (status < 0) {
+    HDF5ErrMapper::ToException<GroupException>(
+          std::string("Unable to copy object to \"") + newName + "\":");
+  }
 }
 
 template <typename Derivate>

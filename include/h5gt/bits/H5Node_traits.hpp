@@ -178,6 +178,27 @@ public:
   /// \param linkAccessProps A link property list with data set access properties
   inline ObjectType getObjectType(const std::string& obj_name, const LinkAccessProps& accessProps = LinkAccessProps()) const;
 
+
+  ///
+  /// \brief Copies specified object to the new destination (this File/Group) under new name.
+  /// The destination must not already have the object with the same name (objNewName).
+  /// \return Copied object
+  Group copy(const Group& obj, const std::string& objNewName,
+             const ObjectCopyProps& copyProps = ObjectCopyProps(),
+             const LinkCreateProps& linkCreateProps = LinkCreateProps(),
+             const GroupAccessProps& groupAccessProps = GroupAccessProps());
+
+  DataSet copy(const DataSet& obj, const std::string& objNewName,
+               const ObjectCopyProps& copyProps = ObjectCopyProps(),
+               const LinkCreateProps& linkCreateProps = LinkCreateProps(),
+               const DataSetAccessProps& dsetAccessProps = DataSetAccessProps());
+
+  /// Copies commited datatype
+  DataType copy(const DataType& obj, const std::string& objNewName,
+                const ObjectCopyProps& copyProps = ObjectCopyProps(),
+                const LinkCreateProps& linkCreateProps = LinkCreateProps(),
+                const DataTypeAccessProps& dtypeAccessProps = DataTypeAccessProps());
+
   template<typename Node,
            typename std::enable_if<
              std::is_same<Node, File>::value |
@@ -194,6 +215,12 @@ public:
       const LinkAccessProps& linkAccessProps = LinkAccessProps(),
       const DataSetAccessProps& dsetAccessProps = DataSetAccessProps());
 
+  DataType createLink(
+      const DataType& target, const std::string& linkName, const LinkType& linkType,
+      const LinkCreateProps& linkCreateProps = LinkCreateProps(),
+      const LinkAccessProps& linkAccessProps = LinkAccessProps(),
+      const DataTypeAccessProps& dtypeAccessProps = DataTypeAccessProps());
+
 private:
   typedef Derivate derivate_type;
 
@@ -207,6 +234,12 @@ private:
   // Opens an arbitrary object to obtain info
   Object _open(const std::string& node_name,
                const LinkAccessProps& accessProps = LinkAccessProps()) const;
+
+  template<typename T>
+  void _copy(const T& obj, const std::string& newName,
+             const ObjectCopyProps& copyProps = ObjectCopyProps(),
+             const LinkCreateProps& linkCreateProps = LinkCreateProps());
+
 
   template<typename T>
   void _createLink(

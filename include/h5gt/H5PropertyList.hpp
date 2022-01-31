@@ -269,6 +269,11 @@ public:
   DataTransferProps(){}
 };
 
+class ObjectCopyProps : public PropertyList<PropertyType::OBJECT_COPY> {
+public:
+  ObjectCopyProps(){}
+};
+
 }  // namespace h5gt
 
 #include "bits/H5PropertyList_misc.hpp"

@@ -20,6 +20,7 @@ void DataSetCreateProps_py(py::class_<DataSetCreateProps, PropertyList<PropertyT
 void DataSetAccessProps_py(py::class_<DataSetAccessProps, PropertyList<PropertyType::DATASET_ACCESS> > &py_obj);
 void DataTypeCreateProps_py(py::class_<DataTypeCreateProps, PropertyList<PropertyType::DATATYPE_CREATE> > &py_obj);
 void DataTypeAccessProps_py(py::class_<DataTypeAccessProps, PropertyList<PropertyType::DATATYPE_ACCESS> > &py_obj);
+void ObjectCopyProps_py(py::class_<ObjectCopyProps, PropertyList<PropertyType::OBJECT_COPY> > &py_obj);
 
 
 } // h5gtpy

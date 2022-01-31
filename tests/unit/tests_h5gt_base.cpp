@@ -1304,6 +1304,26 @@ TEST(H5GTBase, CheckIdFunctionality) {
   ASSERT_EQ(file3.getIdRefCount(), 3);
 }
 
+TEST(H5GTBase, CopyObject) {
+  File file1("copyFrom.h5", File::ReadWrite | File::Create | File::Truncate);
+  File file2("copyTo.h5", File::ReadWrite | File::Create | File::Truncate);
+
+  Group group1 = file1.createGroup("group1");
+  double val_in = 5.5;
+  DataSet dset1 = group1.createDataSet<double>("data", DataSpace::From(val_in));
+  dset1.write(val_in);
+
+  // copy group with inner dataset in it
+  Group group2 = file2.copy(group1, group1.getPath());
+  DataSet dset2 = group2.getDataSet(dset1.getPath());
+  double val_out;
+  dset2.read(val_out);
+
+  ASSERT_TRUE(group1.getPath() == group2.getPath());
+  ASSERT_TRUE(dset1.getPath() == dset2.getPath());
+  ASSERT_EQ(val_in, val_out);
+}
+
 TEST(H5GTBase, GetDatasetProps) {
   std::vector<hsize_t> c_dims({2,3});
   File file("getProps.h5", File::ReadWrite | File::Create | File::Truncate);

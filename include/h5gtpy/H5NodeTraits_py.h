@@ -41,7 +41,37 @@ DataSet createDataSet_wrap3(
 }
 
 template <typename Derivate>
-DataSet createLink_wrap(
+Group copy_wrap1(
+    NodeTraits<Derivate>& self,
+    const Group& obj, const std::string& objNewName,
+    const ObjectCopyProps& copyProps = ObjectCopyProps(),
+    const LinkCreateProps& linkCreateProps = LinkCreateProps(),
+    const GroupAccessProps& groupAccessProps = GroupAccessProps()){
+  return self.copy(obj, objNewName, copyProps, linkCreateProps, groupAccessProps);
+}
+
+template <typename Derivate>
+DataSet copy_wrap2(
+    NodeTraits<Derivate>& self,
+    const DataSet& obj, const std::string& objNewName,
+    const ObjectCopyProps& copyProps = ObjectCopyProps(),
+    const LinkCreateProps& linkCreateProps = LinkCreateProps(),
+    const DataSetAccessProps& dsetAccessProps = DataSetAccessProps()){
+  return self.copy(obj, objNewName, copyProps, linkCreateProps, dsetAccessProps);
+}
+
+template <typename Derivate>
+DataType copy_wrap3(
+    NodeTraits<Derivate>& self,
+    const DataType& obj, const std::string& objNewName,
+    const ObjectCopyProps& copyProps = ObjectCopyProps(),
+    const LinkCreateProps& linkCreateProps = LinkCreateProps(),
+    const DataTypeAccessProps& dtypeAccessProps = DataTypeAccessProps()){
+  return self.copy(obj, objNewName, copyProps, linkCreateProps, dtypeAccessProps);
+}
+
+template <typename Derivate>
+DataSet createLink_wrap1(
     NodeTraits<Derivate>& self,
     const DataSet& target,
     const std::string& linkName,
@@ -50,6 +80,18 @@ DataSet createLink_wrap(
     const LinkAccessProps& linkAccessProps = LinkAccessProps(),
     const DataSetAccessProps& dsetAccessProps = DataSetAccessProps()){
   return self.createLink(target, linkName, linkType, linkCreateProps, linkAccessProps, dsetAccessProps);
+}
+
+template <typename Derivate>
+DataType createLink_wrap2(
+    NodeTraits<Derivate>& self,
+    const DataType& target,
+    const std::string& linkName,
+    const LinkType& linkType,
+    const LinkCreateProps& linkCreateProps = LinkCreateProps(),
+    const LinkAccessProps& linkAccessProps = LinkAccessProps(),
+    const DataTypeAccessProps& dtypeAccessProps = DataTypeAccessProps()){
+  return self.createLink(target, linkName, linkType, linkCreateProps, linkAccessProps, dtypeAccessProps);
 }
 
 
@@ -129,6 +171,24 @@ void NodeTraits_py(py::class_<NodeTraits<Derivate> >& py_obj) {
            py::arg("obj_name"),
            py::arg_v("linkAccessProps", LinkAccessProps(), "LinkAccessProps()"),
            "A shorthand to get the kind of object pointed to (group, dataset, type...)")
+      .def("copy", &ext::copy_wrap1<Derivate>,
+           py::arg("group"),
+           py::arg("objNewName"),
+           py::arg_v("copyProps", ObjectCopyProps(), "ObjectCopyProps()"),
+           py::arg_v("linkCreateProps", LinkCreateProps(), "LinkCreateProps()"),
+           py::arg_v("groupAccessProps", LinkAccessProps(), "LinkAccessProps()"))
+      .def("copy", &ext::copy_wrap2<Derivate>,
+           py::arg("dset"),
+           py::arg("objNewName"),
+           py::arg_v("copyProps", ObjectCopyProps(), "ObjectCopyProps()"),
+           py::arg_v("linkCreateProps", LinkCreateProps(), "LinkCreateProps()"),
+           py::arg_v("dsetAccessProps", DataSetAccessProps(), "DataSetAccessProps()"))
+      .def("copy", &ext::copy_wrap3<Derivate>,
+           py::arg("dtype"),
+           py::arg("objNewName"),
+           py::arg_v("copyProps", ObjectCopyProps(), "ObjectCopyProps()"),
+           py::arg_v("linkCreateProps", LinkCreateProps(), "LinkCreateProps()"),
+           py::arg_v("dtypeAccessProps", DataTypeAccessProps(), "DataTypeAccessProps()"))
       .def("createLink", py::overload_cast<
            const File&,
            const std::string&,
@@ -157,14 +217,22 @@ void NodeTraits_py(py::class_<NodeTraits<Derivate> >& py_obj) {
            py::arg_v("linkAccesProps", LinkAccessProps(), "LinkAccessProps()"),
            py::arg_v("groupAccessProps", GroupAccessProps(), "GroupAccessProps()"),
            "Creates link to a `Group`")
-      .def("createLink", &ext::createLink_wrap<Derivate>,
+      .def("createLink", &ext::createLink_wrap1<Derivate>,
            py::arg("dset"),// "target object",
            py::arg("linkName"),// "name for a new link",
            py::arg("linkType"),
            py::arg_v("linkCreateProps", LinkCreateProps(), "LinkCreateProps()"),
            py::arg_v("linkAccesProps", LinkAccessProps(), "LinkAccessProps()"),
            py::arg_v("dsetAccessProps", DataSetAccessProps(), "DataSetAccessProps()"),
-           "Creates link to a `DataSet`");
+           "Creates link to a `DataSet`")
+      .def("createLink", &ext::createLink_wrap2<Derivate>,
+           py::arg("dtype"),// "target object",
+           py::arg("linkName"),// "name for a new link",
+           py::arg("linkType"),
+           py::arg_v("linkCreateProps", LinkCreateProps(), "LinkCreateProps()"),
+           py::arg_v("linkAccesProps", LinkAccessProps(), "LinkAccessProps()"),
+           py::arg_v("dtypeAccessProps", DataTypeAccessProps(), "DataTypeAccessProps()"),
+           "Creates link to a `DataType`");
 }
 
 

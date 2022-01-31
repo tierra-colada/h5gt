@@ -110,5 +110,10 @@ void DataTypeAccessProps_py(py::class_<DataTypeAccessProps, PropertyList<Propert
       .def(py::init<>());
 }
 
+void ObjectCopyProps_py(py::class_<ObjectCopyProps, PropertyList<PropertyType::OBJECT_COPY> > &py_obj){
+  py_obj
+      .def(py::init<>());
+}
+
 
 } // h5gtpy
