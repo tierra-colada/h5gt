@@ -8,7 +8,7 @@ void DataSet_py(py::class_<DataSet, Object, SliceTraits<DataSet>, AnnotateTraits
            "returns the amount of storage allocated for a dataset")
       .def("getOffset", &DataSet::getOffset,
            "returns DataSet address in file")
-      .def("getOffset", &DataSet::getDataType,
+      .def("getDataType", &DataSet::getDataType,
            "return the datatype associated with this dataset")
       .def("getLinkInfo", &DataSet::getLinkInfo,
            "return the link info object")
