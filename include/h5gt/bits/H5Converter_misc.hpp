@@ -264,10 +264,10 @@ struct container_of_struct_converter {
     for (size_t i = 0; i < vec.size(); i++){
       int ind = 0;
       for (int member = 0; member < nmembers; member++){
-        if (ind < vlen_members.size() &&
-            member == vlen_members[ind]){
+        if (ind < vlen_members.size() && member == vlen_members[ind]){
           memcpy(&str_ptr, (char *) vec.data() + member_offsets[member] + type_size*i, sizeof(str_ptr));
-          ::new((char *) vec.data() + member_offsets[member] + type_size*i) std::string(str_ptr); // placement new
+          if (str_ptr) // important or undefined behaviour caused by std::string(char* == nullptr)
+            ::new((char *) vec.data() + member_offsets[member] + type_size*i) std::string(str_ptr); // placement new
           std::free(str_ptr); // important
           ind++;
         }
