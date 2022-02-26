@@ -70,6 +70,14 @@ void DataSetCreateProps_py(py::class_<DataSetCreateProps, PropertyList<PropertyT
                   py::arg("id"),
                   py::arg_v("increaseRefCount", false, "false"),
                   "Create new object from ID")
+      .def("addExternalFile", &DataSetCreateProps::addExternalFile,
+           py::arg("file"),
+           py::arg_v("offset", 0, "0"),
+           py::arg_v("size", 0, "0"))
+      .def("addVirtualDataSet", &DataSetCreateProps::addVirtualDataSet,
+           py::arg("vSelection"),
+           py::arg("srcDset"),
+           py::arg("srcSelection"))
       .def("setShuffle", &DataSetCreateProps::setShuffle)
       .def("setChunk", &ext::setChunk_wrap1,
            py::arg("dims"))

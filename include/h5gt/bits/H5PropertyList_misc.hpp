@@ -108,6 +108,33 @@ inline void DataSetAccessProps::getChunkCache(
   }
 }
 
+inline void DataSetCreateProps::addExternalFile(const std::string& file, off_t offset, hsize_t size)
+{
+  if (size == 0){
+    try {
+      size = std::filesystem::file_size(file);
+      size = size - offset;
+    } catch(std::filesystem::filesystem_error& e) {
+      std::cout << e.what() << std::endl;
+    }
+  }
+
+  if (H5Pset_external(_hid, file.c_str(), offset, size) < 0){
+    HDF5ErrMapper::ToException<PropertyException>(
+          "Unable to add external file");
+  }
+}
+
+inline void DataSetCreateProps::addVirtualDataSet(
+    const Selection& vSelection, const DataSet& srcDset, const Selection& srcSelection)
+{
+  if (H5Pset_virtual( _hid, vSelection.getSpace().getId(), srcDset.getFileName().c_str(),
+                  srcDset.getPath().c_str(), srcSelection.getSpace().getId()) < 0){
+    HDF5ErrMapper::ToException<PropertyException>(
+          "Unable to add set dataset virtual");
+  }
+}
+
 inline void DataSetCreateProps::setShuffle() {
   if (!H5Zfilter_avail(H5Z_FILTER_SHUFFLE)){
     HDF5ErrMapper::ToException<PropertyException>(

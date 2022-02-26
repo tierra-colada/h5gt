@@ -18,27 +18,28 @@ namespace h5gt {
 ///
 /// \brief Selection: represent a view on a slice/part of a dataset
 ///
-/// A Selection is valid only if its parent dataset is valid
+/// A Selection may exist with invalid parent dataset
 ///
 class Selection : public SliceTraits<Selection> {
 public:
   ///
+  /// \brief public constructor is needed to create virtual datasets
+  explicit Selection(const DataSpace& space) : _file_space(space) {}
+
+  ///
   /// \brief getSpace
   /// \return Dataspace associated with this selection
-  ///
   DataSpace getSpace() const noexcept;
 
   ///
   /// \brief getMemSpace
   /// \return Dataspace associated with the memory representation of this
   /// selection
-  ///
   DataSpace getMemSpace() const noexcept;
 
   ///
   /// \brief getDataSet
   /// \return parent dataset of this selection
-  ///
   DataSet& getDataset() noexcept;
   const DataSet& getDataset() const noexcept;
 

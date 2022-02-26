@@ -71,6 +71,7 @@ inline ElementSet::ElementSet(const std::vector<std::vector<std::size_t>>& eleme
   }
 }
 
+
 template <typename Derivate>
 inline Selection SliceTraits<Derivate>::select(const std::vector<size_t>& offset,
                                                const std::vector<size_t>& count,

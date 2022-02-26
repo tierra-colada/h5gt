@@ -122,6 +122,7 @@ protected:
   inline DataSet(Object&& o) noexcept : Object(std::move(o)) {}
 
   friend class Reference;
+  friend class Selection;
   template <typename Derivate> friend class NodeTraits;
 
 };

@@ -10,6 +10,7 @@
 #define H5PROPERTY_LIST_HPP
 
 #include <vector>
+#include <filesystem>
 
 #include <H5Ppublic.h>
 
@@ -188,6 +189,25 @@ public:
     return DataSetCreateProps(id);
   };
 
+  /// \brief map external binary file to a dataset
+  /// \param file path to the file
+  /// \param offset offset in bytes
+  /// \param size is the size of the part that is to be mapped (offset+size=fileSize)
+  /// leave it as 0 to to map everything starting from the offset
+  /// size == H5F_UNLIMITED means the external file can be of unlimited size and
+  /// no more files can be added to the external files list
+  void addExternalFile(
+      const std::string& file,
+      off_t offset = 0, hsize_t size = 0);
+
+  /// \brief map source dataset
+  /// selections must have equal number of selected elements
+  /// srcDset may be mapped external file
+  void addVirtualDataSet(
+      const Selection& vSelection,
+      const DataSet& srcDset,
+      const Selection& srcSelection);
+
   void setShuffle();
 
   void setDeflate(const unsigned& level);
@@ -276,6 +296,5 @@ public:
 
 }  // namespace h5gt
 
-#include "bits/H5PropertyList_misc.hpp"
 
 #endif  // H5PROPERTY_LIST_HPP

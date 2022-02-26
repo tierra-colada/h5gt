@@ -23,10 +23,12 @@
 #include "../H5Group.hpp"
 #include "../H5Selection.hpp"
 #include "../H5Utility.hpp"
+#include "../H5PropertyList.hpp"
 #include "H5DataSet_misc.hpp"
 #include "H5Iterables_misc.hpp"
 #include "H5Selection_misc.hpp"
 #include "H5Slice_traits_misc.hpp"
+#include "H5PropertyList_misc.hpp"
 
 namespace h5gt {
 

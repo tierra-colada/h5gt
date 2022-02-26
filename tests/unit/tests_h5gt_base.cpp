@@ -17,6 +17,7 @@
 #include <string>
 #include <typeinfo>
 #include <vector>
+#include <fstream>
 
 #include <h5gt/H5DataSet.hpp>
 #include <h5gt/H5DataSpace.hpp>
@@ -494,6 +495,85 @@ TEST(H5GTBase, DataSpaceTest) {
   EXPECT_EQ(space.getDimensions().size(), 2);
   EXPECT_EQ(space.getDimensions()[0], 10);
   EXPECT_EQ(space.getDimensions()[1], 1);
+}
+
+TEST(H5GTBase, ExternalAndVirtualData) {
+  // Create binary data
+  std::string fileName = "virtual_data.bin";
+  std::vector<int> vin({1,2,3,4,5,6,7}), vout;
+  {
+    std::ofstream ostrm(fileName, std::ios::binary);
+    ostrm.write(reinterpret_cast<const char*>(vin.data()), vin.size()*sizeof(int));
+  }
+
+  // read back
+  vout.resize(vin.size());
+  {
+    std::ifstream istrm(fileName, std::ios::binary);
+    istrm.read(reinterpret_cast<char*>(vout.data()), vout.size()*sizeof(int));
+  }
+  for (int i = 0; i < vin.size(); i++){
+    EXPECT_EQ(vin[i], vout[i]);
+  }
+
+  // Create external dataset from binary file
+  const std::string FILE_NAME("virtual_data.h5");
+  const std::string SRCDSET_NAME("srcdset");
+  const std::string VDSET_NAME("vdset");
+
+  File file(FILE_NAME, File::ReadWrite | File::Create | File::Truncate);
+  DataSetCreateProps srcDsetCreateProps;
+  off64_t offset = 4;
+  size_t nbytes = 24;
+  srcDsetCreateProps.addExternalFile(fileName, offset);
+  auto srcDset = file.createDataSet<int>(
+        SRCDSET_NAME, DataSpace(2,3), LinkCreateProps(), srcDsetCreateProps);
+  std::vector<int> srcVout_row1, srcVout_row2;
+  std::vector<double> vVout; // intensionally created as DOUBLE while src dset is INT
+  srcDset.select({0,0},{1,3}).read(srcVout_row1);
+  srcDset.select({1,0},{1,3}).read(srcVout_row2);
+
+  // Create virtual dataset from selections
+  DataSetCreateProps vDsetCreateProps;
+  Selection srcSel1 = srcDset.select({0,0},{1,3});
+  DataSpace vSpace(1,6);
+  Selection vSel1(vSpace);
+  vSel1 = vSel1.select({0,3},{1,3}); // need to update mem space
+  vDsetCreateProps.addVirtualDataSet(vSel1, srcDset, srcSel1);
+
+  Selection srcSel2 = srcDset.select({1,0},{1,3});
+  DataSpace vSpace2(1,6);
+  Selection vSel2(vSpace);
+  vSel2 = vSel2.select({0,0},{1,3}); // need to update mem space
+  vDsetCreateProps.addVirtualDataSet(vSel2, srcDset, srcSel2);
+
+  auto vDset = file.createDataSet<double>(
+        VDSET_NAME, vSpace, LinkCreateProps(), vDsetCreateProps);
+
+  // we can also read to pointer and it still works as expected
+  vDset.read(vVout);
+  EXPECT_EQ(srcVout_row1[0], vVout[3]);
+  EXPECT_EQ(srcVout_row1[1], vVout[4]);
+  EXPECT_EQ(srcVout_row1[2], vVout[5]);
+  EXPECT_EQ(srcVout_row2[0], vVout[0]);
+  EXPECT_EQ(srcVout_row2[1], vVout[1]);
+  EXPECT_EQ(srcVout_row2[2], vVout[2]);
+
+  // modify data (we can write the data from pointer as well)
+  vVout[1] = -6.8;
+  vDset.write(vVout);
+  file.flush();
+
+  vDset.read(vVout.data());
+  EXPECT_EQ(vVout[1], -6);
+
+  // read modified data from binary file
+  std::vector<int> vout2(6);
+  {
+    std::ifstream istrm(fileName, std::ios::binary);
+    istrm.read(reinterpret_cast<char*>(vout2.data()), vout2.size()*sizeof(int));
+  }
+  EXPECT_EQ(vout2[5], -6);
 }
 
 TEST(H5GTBase, DataSpaceVectorTest) {

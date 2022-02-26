@@ -130,6 +130,7 @@ protected:
   friend class Attribute;
   friend class File;
   friend class DataSet;
+  friend class Selection;
 };
 
 }  // namespace h5gt

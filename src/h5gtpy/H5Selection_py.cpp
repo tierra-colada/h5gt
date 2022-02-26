@@ -14,6 +14,7 @@ DataSet& getDataset_selection_wrap(Selection& self) noexcept{
 
 void Selection_py(py::class_<Selection, SliceTraits<Selection> > &py_obj){
   py_obj
+      .def(py::init<const DataSpace&>())
       .def("getSpace", &Selection::getSpace,
            "Dataspace associated with this selection")
       .def("getMemSpace", &Selection::getMemSpace,
