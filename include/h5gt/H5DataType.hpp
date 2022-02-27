@@ -35,6 +35,12 @@ enum class DataTypeClass {
   Invalid
 };
 
+enum Endian {
+  Native,
+  Little,
+  Big
+};
+
 
 ///
 /// \brief HDF5 Data Type
@@ -117,7 +123,7 @@ protected:
 template <typename T>
 class AtomicType : public DataType {
 public:
-  AtomicType();
+  AtomicType(Endian endian = Endian::Native);
 
   typedef T basic_type;
 

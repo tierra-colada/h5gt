@@ -119,6 +119,7 @@ PYBIND11_MODULE(_h5gt, m) {
   auto pyLinkType = py::enum_<LinkType>(m, "LinkType", py::arithmetic());
   auto pyPropertyType = py::enum_<PropertyType>(m, "PropertyType", py::arithmetic());
   auto pyOpenFlag = py::enum_<File::OpenFlag>(m, "OpenFlag", py::arithmetic());
+  auto pyEndian = py::enum_<Endian>(m, "Endian", py::arithmetic());
   auto pyDTypeClass = py::enum_<DataTypeClass>(m, "DataTypeClass", py::arithmetic());
 
 //  auto pyException = py::class_<Exception, std::exception>(m, "Exception", py::arithmetic());
@@ -169,8 +170,8 @@ PYBIND11_MODULE(_h5gt, m) {
   // DATATYPE -> H5DataType_py.cpp
   auto pyDType = py::class_<DataType, Object>(m, "DataType");
 
-  /* atomic declarations should be invoked after `DataType_py` as
-       * atomic types are children of DataType */
+  // atomic declarations should be invoked after `DataType_py` as
+  // atomic types are children of DataType
   auto pyAtomicBool = py::class_<AtomicType<bool>, DataType>(m, "AtomicBool");
   auto pyAtomicChar = py::class_<AtomicType<char>, DataType>(m, "AtomicChar");
   auto pyAtomicSChar = py::class_<AtomicType<signed char>, DataType>(m, "AtomicSChar");
@@ -239,6 +240,7 @@ PYBIND11_MODULE(_h5gt, m) {
   LinkType_py(pyLinkType);
   PropertyType_py(pyPropertyType);
   OpenFlag_py(pyOpenFlag);
+  Endian_py(pyEndian);
   DataTypeClass_py(pyDTypeClass);
 
   // PROPERTYLIST -> H5PropertyList_py.cpp

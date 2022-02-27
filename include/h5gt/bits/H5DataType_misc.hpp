@@ -83,90 +83,174 @@ inline std::string DataType::string() const {
 
 // char mapping
 template <>
-inline AtomicType<char>::AtomicType() {
-  _hid = H5Tcopy(H5T_NATIVE_CHAR);
+inline AtomicType<char>::AtomicType(Endian endian) {
+  if (endian == Little){
+    _hid = H5Tcopy(H5T_STD_I8LE);
+  } else if (endian == Big){
+    _hid = H5Tcopy(H5T_STD_I8BE);
+  } else {
+    _hid = H5Tcopy(H5T_NATIVE_CHAR);
+  }
 }
 
 template <>
-inline AtomicType<signed char>::AtomicType() {
-  _hid = H5Tcopy(H5T_NATIVE_CHAR);
+inline AtomicType<signed char>::AtomicType(Endian endian) {
+  if (endian == Little){
+    _hid = H5Tcopy(H5T_STD_I8LE);
+  } else if (endian == Big){
+    _hid = H5Tcopy(H5T_STD_I8BE);
+  } else {
+    _hid = H5Tcopy(H5T_NATIVE_CHAR);
+  }
 }
 
 template <>
-inline AtomicType<unsigned char>::AtomicType() {
-  _hid = H5Tcopy(H5T_NATIVE_UCHAR);
+inline AtomicType<unsigned char>::AtomicType(Endian endian) {
+  if (endian == Little){
+    _hid = H5Tcopy(H5T_STD_U8LE);
+  } else if (endian == Big){
+    _hid = H5Tcopy(H5T_STD_U8BE);
+  } else {
+    _hid = H5Tcopy(H5T_NATIVE_UCHAR);
+  }
 }
 
 // short mapping
 template <>
-inline AtomicType<short>::AtomicType() {
-  _hid = H5Tcopy(H5T_NATIVE_SHORT);
+inline AtomicType<short>::AtomicType(Endian endian) {
+  if (endian == Little){
+    _hid = H5Tcopy(H5T_STD_I16LE);
+  } else if (endian == Big){
+    _hid = H5Tcopy(H5T_STD_I16BE);
+  } else {
+    _hid = H5Tcopy(H5T_NATIVE_SHORT);
+  }
 }
 
 template <>
-inline AtomicType<unsigned short>::AtomicType() {
-  _hid = H5Tcopy(H5T_NATIVE_USHORT);
+inline AtomicType<unsigned short>::AtomicType(Endian endian) {
+  if (endian == Little){
+    _hid = H5Tcopy(H5T_STD_U16LE);
+  } else if (endian == Big){
+    _hid = H5Tcopy(H5T_STD_U16BE);
+  } else {
+    _hid = H5Tcopy(H5T_NATIVE_USHORT);
+  }
 }
 
 // integer mapping
 template <>
-inline AtomicType<int>::AtomicType() {
-  _hid = H5Tcopy(H5T_NATIVE_INT);
+inline AtomicType<int>::AtomicType(Endian endian) {
+  if (endian == Little){
+    _hid = H5Tcopy(H5T_STD_I32LE);
+  } else if (endian == Big){
+    _hid = H5Tcopy(H5T_STD_I32BE);
+  } else {
+    _hid = H5Tcopy(H5T_NATIVE_INT);
+  }
 }
 
 template <>
-inline AtomicType<unsigned>::AtomicType() {
-  _hid = H5Tcopy(H5T_NATIVE_UINT);
+inline AtomicType<unsigned>::AtomicType(Endian endian) {
+  if (endian == Little){
+    _hid = H5Tcopy(H5T_STD_U32LE);
+  } else if (endian == Big){
+    _hid = H5Tcopy(H5T_STD_U32BE);
+  } else {
+    _hid = H5Tcopy(H5T_NATIVE_UINT);
+  }
 }
 
 // long mapping
 template <>
-inline AtomicType<long>::AtomicType() {
-  _hid = H5Tcopy(H5T_NATIVE_LONG);
+inline AtomicType<long>::AtomicType(Endian endian) {
+  if (endian == Little){
+    _hid = H5Tcopy(H5T_STD_I32LE);
+  } else if (endian == Big){
+    _hid = H5Tcopy(H5T_STD_I32BE);
+  } else {
+    _hid = H5Tcopy(H5T_NATIVE_LONG);
+  }
 }
 
 template <>
-inline AtomicType<unsigned long>::AtomicType() {
-  _hid = H5Tcopy(H5T_NATIVE_ULONG);
+inline AtomicType<unsigned long>::AtomicType(Endian endian) {
+  if (endian == Little){
+    _hid = H5Tcopy(H5T_STD_U32LE);
+  } else if (endian == Big){
+    _hid = H5Tcopy(H5T_STD_U32BE);
+  } else {
+    _hid = H5Tcopy(H5T_NATIVE_ULONG);
+  }
 }
 
 // long long mapping
 template <>
-inline AtomicType<long long>::AtomicType() {
-  _hid = H5Tcopy(H5T_NATIVE_LLONG);
+inline AtomicType<long long>::AtomicType(Endian endian) {
+  if (endian == Little){
+    _hid = H5Tcopy(H5T_STD_I64LE);
+  } else if (endian == Big){
+    _hid = H5Tcopy(H5T_STD_I64BE);
+  } else {
+    _hid = H5Tcopy(H5T_NATIVE_LLONG);
+  }
 }
 
 template <>
-inline AtomicType<unsigned long long>::AtomicType() {
-  _hid = H5Tcopy(H5T_NATIVE_ULLONG);
+inline AtomicType<unsigned long long>::AtomicType(Endian endian) {
+  if (endian == Little){
+    _hid = H5Tcopy(H5T_STD_U64LE);
+  } else if (endian == Big){
+    _hid = H5Tcopy(H5T_STD_U64BE);
+  } else {
+    _hid = H5Tcopy(H5T_NATIVE_ULLONG);
+  }
 }
 
 // float and double mapping
 template <>
-inline AtomicType<float>::AtomicType() {
-  _hid = H5Tcopy(H5T_NATIVE_FLOAT);
+inline AtomicType<float>::AtomicType(Endian endian) {
+  if (endian == Little){
+    _hid = H5Tcopy(H5T_IEEE_F32LE);
+  } else if (endian == Big){
+    _hid = H5Tcopy(H5T_IEEE_F32BE);
+  } else {
+    _hid = H5Tcopy(H5T_NATIVE_FLOAT);
+  }
 }
 
 template <>
-inline AtomicType<double>::AtomicType() {
-  _hid = H5Tcopy(H5T_NATIVE_DOUBLE);
+inline AtomicType<double>::AtomicType(Endian endian) {
+  if (endian == Little){
+    _hid = H5Tcopy(H5T_IEEE_F64LE);
+  } else if (endian == Big){
+    _hid = H5Tcopy(H5T_IEEE_F64BE);
+  } else {
+    _hid = H5Tcopy(H5T_NATIVE_DOUBLE);
+  }
 }
 
 // boolean mapping
 template <>
-inline AtomicType<bool>::AtomicType() {
-  _hid = H5Tcopy(H5T_NATIVE_HBOOL);
+inline AtomicType<bool>::AtomicType(Endian endian) {
+  if (endian == Little){
+    _hid = H5Tcopy(H5T_STD_I8LE);
+  } else if (endian == Big){
+    _hid = H5Tcopy(H5T_STD_I8BE);
+  } else {
+    _hid = H5Tcopy(H5T_NATIVE_HBOOL);
+  }
 }
 
 // std string
 template <>
-inline AtomicType<std::string>::AtomicType() {
+inline AtomicType<std::string>::AtomicType(Endian endian) {
   _hid = create_string(H5T_VARIABLE);
 }
 
 // std string
 template <>
-inline AtomicType<const char*>::AtomicType() {
+inline AtomicType<const char*>::AtomicType(Endian endian) {
   _hid = create_string(H5T_VARIABLE);
 }
 
@@ -185,34 +269,78 @@ public:
 };
 
 template <>
-inline AtomicType<std::complex<double> >::AtomicType() {
-  static struct ComplexType : public Object {
-    ComplexType() {
-      _hid = H5Tcreate(H5T_COMPOUND, sizeof(std::complex<double>));
-      // h5py/numpy compatible datatype
-      H5Tinsert(_hid, "r", 0, H5T_NATIVE_DOUBLE);
-      H5Tinsert(_hid, "i", sizeof(double), H5T_NATIVE_DOUBLE);
-    };
-  } complexType;
-  _hid = H5Tcopy(complexType.getId(false));
+inline AtomicType<std::complex<double> >::AtomicType(Endian endian) {
+  if (endian == Little){
+    static struct ComplexType : public Object {
+      ComplexType() {
+        _hid = H5Tcreate(H5T_COMPOUND, sizeof(std::complex<double>));
+        // h5py/numpy compatible datatype
+        H5Tinsert(_hid, "r", 0, H5T_IEEE_F64LE);
+        H5Tinsert(_hid, "i", sizeof(double), H5T_IEEE_F64LE);
+      };
+    } complexType;
+    _hid = H5Tcopy(complexType.getId(false));
+  } else if (endian == Big){
+    static struct ComplexType : public Object {
+      ComplexType() {
+        _hid = H5Tcreate(H5T_COMPOUND, sizeof(std::complex<double>));
+        // h5py/numpy compatible datatype
+        H5Tinsert(_hid, "r", 0, H5T_IEEE_F64BE);
+        H5Tinsert(_hid, "i", sizeof(double), H5T_IEEE_F64BE);
+      };
+    } complexType;
+    _hid = H5Tcopy(complexType.getId(false));
+  } else {
+    static struct ComplexType : public Object {
+      ComplexType() {
+        _hid = H5Tcreate(H5T_COMPOUND, sizeof(std::complex<double>));
+        // h5py/numpy compatible datatype
+        H5Tinsert(_hid, "r", 0, H5T_NATIVE_DOUBLE);
+        H5Tinsert(_hid, "i", sizeof(double), H5T_NATIVE_DOUBLE);
+      };
+    } complexType;
+    _hid = H5Tcopy(complexType.getId(false));
+  }
 }
 
 template <>
-inline AtomicType<std::complex<float> >::AtomicType() {
-  static struct ComplexType : public Object {
-    ComplexType() {
-      _hid = H5Tcreate(H5T_COMPOUND, sizeof(std::complex<float>));
-      // h5py/numpy compatible datatype
-      H5Tinsert(_hid, "r", 0, H5T_NATIVE_FLOAT);
-      H5Tinsert(_hid, "i", sizeof(float), H5T_NATIVE_FLOAT);
-    };
-  } complexType;
-  _hid = H5Tcopy(complexType.getId(false));
+inline AtomicType<std::complex<float> >::AtomicType(Endian endian) {
+  if (endian == Little){
+    static struct ComplexType : public Object {
+      ComplexType() {
+        _hid = H5Tcreate(H5T_COMPOUND, sizeof(std::complex<float>));
+        // h5py/numpy compatible datatype
+        H5Tinsert(_hid, "r", 0, H5T_IEEE_F32LE);
+        H5Tinsert(_hid, "i", sizeof(float), H5T_IEEE_F32LE);
+      };
+    } complexType;
+    _hid = H5Tcopy(complexType.getId(false));
+  } else if (endian == Big){
+    static struct ComplexType : public Object {
+      ComplexType() {
+        _hid = H5Tcreate(H5T_COMPOUND, sizeof(std::complex<float>));
+        // h5py/numpy compatible datatype
+        H5Tinsert(_hid, "r", 0, H5T_IEEE_F32BE);
+        H5Tinsert(_hid, "i", sizeof(float), H5T_IEEE_F32BE);
+      };
+    } complexType;
+    _hid = H5Tcopy(complexType.getId(false));
+  } else {
+    static struct ComplexType : public Object {
+      ComplexType() {
+        _hid = H5Tcreate(H5T_COMPOUND, sizeof(std::complex<float>));
+        // h5py/numpy compatible datatype
+        H5Tinsert(_hid, "r", 0, H5T_NATIVE_FLOAT);
+        H5Tinsert(_hid, "i", sizeof(float), H5T_NATIVE_FLOAT);
+      };
+    } complexType;
+    _hid = H5Tcopy(complexType.getId(false));
+  }
 }
 
 // Other cases not supported. Fail early with a user message
 template <typename T>
-AtomicType<T>::AtomicType() {
+AtomicType<T>::AtomicType(Endian endian) {
   static_assert(details::inspector<T>::recursive_ndim == 0,
       "Atomic types cant be arrays, except for char[] (fixed-len strings)");
   static_assert(details::inspector<T>::recursive_ndim > 0, "Type not supported");
@@ -272,7 +400,7 @@ inline std::string FixedLenStringArray<N>::getString(std::size_t i) const {
 // Internal
 // Reference mapping
 template <>
-inline AtomicType<Reference>::AtomicType() {
+inline AtomicType<Reference>::AtomicType(Endian endian) {
   _hid = H5Tcopy(H5T_STD_REF_OBJ);
 }
 

@@ -69,5 +69,13 @@ void OpenFlag_py(py::enum_<File::OpenFlag> &py_obj) {
       .export_values();
 }
 
+void Endian_py(py::enum_<Endian> &py_obj) {
+  py_obj
+      .value("Native", Endian::Native)
+      .value("Little", Endian::Little)
+      .value("Big", Endian::Big)
+      .export_values();
+}
+
 
 } // h5gtpy
