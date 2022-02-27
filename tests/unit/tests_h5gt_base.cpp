@@ -539,13 +539,13 @@ TEST(H5GTBase, ExternalAndVirtualData) {
   DataSpace vSpace(1,6);
   Selection vSel1(vSpace);
   vSel1 = vSel1.select({0,3},{1,3}); // need to update mem space
-  vDsetCreateProps.addVirtualDataSet(vSel1, srcDset, srcSel1);
+  vDsetCreateProps.addVirtualDataSet(vSel1.getSpace(), srcDset, srcSel1.getSpace());
 
   Selection srcSel2 = srcDset.select({1,0},{1,3});
   DataSpace vSpace2(1,6);
   Selection vSel2(vSpace);
   vSel2 = vSel2.select({0,0},{1,3}); // need to update mem space
-  vDsetCreateProps.addVirtualDataSet(vSel2, srcDset, srcSel2);
+  vDsetCreateProps.addVirtualDataSet(vSel2.getSpace(), srcDset, srcSel2.getSpace());
 
   auto vDset = file.createDataSet<double>(
         VDSET_NAME, vSpace, LinkCreateProps(), vDsetCreateProps);

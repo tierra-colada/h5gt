@@ -201,12 +201,13 @@ public:
       off_t offset = 0, hsize_t size = 0);
 
   /// \brief map source dataset
-  /// selections must have equal number of selected elements
+  /// Spaces must have equal number of selected elements
+  /// Spaces may be given from selection: Selection.getSpace()
   /// srcDset may be mapped external file
   void addVirtualDataSet(
-      const Selection& vSelection,
+      const DataSpace& vSpace,
       const DataSet& srcDset,
-      const Selection& srcSelection);
+      const DataSpace& srcSpace);
 
   void setShuffle();
 

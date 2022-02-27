@@ -75,9 +75,9 @@ void DataSetCreateProps_py(py::class_<DataSetCreateProps, PropertyList<PropertyT
            py::arg_v("offset", 0, "0"),
            py::arg_v("size", 0, "0"))
       .def("addVirtualDataSet", &DataSetCreateProps::addVirtualDataSet,
-           py::arg("vSelection"),
+           py::arg("vSpace"),
            py::arg("srcDset"),
-           py::arg("srcSelection"))
+           py::arg("srcSpace"))
       .def("setShuffle", &DataSetCreateProps::setShuffle)
       .def("setChunk", &ext::setChunk_wrap1,
            py::arg("dims"))

@@ -126,10 +126,12 @@ inline void DataSetCreateProps::addExternalFile(const std::string& file, off_t o
 }
 
 inline void DataSetCreateProps::addVirtualDataSet(
-    const Selection& vSelection, const DataSet& srcDset, const Selection& srcSelection)
+    const DataSpace& vSpace,
+    const DataSet& srcDset,
+    const DataSpace& srcSpace)
 {
-  if (H5Pset_virtual( _hid, vSelection.getSpace().getId(), srcDset.getFileName().c_str(),
-                  srcDset.getPath().c_str(), srcSelection.getSpace().getId()) < 0){
+  if (H5Pset_virtual( _hid, vSpace.getId(), srcDset.getFileName().c_str(),
+                  srcDset.getPath().c_str(), srcSpace.getId()) < 0){
     HDF5ErrMapper::ToException<PropertyException>(
           "Unable to add set dataset virtual");
   }
