@@ -25,6 +25,14 @@ std::tuple<size_t, size_t, double> getChunkCache(
   return std::make_tuple(std::move(numSlots), std::move(cacheSize), std::move(w0));
 }
 
+std::tuple<std::string, off_t, hsize_t> getExternal(
+    DataSetCreateProps& self, unsigned idx){
+  off_t offset;
+  hsize_t fileSize;
+  std::string fileName = self.getExternal(idx, offset, fileSize);
+  return std::make_tuple(std::move(fileName), std::move(offset), std::move(fileSize));
+}
+
 } // ext
 
 
@@ -83,6 +91,19 @@ void DataSetCreateProps_py(py::class_<DataSetCreateProps, PropertyList<PropertyT
            py::arg("dims"))
       .def("setChunk", &ext::setChunk_wrap2,
            py::arg("dim"))
+      .def("getExternalCount", &DataSetCreateProps::getExternalCount)
+      .def("getExternal", &ext::getExternal,
+           py::arg("idx"),
+           "Return: filename, offset, filesize")
+      .def("getVirtualCount", &DataSetCreateProps::getVirtualCount)
+      .def("getVirtualDataSetName", &DataSetCreateProps::getVirtualDataSetName,
+           py::arg("idx"))
+      .def("getVirtualFileName", &DataSetCreateProps::getVirtualFileName,
+           py::arg("idx"))
+      .def("getVirtualSrcSpace", &DataSetCreateProps::getVirtualSrcSpace,
+           py::arg("idx"))
+      .def("getVirtualVSpace", &DataSetCreateProps::getVirtualVSpace,
+           py::arg("idx"))
       .def("getChunk", &DataSetCreateProps::getChunk,
            py::arg("max_ndims"))
       .def("getLayoutType", &DataSetCreateProps::getLayoutType)

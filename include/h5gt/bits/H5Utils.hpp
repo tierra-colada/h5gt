@@ -19,7 +19,7 @@
 #include <vector>
 
 #ifndef H5GT_MAX_PATH_LEN
-#define H5GT_MAX_PATH_LEN 255
+#define H5GT_MAX_PATH_LEN 510
 #endif
 #ifdef H5GT_USE_BOOST
 # include <boost/multi_array.hpp>

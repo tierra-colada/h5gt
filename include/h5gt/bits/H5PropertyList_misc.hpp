@@ -168,6 +168,84 @@ inline void DataSetCreateProps::setChunk(const std::vector<hsize_t>& dims) {
   }
 }
 
+inline size_t DataSetCreateProps::getExternalCount() {
+  int num = H5Pget_external_count(_hid);
+  if (num < 0){
+    HDF5ErrMapper::ToException<PropertyException>(
+          "Unable to get number of external files");
+  }
+  return num;
+}
+
+inline std::string DataSetCreateProps::getExternal(
+    unsigned idx, off_t& offset, hsize_t& fileSize) {
+  char buffer[H5GT_MAX_PATH_LEN + 1];
+  herr_t status = H5Pget_external(
+        _hid, idx, static_cast<hsize_t>(H5GT_MAX_PATH_LEN) + 1,
+        buffer, &offset, &fileSize);
+  if (status < 0){
+    HDF5ErrMapper::ToException<PropertyException>(
+          "Unable to get info about external file");
+  }
+  return std::string(buffer);
+}
+
+inline size_t DataSetCreateProps::getVirtualCount(){
+  size_t num;
+  herr_t status = H5Pget_virtual_count(_hid, &num);
+  if (status < 0){
+    HDF5ErrMapper::ToException<PropertyException>(
+          "Unable to get number of virtual datasets");
+  }
+  return num;
+}
+
+inline std::string DataSetCreateProps::getVirtualDataSetName(size_t idx){
+  char buffer[H5GT_MAX_PATH_LEN + 1];
+  ssize_t retcode = H5Pget_virtual_dsetname(
+        _hid, idx, buffer,
+        static_cast<size_t>(H5GT_MAX_PATH_LEN) + 1);
+  if (retcode < 0) {
+    HDF5ErrMapper::ToException<PropertyException>("Error accessing object name");
+  }
+  const size_t length = static_cast<std::size_t>(retcode);
+  if (length <= H5GT_MAX_PATH_LEN) {
+    return std::string(buffer, length);
+  }
+  std::vector<char> bigBuffer(length + 1, 0);
+  H5Pget_virtual_dsetname(
+        _hid, idx, bigBuffer.data(),
+        static_cast<hsize_t>(length) + 1);
+  return std::string(bigBuffer.data(), length);
+}
+
+inline std::string DataSetCreateProps::getVirtualFileName(size_t idx) {
+  char buffer[H5GT_MAX_PATH_LEN + 1];
+  ssize_t retcode = H5Pget_virtual_filename(
+        _hid, idx, buffer,
+        static_cast<size_t>(H5GT_MAX_PATH_LEN) + 1);
+  if (retcode < 0) {
+    HDF5ErrMapper::ToException<PropertyException>("Error accessing object name");
+  }
+  const size_t length = static_cast<std::size_t>(retcode);
+  if (length <= H5GT_MAX_PATH_LEN) {
+    return std::string(buffer, length);
+  }
+  std::vector<char> bigBuffer(length + 1, 0);
+  H5Pget_virtual_filename(
+        _hid, idx, bigBuffer.data(),
+        static_cast<hsize_t>(length) + 1);
+  return std::string(bigBuffer.data(), length);
+}
+
+inline DataSpace DataSetCreateProps::getVirtualSrcSpace(size_t idx){
+  return DataSpace::FromId(H5Pget_virtual_srcspace(_hid, idx));
+}
+
+inline DataSpace DataSetCreateProps::getVirtualVSpace(size_t idx){
+  return DataSpace::FromId(H5Pget_virtual_vspace(_hid, idx));
+}
+
 inline std::vector<hsize_t> DataSetCreateProps::getChunk(int max_ndims)
 {
   // initialize with zeros

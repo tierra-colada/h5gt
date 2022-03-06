@@ -518,8 +518,8 @@ TEST(H5GTBase, ExternalAndVirtualData) {
 
   // Create external dataset from binary file
   const std::string FILE_NAME("virtual_data.h5");
-  const std::string SRCDSET_NAME("srcdset");
-  const std::string VDSET_NAME("vdset");
+  const std::string SRCDSET_NAME("/srcdset"); // with slash '/' as it is going to be compared
+  const std::string VDSET_NAME("/vdset");
 
   File file(FILE_NAME, File::ReadWrite | File::Create | File::Truncate);
   DataSetCreateProps srcDsetCreateProps;
@@ -574,6 +574,23 @@ TEST(H5GTBase, ExternalAndVirtualData) {
     istrm.read(reinterpret_cast<char*>(vout2.data()), vout2.size()*sizeof(int));
   }
   EXPECT_EQ(vout2[5], -6);
+
+  // check properties
+  // External
+  auto srcDsetCreatePropsOut = srcDset.getCreateProps();
+  EXPECT_EQ(srcDsetCreatePropsOut.getExternalCount(), 1);
+  off_t srcOffset = 10;
+  hsize_t fileSize;
+  std::string externalName = srcDsetCreatePropsOut.getExternal(0, srcOffset, fileSize);
+  EXPECT_STREQ(fileName.c_str(), externalName.c_str());
+
+  // virtual
+  auto vDsetCreatePropsOut = vDset.getCreateProps();
+  EXPECT_EQ(vDsetCreatePropsOut.getVirtualCount(), 2);
+  std::string srcDsetName = vDsetCreatePropsOut.getVirtualDataSetName(0);
+  EXPECT_STREQ(SRCDSET_NAME.c_str(), srcDsetName.c_str());
+  std::string vFileName = vDsetCreatePropsOut.getVirtualFileName(0);
+  EXPECT_STREQ(FILE_NAME.c_str(), vFileName.c_str());
 }
 
 TEST(H5GTBase, DataSpaceVectorTest) {

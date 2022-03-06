@@ -226,6 +226,18 @@ public:
 
   void setChunk(const std::vector<hsize_t>& dims);
 
+  /// return number of external files
+  size_t getExternalCount();
+  /// retrieve info about external file under index 'idx'
+  std::string getExternal(unsigned idx, off_t& offset, hsize_t& fileSize);
+  /// return number of virtual datasets
+  size_t getVirtualCount();
+  /// resturn virtual (source) dataset name
+  std::string getVirtualDataSetName(size_t idx);
+  std::string getVirtualFileName(size_t idx);
+  DataSpace getVirtualSrcSpace(size_t idx);
+  DataSpace getVirtualVSpace(size_t idx);
+
   std::vector<hsize_t> getChunk(int max_ndims);
 
   LayoutType getLayoutType();
