@@ -12,12 +12,6 @@
 #include "../../include/h5gtpy/H5Selection_py.h"
 #include "../../include/h5gtpy/H5SliceTraits_py.h"
 
-PYBIND11_MAKE_OPAQUE(std::vector<CompoundType::member_def>);
-PYBIND11_MAKE_OPAQUE(std::vector<EnumType<int>::member_def>);
-PYBIND11_MAKE_OPAQUE(std::vector<EnumType<unsigned>::member_def>);
-PYBIND11_MAKE_OPAQUE(std::vector<EnumType<long long>::member_def>);
-PYBIND11_MAKE_OPAQUE(std::vector<EnumType<unsigned long long>::member_def>);
-
 
 using py_types = std::tuple<
 bool,

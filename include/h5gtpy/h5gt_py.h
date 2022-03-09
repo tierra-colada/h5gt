@@ -23,6 +23,13 @@ using namespace h5gt;
 
 namespace py = pybind11;
 
+// opaque types must be included to every translation unit or ODR falls (warnings is given)
+PYBIND11_MAKE_OPAQUE(std::vector<CompoundType::member_def>);
+PYBIND11_MAKE_OPAQUE(std::vector<EnumType<int>::member_def>);
+PYBIND11_MAKE_OPAQUE(std::vector<EnumType<unsigned>::member_def>);
+PYBIND11_MAKE_OPAQUE(std::vector<EnumType<long long>::member_def>);
+PYBIND11_MAKE_OPAQUE(std::vector<EnumType<unsigned long long>::member_def>);
+
 /* to generate .pyi the returned type should be declared before it
  * is called. For example `createGroup` returns `Group` so I need to
  * place `py::class_<Group, Object>(m, "Group")`
