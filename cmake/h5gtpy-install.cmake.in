@@ -12,7 +12,7 @@ cmake_policy(SET CMP0012 NEW)
 message(STATUS "Resolving h5gtpy RUNTIME dependencies...")
 
 file(GET_RUNTIME_DEPENDENCIES
-  LIBRARIES $<TARGET_FILE:_h5gt>
+  LIBRARIES "$<TARGET_FILE:_h5gt>"
   RESOLVED_DEPENDENCIES_VAR res_deps
   UNRESOLVED_DEPENDENCIES_VAR unres_deps
   CONFLICTING_DEPENDENCIES_PREFIX confl_deps
@@ -117,7 +117,7 @@ configure_file("${MANIFEST_IN}" "${MANIFEST_OUT}")
 configure_file("${INIT_PY_IN}" "${INIT_PY_OUT}")
 configure_file("${INIT_PY_IN_TEST}" "${INIT_PY_OUT_TEST}" COPYONLY)
 configure_file("${STUBS_INIT_IN}" "${STUBS_INIT_OUT}" COPYONLY)
-configure_file($<TARGET_FILE:_h5gt> "${H5GTPY_DIR}" COPYONLY)
+configure_file("$<TARGET_FILE:_h5gt>" "${H5GTPY_DIR}" COPYONLY)
 
 # copy pytests
 foreach(_file ${TEST_PY_IN_LIST})
