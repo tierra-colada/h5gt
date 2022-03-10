@@ -11,9 +11,9 @@ cmake_policy(SET CMP0012 NEW)
 #-----------------------------------------------------------------------------
 message(STATUS "Resolving h5gtpy RUNTIME dependencies...")
 
-get_filename_component(_runtime_dir "$<TARGET_FILE:hdf5::hdf5>" DIRECTORY)
+get_filename_component(_runtime_dir "$<$<TARGET_EXISTS:hdf5::hdf5>:$<TARGET_FILE:hdf5::hdf5>>" DIRECTORY)
 list(APPEND runtime_dirs "${_runtime_dir}")
-get_filename_component(_runtime_dir "$<TARGET_FILE:ZLIB::ZLIB>" DIRECTORY)
+get_filename_component(_runtime_dir "$<$<TARGET_EXISTS:ZLIB::ZLIB>:$<TARGET_FILE:ZLIB::ZLIB>>" DIRECTORY)
 list(APPEND runtime_dirs "${_runtime_dir}")
 
 message("Detected runtime_dirs: ${runtime_dirs}")
