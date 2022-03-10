@@ -59,7 +59,7 @@ endif()
 #-----------------------------------------------------------------------------
 # Setting variables needed to configure in-files
 #-----------------------------------------------------------------------------
-set(H5GTPY_DIR @CMAKE_CURRENT_BINARY_DIR@/h5gtpy)
+set(H5GTPY_DIR "@CMAKE_CURRENT_BINARY_DIR@/h5gtpy")
 
 file(MAKE_DIRECTORY "${H5GTPY_DIR}")
 file(MAKE_DIRECTORY "${H5GTPY_DIR}/h5gtpy")
@@ -128,5 +128,5 @@ endforeach()
 #-----------------------------------------------------------------------------
 # Pip install
 #-----------------------------------------------------------------------------
-execute_process(COMMAND @PYTHON_EXECUTABLE@ -m pip install --upgrade pip)   # is very necessary
-execute_process(COMMAND @PYTHON_EXECUTABLE@ -m pip install @CMAKE_CURRENT_BINARY_DIR@)
+execute_process(COMMAND "@PYTHON_EXECUTABLE@" -m pip install --upgrade pip)   # is very necessary
+execute_process(COMMAND "@PYTHON_EXECUTABLE@" -m pip install "@CMAKE_CURRENT_BINARY_DIR@")
