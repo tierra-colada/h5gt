@@ -17,8 +17,11 @@ file(GET_RUNTIME_DEPENDENCIES
   UNRESOLVED_DEPENDENCIES_VAR unres_deps
   CONFLICTING_DEPENDENCIES_PREFIX confl_deps
   DIRECTORIES
-    @HDF5_RUNTIME_DIR@
-  PRE_INCLUDE_REGEXES "^.*([Hh][Dd][Ff][5]).*$"
+    "@HDF5_RUNTIME_DIR@"
+    "@ZLIB_RUNTIME_DIR@"
+  PRE_INCLUDE_REGEXES 
+    "^.*([Hh][Dd][Ff][5]).*$"
+    "^.*([Zz][Ll][Ii][Bb]).*$"
   PRE_EXCLUDE_REGEXES "[^\n]+"
 )
 
@@ -41,14 +44,14 @@ endforeach()
 list(LENGTH unres_deps unres_deps_LEN)
 if(${unres_deps_LEN} GREATER 0)
   message(FATAL_ERROR "There are UNRESOLVED runtime dependencies.
-  Try setting `HDF5_RUNTIME_DIR` and rerun `cmake .` and `cmake --install .`
+  Try setting `HDF5_RUNTIME_DIR, ZLIB_RUNTIME_DIR` and rerun `cmake .` and `cmake --install .`
   (you don't have to rebuild the project)")
 endif()
 
 list(LENGTH confl_deps confl_deps_LEN)
 if(${confl_deps_LEN} GREATER 0)
   message(FATAL_ERROR "There are CNFLICTING runtime dependencies.
-  Try setting `HDF5_RUNTIME_DIR` and rerun `cmake .` and `cmake --install .`
+  Try setting `HDF5_RUNTIME_DIR, ZLIB_RUNTIME_DIR` and rerun `cmake .` and `cmake --install .`
   (you don't have to rebuild the project)")
 endif()
 
@@ -79,15 +82,6 @@ set(STUBS_INIT_OUT ${H5GTPY_DIR}/h5gtpy/h5gt.pyi)
 file(GLOB_RECURSE TEST_PY_IN_LIST @CMAKE_SOURCE_DIR@/tests/pytest/*.py)
 set(TEST_PY_OUT_DIR ${H5GTPY_DIR}/tests)
 
-# `MODULE_PATTERN` is also used when configuring `MANIFEST.in.in`
-if(WIN32)
-  set(MODULE_PATTERN "*.pyd")
-  set(ADD_TO_MANIFEST "include h5gtpy/*.dll")
-else()
-  set(MODULE_PATTERN "*.so")
-  set(ADD_TO_MANIFEST "")
-endif()
-
 
 #-----------------------------------------------------------------------------
 # Configuring in-files
@@ -96,32 +90,27 @@ endif()
 # copy runtime deps or change __init__.py file to modify ENV PATH
 if(@COPY_H5GTPY_RUNTIME_DEPS@)
   foreach(_file ${res_deps})
+    message("Copying runtime dependency:\t${_file} \nto:\t${H5GTPY_DIR}")
     configure_file(${_file} ${H5GTPY_DIR} COPYONLY)
   endforeach()
 else()
   foreach(_file ${res_deps})
-    get_filename_component(_file_we ${_file} NAME_WE) # NAME_WE - without extension
-    if(${_file_we} MATCHES "^.*hdf5.*$")
-      get_filename_component(hdf5_dep ${_file} DIRECTORY)
-    endif()
+    get_filename_component(_dir ${_file} DIRECTORY)
+    list(APPEND res_deps_dirs ${_dir})
   endforeach()
 
   get_filename_component(CMAKE_ABS_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} ABSOLUTE)
+  list(APPEND res_deps_dirs ${CMAKE_ABS_INSTALL_PREFIX}/lib)  # add h5gt dir
+  list(REMOVE_DUPLICATES res_deps_dirs)   # remove repeating dirs
 
-# `PYTHON_INIT_PATH_VAR` is used to configure `INIT_PY_IN` file
-#----------------------DONT TOUCH SPACES HERE!----------------------
-set(PYTHON_INIT_PATH_VAR
-"
-import os
-
-if not os.environ['PATH'].__contains__('${hdf5_dep}'):
-    os.environ['PATH'] += ';${hdf5_dep}'
-"
-)
-#--------------------------END OF WARNING---------------------------
-
+  # `PYTHON_INIT_PATH_VAR` is used to configure `INIT_PY_IN` file
+  set(PYTHON_INIT_PATH_VAR "import os\n")
+  foreach(_dir ${res_deps_dirs})
+    set(PYTHON_INIT_PATH_VAR "${PYTHON_INIT_PATH_VAR}\n
+if not os.environ['PATH'].__contains__('${_dir}'):
+  os.environ['PATH'] = '${_dir}' + os.pathsep + os.environ['PATH']")
+  endforeach()
 endif()
-
 
 configure_file(${SETUP_PY_IN} ${SETUP_PY_OUT})
 configure_file(${MANIFEST_IN} ${MANIFEST_OUT})

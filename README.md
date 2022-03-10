@@ -30,7 +30,8 @@ cmake ..
   -DH5GT_USE_EIGEN=ON 
   -DEigen3_ROOT=/path/to/eigen3 
   -DHDF5_DIR=/path/to/hdf5-config.cmake 
-  -DHDF5_RUNTIME_DIR=/path/to/hdf5-runtime   -DCOPY_H5GEOPY_RUNTIME_DEPS=ON
+  -DHDF5_RUNTIME_DIR=/path/to/hdf5-runtime   
+  -DZLIB_RUNTIME_DIR=/path/to/zlib-runtime   -DCOPY_H5GTPY_RUNTIME_DEPS=ON
 cmake --build . 
 ```
 If your HDF5 depends on ZLIB or MPI you may also need to add it.

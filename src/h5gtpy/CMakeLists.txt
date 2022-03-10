@@ -2,7 +2,8 @@ project(h5gtpy VERSION ${COMMON_PROJECT_VERSION} LANGUAGES C CXX)
 
 message("project: ${PROJECT_NAME} ${COMMON_PROJECT_VERSION}")
 
-set(HDF5_RUNTIME_DIR "" CACHE PATH "hdf5 runtime is a dependency of h5geopy")
+set(HDF5_RUNTIME_DIR "" CACHE PATH "hdf5 runtime is a dependency of h5gtpy")
+set(ZLIB_RUNTIME_DIR "" CACHE PATH "zlib runtime is an optional dependency of hdf5")
 option(COPY_H5GTPY_RUNTIME_DEPS "Copy hdf5 runtime to python site-packages
   (otherwise it will simply add to ENV PATH to hdf5 runtime dir in `__init__.py`)" ON)
 
