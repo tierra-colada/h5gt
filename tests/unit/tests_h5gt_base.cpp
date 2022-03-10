@@ -1618,7 +1618,7 @@ TEST(H5GTBase, RenameRelative) {
   }
 }
 
-#define H5GEO_CHAR_ARRAY_SIZE 50
+#define H5GT_CHAR_ARRAY_SIZE 50
 
 typedef struct {
   int m1;
@@ -1649,7 +1649,7 @@ typedef struct CSL4 {
   double z;
 
   void setName(const std::string& s){
-    size_t nChar2copy = std::min(s.size(), size_t(H5GEO_CHAR_ARRAY_SIZE - 1));
+    size_t nChar2copy = std::min(s.size(), size_t(H5GT_CHAR_ARRAY_SIZE - 1));
     if (nChar2copy < 1){
       this->name[0] = '\0';
     } else {
@@ -1663,7 +1663,7 @@ typedef struct CSL4 {
   }
 
   // needs to be public to calculate offset
-  char name[H5GEO_CHAR_ARRAY_SIZE];
+  char name[H5GT_CHAR_ARRAY_SIZE];
 } CSL4;
 
 
@@ -1713,7 +1713,7 @@ CompoundType create_compound_csl4() {
           {"x", AtomicType<double>{}, HOFFSET(CSL4, x)},
           {"y", AtomicType<double>{}, HOFFSET(CSL4, y)},
           {"z", AtomicType<double>{}, HOFFSET(CSL4, z)},
-          {"name", AtomicType<FixedLenStringArray<H5GEO_CHAR_ARRAY_SIZE>>{}, HOFFSET(CSL4, name)}
+          {"name", AtomicType<FixedLenStringArray<H5GT_CHAR_ARRAY_SIZE>>{}, HOFFSET(CSL4, name)}
         }, sizeof(CSL4));
 
   return t4;
