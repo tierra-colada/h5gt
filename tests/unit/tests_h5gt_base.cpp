@@ -523,7 +523,7 @@ TEST(H5GTBase, ExternalAndVirtualData) {
 
   File file(FILE_NAME, File::ReadWrite | File::Create | File::Truncate);
   DataSetCreateProps srcDsetCreateProps;
-  off64_t offset = 4;
+  off_t offset = 4;
   size_t nbytes = 24;
   srcDsetCreateProps.addExternalFile(fileName, offset);
   auto srcDset = file.createDataSet<int>(
@@ -1643,10 +1643,26 @@ typedef struct {
     CT1 ct1;
 } CT2;
 
-typedef struct {
+typedef struct CSL4 {
   double x;
   double y;
   double z;
+
+  void setName(const std::string& s){
+    size_t nChar2copy = std::min(s.size(), size_t(H5GEO_CHAR_ARRAY_SIZE - 1));
+    if (nChar2copy < 1){
+      this->name[0] = '\0';
+    } else {
+       s.copy(this->name, nChar2copy);
+      this->name[nChar2copy] = '\0';
+    }
+  }
+
+  std::string getName(){
+    return std::string(this->name);
+  }
+
+  // needs to be public to calculate offset
   char name[H5GEO_CHAR_ARRAY_SIZE];
 } CSL4;
 
@@ -1666,8 +1682,7 @@ CompoundType create_compound_csl2() {
   return t2;
 }
 
-/// as 'CT1' contains 'std::string' we must explicitely set
-/// offset for each member and for the struct itself
+/// NOT SUPPORTED (NOT TRIVIAL TYPE, 'offsetof' is undefined behaviour)
 CompoundType create_compound_CT1() {
   CompoundType t(
         {
@@ -1680,8 +1695,7 @@ CompoundType create_compound_CT1() {
   return t;
 }
 
-/// as 'CT2' contains 'std::string' we must explicitely set
-/// offset for each member and for the struct itself
+/// NOT SUPPORTED (NOT TRIVIAL TYPE, 'offsetof' is undefined behaviour)
 inline CompoundType create_compound_CT2() {
   CompoundType t(
         {
@@ -1754,30 +1768,46 @@ TEST(H5GTBase, Compounds) {
     EXPECT_EQ(result[1].m2, 3);
     EXPECT_EQ(result[1].m3, 4);
 
-    std::vector<CT2> ct2_vec_in{
-        {3, "Gone with the wind", {1.1, "John", "Travolta", "Olegovich"}},
-        {4, "Fast and dead", {2.2, "Clint", "Eastwood", "Vasilievich"}}
-        };
+    // ! VARIANT LENGTH COMPOUND TYPE UNSUPPORTED AS 'offsetof' WORKS ONLY WITH TRIVIAL (POD) TYPES
+    // type containing 'std::string' as a member var is non-POD
+    // you can check if the type is trivial using 'std::cout << std::is_trivial<CSL4>::value << std::endl;'
+//    std::vector<CT1> ct1_vec_in{
+//        {1.1, "John", "Travolta", "Olegovich"},
+//        {2.2, "Clint", "Eastwood", "Vasilievich"}
+//        };
 
-    auto dataset_ct2 = file.createDataSet("dset_vec_CT2", DataSpace::From(ct2_vec_in), t_ct2);
-    dataset_ct2.write(ct2_vec_in);
+//    auto dataset_ct1 = file.createDataSet("dset_vec_CT1", DataSpace::From(ct1_vec_in), t_ct1);
+//    dataset_ct1.write(ct1_vec_in);
 
-    file.flush();
+//    file.flush();
 
-    std::vector<CT2> ct2_vec_out;
-    dataset_ct2.read(ct2_vec_out);
+//    std::vector<CT1> ct1_vec_out;
+//    dataset_ct1.read(ct1_vec_out);
 
-    EXPECT_EQ(ct2_vec_out.size(), 2);
-    EXPECT_EQ(ct2_vec_out[0].y, ct2_vec_in[0].y);
-    EXPECT_EQ(ct2_vec_out[0].film, ct2_vec_in[0].film);
-    EXPECT_EQ(ct2_vec_out[0].ct1.x, ct2_vec_in[0].ct1.x);
-    EXPECT_EQ(ct2_vec_out[0].ct1.name, ct2_vec_in[0].ct1.name);
-    EXPECT_EQ(ct2_vec_out[0].ct1.family, ct2_vec_in[0].ct1.family);
-    EXPECT_EQ(ct2_vec_out[1].y, ct2_vec_in[1].y);
-    EXPECT_EQ(ct2_vec_out[1].film, ct2_vec_in[1].film);
-    EXPECT_EQ(ct2_vec_out[1].ct1.x, ct2_vec_in[1].ct1.x);
-    EXPECT_EQ(ct2_vec_out[1].ct1.name, ct2_vec_in[1].ct1.name);
-    EXPECT_EQ(ct2_vec_out[1].ct1.family, ct2_vec_in[1].ct1.family);
+//    std::vector<CT2> ct2_vec_in{
+//        {3, "Gone with the wind", {1.1, "John", "Travolta", "Olegovich"}},
+//        {4, "Fast and dead", {2.2, "Clint", "Eastwood", "Vasilievich"}}
+//        };
+
+//    auto dataset_ct2 = file.createDataSet("dset_vec_CT2", DataSpace::From(ct2_vec_in), t_ct2);
+//    dataset_ct2.write(ct2_vec_in);
+
+//    file.flush();
+
+//    std::vector<CT2> ct2_vec_out;
+//    dataset_ct2.read(ct2_vec_out);
+
+//    EXPECT_EQ(ct2_vec_out.size(), 2);
+//    EXPECT_EQ(ct2_vec_out[0].y, ct2_vec_in[0].y);
+//    EXPECT_EQ(ct2_vec_out[0].film, ct2_vec_in[0].film);
+//    EXPECT_EQ(ct2_vec_out[0].ct1.x, ct2_vec_in[0].ct1.x);
+//    EXPECT_EQ(ct2_vec_out[0].ct1.name, ct2_vec_in[0].ct1.name);
+//    EXPECT_EQ(ct2_vec_out[0].ct1.family, ct2_vec_in[0].ct1.family);
+//    EXPECT_EQ(ct2_vec_out[1].y, ct2_vec_in[1].y);
+//    EXPECT_EQ(ct2_vec_out[1].film, ct2_vec_in[1].film);
+//    EXPECT_EQ(ct2_vec_out[1].ct1.x, ct2_vec_in[1].ct1.x);
+//    EXPECT_EQ(ct2_vec_out[1].ct1.name, ct2_vec_in[1].ct1.name);
+//    EXPECT_EQ(ct2_vec_out[1].ct1.family, ct2_vec_in[1].ct1.family);
 
     CSL4 cls41, cls42;
     cls41.x = 1;
@@ -1803,6 +1833,16 @@ TEST(H5GTBase, Compounds) {
 
     std::vector<CSL4> result4(2);
     dataset4.read(result4.data(), dtype4);
+
+    EXPECT_EQ(result4.size(), 2);
+    EXPECT_EQ(result4[0].x, csl4[0].x);
+    EXPECT_EQ(result4[0].y, csl4[0].y);
+    EXPECT_EQ(result4[0].z, csl4[0].z);
+    EXPECT_EQ(result4[0].getName(), csl4[0].getName());
+    EXPECT_EQ(result4[1].x, csl4[1].x);
+    EXPECT_EQ(result4[1].y, csl4[1].y);
+    EXPECT_EQ(result4[1].z, csl4[1].z);
+    EXPECT_EQ(result4[1].getName(), csl4[1].getName());
   }
 
   {  // Nested
