@@ -11,6 +11,13 @@ cmake_policy(SET CMP0012 NEW)
 #-----------------------------------------------------------------------------
 message(STATUS "Resolving h5gtpy RUNTIME dependencies...")
 
+get_filename_component(_runtime_dir "$<TARGET_FILE:hdf5::hdf5>" DIRECTORY)
+list(APPEND runtime_dirs "${_runtime_dir}")
+get_filename_component(_runtime_dir "$<TARGET_FILE:ZLIB::ZLIB>" DIRECTORY)
+list(APPEND runtime_dirs "${_runtime_dir}")
+
+message("Detected runtime_dirs: ${runtime_dirs}")
+
 file(GET_RUNTIME_DEPENDENCIES
   LIBRARIES "$<TARGET_FILE:_h5gt>"
   RESOLVED_DEPENDENCIES_VAR res_deps
@@ -19,6 +26,7 @@ file(GET_RUNTIME_DEPENDENCIES
   DIRECTORIES
     "@HDF5_RUNTIME_DIR@"
     "@ZLIB_RUNTIME_DIR@"
+    "${runtime_dirs}"
   PRE_INCLUDE_REGEXES 
     "^.*([Hh][Dd][Ff][5]).*$"
     "^.*([Zz][Ll][Ii][Bb]).*$"
