@@ -15,7 +15,7 @@ classifiers = [
 ]
 
 setup(name='h5gtpy',
-      version='${COMMON_PROJECT_VERSION}',
+      version='0.1.0',
       author="Kerim Khemraev",
       author_email="tierracolada@gmail.com",
       maintainer="Kerim Khemraev",
