@@ -1,3 +1,3 @@
-graft h5gtpy/*
+include h5gtpy/*
 
 ${ADD_TO_MANIFEST}
