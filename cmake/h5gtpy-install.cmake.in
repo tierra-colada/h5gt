@@ -115,11 +115,18 @@ else()
 
   # `PYTHON_INIT_PATH_VAR` is used to configure `INIT_PY_IN` file
   set(PYTHON_INIT_PATH_VAR "import os\n")
-  foreach(_dir ${res_deps_dirs})
-    set(PYTHON_INIT_PATH_VAR "${PYTHON_INIT_PATH_VAR}\n
+  if(WIN32 AND Python_VERSION_MAJOR GREATER_EQUAL 3 AND Python_VERSION_MINOR GREATER_EQUAL 8)
+    foreach(_dir ${res_deps_dirs})
+      set(PYTHON_INIT_PATH_VAR "${PYTHON_INIT_PATH_VAR}\n
+os.add_dll_directory('${_dir}')")
+    endforeach()
+  else()
+    foreach(_dir ${res_deps_dirs})
+      set(PYTHON_INIT_PATH_VAR "${PYTHON_INIT_PATH_VAR}\n
 if not os.environ['PATH'].__contains__('${_dir}'):
   os.environ['PATH'] = '${_dir}' + os.pathsep + os.environ['PATH']")
-  endforeach()
+    endforeach()
+  endif()
 endif()
 
 configure_file("${SETUP_PY_IN}" "${SETUP_PY_OUT}")
