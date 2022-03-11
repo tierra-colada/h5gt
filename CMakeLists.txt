@@ -37,9 +37,6 @@ option(H5GT_BUILD_h5gtpy "Build python wrapper (make sure to disable HDF5_USE_ST
 option(HDF5_USE_STATIC_LIBRARIES "Use static hdf5 lib" OFF)
 option(HDF5_PREFER_PARALLEL "Prefer parallel hdf5 if available" OFF)
 
-message("HOME H5GT HDF5_RUNTIME_DIR: ${HDF5_RUNTIME_DIR}")
-message("HOME H5GT ZLIB_RUNTIME_DIR: ${ZLIB_RUNTIME_DIR}")
-
 set(gtest_force_shared_crt ON CACHE BOOL "Prevent overriding the parent project's compiler/linker settings on Windows")
 
 file(GLOB_RECURSE hpp_files

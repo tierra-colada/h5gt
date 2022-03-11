@@ -7,9 +7,6 @@ set(ZLIB_RUNTIME_DIR "" CACHE PATH "zlib runtime is an optional dependency of hd
 option(COPY_H5GTPY_RUNTIME_DEPS "Copy hdf5 runtime to python site-packages
   (otherwise it will simply add to ENV PATH to hdf5 runtime dir in `__init__.py`)" ON)
 
-message("HOME H5GTPY HDF5_RUNTIME_DIR: ${HDF5_RUNTIME_DIR}")
-message("HOME H5GTPY ZLIB_RUNTIME_DIR: ${ZLIB_RUNTIME_DIR}")
-
 include(FetchContent)
 FetchContent_Declare(
   pybind11

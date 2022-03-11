@@ -17,8 +17,8 @@ get_filename_component(_runtime_dir "$<$<TARGET_EXISTS:ZLIB::ZLIB>:$<TARGET_FILE
 list(APPEND runtime_dirs "${_runtime_dir}")
 
 message(STATUS "Detected runtime_dirs: ${runtime_dirs}")
-message(STATUS "HDF5_RUNTIME_DIR: ${HDF5_RUNTIME_DIR}")
-message(STATUS "ZLIB_RUNTIME_DIR: ${ZLIB_RUNTIME_DIR}")
+message(STATUS "HDF5_RUNTIME_DIR: @HDF5_RUNTIME_DIR@")
+message(STATUS "ZLIB_RUNTIME_DIR: @ZLIB_RUNTIME_DIR@")
 
 file(GET_RUNTIME_DEPENDENCIES
   LIBRARIES "$<TARGET_FILE:_h5gt>"
