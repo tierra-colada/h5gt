@@ -37,6 +37,12 @@ option(H5GT_BUILD_h5gtpy "Build python wrapper (make sure to disable HDF5_USE_ST
 option(HDF5_USE_STATIC_LIBRARIES "Use static hdf5 lib" OFF)
 option(HDF5_PREFER_PARALLEL "Prefer parallel hdf5 if available" OFF)
 
+# CACHE
+set(HDF5_RUNTIME_DIR "" CACHE PATH "hdf5 runtime is a dependency of h5gtpy")
+set(ZLIB_RUNTIME_DIR "" CACHE PATH "zlib runtime is an optional dependency of hdf5")
+option(COPY_H5GTPY_RUNTIME_DEPS "Copy hdf5 runtime to python site-packages
+  (otherwise it will simply add to ENV PATH to hdf5 runtime dir in `__init__.py`)" ON)
+  
 set(gtest_force_shared_crt ON CACHE BOOL "Prevent overriding the parent project's compiler/linker settings on Windows")
 
 file(GLOB_RECURSE hpp_files
