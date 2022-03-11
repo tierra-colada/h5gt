@@ -21,6 +21,9 @@ if(NOT pybind11_POPULATED)
   message(STATUS "PYTHON_EXECUTABLE: ${PYTHON_EXECUTABLE}")
 endif()
 
+# Needed to get info about Version and is used in installation script
+find_package(Python REQUIRED)
+
 file(GLOB_RECURSE h5gtpy_src
      RELATIVE ${PROJECT_SOURCE_DIR}
      ${CMAKE_SOURCE_DIR}/src/h5gtpy/*.cpp
