@@ -42,7 +42,10 @@ set(HDF5_RUNTIME_DIR "" CACHE PATH "hdf5 runtime is a dependency of h5gtpy")
 set(ZLIB_RUNTIME_DIR "" CACHE PATH "zlib runtime is an optional dependency of hdf5")
 option(COPY_H5GTPY_RUNTIME_DEPS "Copy hdf5 runtime to python site-packages
   (otherwise it will simply add to ENV PATH to hdf5 runtime dir in `__init__.py`)" ON)
-  
+
+message("HOME H5GT HDF5_RUNTIME_DIR: ${HDF5_RUNTIME_DIR}")
+message("HOME H5GT ZLIB_RUNTIME_DIR: ${HDF5_RUNTIME_DIR}")
+
 set(gtest_force_shared_crt ON CACHE BOOL "Prevent overriding the parent project's compiler/linker settings on Windows")
 
 file(GLOB_RECURSE hpp_files
