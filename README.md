@@ -16,7 +16,7 @@ To build with python support you need:
 * set `H5GT_BUILD_h5gtpy` to `ON`
 * provide python to cmake (I do it with `PYTHON_EXECUTABLE=/path/to/python.exe`)
 * enable Eigen3 support `H5GT_USE_EIGEN=ON` (`Eigen3_ROOT` is enough to find eigen)
-* specify `HDF5_RUNTIME_DIR` containing HDF5-runtime (probably it is enough to have it in `PATH` env)
+* specify `HDF5_RUNTIME_DIRS` containing HDF5-runtime (probably it is enough to have it in `PATH` env)
 * **build HDF5 as SHARED C library**
 
 then do something like:
@@ -30,8 +30,8 @@ cmake ..
   -DH5GT_USE_EIGEN=ON 
   -DEigen3_ROOT=/path/to/eigen3 
   -DHDF5_DIR=/path/to/hdf5-config.cmake 
-  -DHDF5_RUNTIME_DIR=/path/to/hdf5-runtime   
-  -DZLIB_RUNTIME_DIR=/path/to/zlib-runtime   -DCOPY_H5GTPY_RUNTIME_DEPS=ON
+  -DHDF5_RUNTIME_DIRS=/path/to/hdf5-runtime   
+  -DZLIB_RUNTIME_DIRS=/path/to/zlib-runtime   -DCOPY_H5GTPY_RUNTIME_DEPS=ON
 cmake --build . 
 ```
 If your HDF5 depends on ZLIB or MPI you may also need to add it.

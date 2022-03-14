@@ -19,8 +19,8 @@ get_filename_component(_runtime_dir "$<$<TARGET_EXISTS:ZLIB::ZLIB>:$<TARGET_FILE
 list(APPEND runtime_dirs "${_runtime_dir}")
 
 message(STATUS "Detected runtime_dirs: ${runtime_dirs}")
-message(STATUS "HDF5_RUNTIME_DIR: @HDF5_RUNTIME_DIR@")
-message(STATUS "ZLIB_RUNTIME_DIR: @ZLIB_RUNTIME_DIR@")
+message(STATUS "HDF5_RUNTIME_DIRS: @HDF5_RUNTIME_DIRS@")
+message(STATUS "ZLIB_RUNTIME_DIRS: @ZLIB_RUNTIME_DIRS@")
 
 file(GET_RUNTIME_DEPENDENCIES
   LIBRARIES "$<TARGET_FILE:_h5gt>"
@@ -28,8 +28,8 @@ file(GET_RUNTIME_DEPENDENCIES
   UNRESOLVED_DEPENDENCIES_VAR unres_deps
   CONFLICTING_DEPENDENCIES_PREFIX confl_deps
   DIRECTORIES
-    "@HDF5_RUNTIME_DIR@"
-    "@ZLIB_RUNTIME_DIR@"
+    "@HDF5_RUNTIME_DIRS@"
+    "@ZLIB_RUNTIME_DIRS@"
     "${runtime_dirs}"
   PRE_INCLUDE_REGEXES 
     "^.*([Hh][Dd][Ff][5]).*$"
@@ -56,14 +56,14 @@ endforeach()
 list(LENGTH unres_deps unres_deps_LEN)
 if(${unres_deps_LEN} GREATER 0)
   message(FATAL_ERROR "There are UNRESOLVED runtime dependencies.
-  Try setting `HDF5_RUNTIME_DIR, ZLIB_RUNTIME_DIR` and rerun `cmake .` and `cmake --install .`
+  Try setting `HDF5_RUNTIME_DIRS, ZLIB_RUNTIME_DIRS` and rerun `cmake .` and `cmake --install .`
   (you don't have to rebuild the project)")
 endif()
 
 list(LENGTH confl_deps confl_deps_LEN)
 if(${confl_deps_LEN} GREATER 0)
   message(FATAL_ERROR "There are CONFLICTING runtime dependencies.
-  Try setting `HDF5_RUNTIME_DIR, ZLIB_RUNTIME_DIR` and rerun `cmake .` and `cmake --install .`
+  Try setting `HDF5_RUNTIME_DIRS, ZLIB_RUNTIME_DIRS` and rerun `cmake .` and `cmake --install .`
   (you don't have to rebuild the project)")
 endif()
 
