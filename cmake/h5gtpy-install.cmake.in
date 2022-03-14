@@ -22,15 +22,17 @@ message(STATUS "Detected runtime_dirs: ${runtime_dirs}")
 message(STATUS "HDF5_RUNTIME_DIRS: @HDF5_RUNTIME_DIRS@")
 message(STATUS "ZLIB_RUNTIME_DIRS: @ZLIB_RUNTIME_DIRS@")
 
+list(APPEND runtime_dirs 
+  "@HDF5_RUNTIME_DIRS@" 
+  "@ZLIB_RUNTIME_DIRS@")
+
+# DIRECTORIES must be without qoutes
 file(GET_RUNTIME_DEPENDENCIES
   LIBRARIES "$<TARGET_FILE:_h5gt>"
   RESOLVED_DEPENDENCIES_VAR res_deps
   UNRESOLVED_DEPENDENCIES_VAR unres_deps
   CONFLICTING_DEPENDENCIES_PREFIX confl_deps
-  DIRECTORIES
-    "@HDF5_RUNTIME_DIRS@"
-    "@ZLIB_RUNTIME_DIRS@"
-    "${runtime_dirs}"
+  DIRECTORIES ${runtime_dirs}
   PRE_INCLUDE_REGEXES 
     "^.*([Hh][Dd][Ff][5]).*$"
     "^.*([Zz][Ll][Ii][Bb]).*$"
