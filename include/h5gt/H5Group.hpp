@@ -42,11 +42,13 @@ public:
   ///
   std::string getTargetPath(
       const LinkAccessProps& accessProp = LinkAccessProps()) const{
-    if (getLinkInfo().getLinkType() == LinkType::Soft){
-      char str[256];
+    h5gt::LinkInfo linkInfo = getLinkInfo();
+    if (linkInfo.getLinkType() == LinkType::Soft){
+      size_t n = linkInfo.getSoftLinkSize();
+      char str[n];
 
       if (H5Lget_val(getId(false), getPath().c_str(),
-                     &str, 255, accessProp.getId(false)) < 0){
+                     &str, n, accessProp.getId(false)) < 0){
         HDF5ErrMapper::ToException<GroupException>(
               std::string("Can't get path to which the link points to"));
       }
