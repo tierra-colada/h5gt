@@ -39,7 +39,6 @@ public:
   /// link points to. Otherwise it works the same way as `getPath()`
   /// \param accessProp
   /// \return
-  ///
   std::string getTargetPath(
       const LinkAccessProps& accessProp = LinkAccessProps()) const{
     h5gt::LinkInfo linkInfo = getLinkInfo();
