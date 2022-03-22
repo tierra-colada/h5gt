@@ -18,7 +18,7 @@ void DataSet_py(py::class_<DataSet, Object, SliceTraits<DataSet>, AnnotateTraits
            "same as getSpace for DataSet, compatibility with Selection")
       .def("getTargetPath", &DataSet::getTargetPath,
            py::arg_v("accessProp", LinkAccessProps(), "LinkAccessProps()"),
-           "getTargetPath For soft link that returns path to target that"
+           "For soft link that returns path to target that"
 "link points to. Otherwise it works the same way as `getPath()`")
       .def("getParent", &DataSet::getParent,
            py::arg_v("groupAccessProps", GroupAccessProps(), "GroupAccessProps()"))

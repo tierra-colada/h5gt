@@ -229,25 +229,76 @@ inline bool NodeTraits<Derivate>::_exist(const std::string& node_name,
 }
 
 template <typename Derivate>
-inline bool NodeTraits<Derivate>::exist(const std::string& group_path,
+inline bool NodeTraits<Derivate>::_resolved(const std::string& node_name,
+                                            const LinkAccessProps& accessProps,
+                                            bool raise_errors) const {
+  if (node_name.empty())
+    return false;
+
+  SilenceHDF5 silencer{!raise_errors};
+  const auto val = H5Oexists_by_name(static_cast<const Derivate*>(this)->getId(false),
+                                     node_name.c_str(), accessProps.getId(false));
+  if (val < 0) {
+    if (raise_errors) {
+      HDF5ErrMapper::ToException<GroupException>("Invalid link for resolved()");
+    } else {
+      return false;
+    }
+  }
+
+  // The root path always exists, but H5Lexists return 0 or 1
+  // depending of the version of HDF5, so always return true for it
+  // We had to call H5Lexists anyway to check that there are no errors
+  return (node_name == "/") ? true : (val > 0);
+}
+
+template <typename Derivate>
+inline bool NodeTraits<Derivate>::exist(const std::string& objName,
                                         const LinkAccessProps& linkAccessProps,
                                         bool raise_errors) const {
   // When there are slashes, first check everything is fine
   // so that subsequent errors are only due to missing intermediate groups
-  if (group_path.find('/') != std::string::npos) {
+  if (objName.find('/') != std::string::npos) {
     _exist("/", linkAccessProps);  // Shall not throw under normal circumstances
     // Unless "/" (already checked), verify path exists (not thowing errors)
-    return (group_path == "/") ? true : _exist(group_path, linkAccessProps, false);
+    return (objName == "/") ? true : _exist(objName, linkAccessProps, false);
   }
-  return _exist(group_path, linkAccessProps, raise_errors);
+  return _exist(objName, linkAccessProps, raise_errors);
+}
+
+template <typename Derivate>
+inline bool NodeTraits<Derivate>::resolved(const std::string& objName,
+                                           const LinkAccessProps& linkAccessProps,
+                                           bool raise_errors) const {
+  // When there are slashes, first check everything is fine
+  // so that subsequent errors are only due to missing intermediate groups
+  if (objName.find('/') != std::string::npos) {
+    _resolved("/", linkAccessProps);  // Shall not throw under normal circumstances
+    // Unless "/" (already checked), verify path exists (not thowing errors)
+    return (objName == "/") ? true : _resolved(objName, linkAccessProps, false);
+  }
+  return _resolved(objName, linkAccessProps, raise_errors);
+}
+
+template <typename Derivate>
+inline bool NodeTraits<Derivate>::existAndResolved(const std::string& objName,
+                                                   const LinkAccessProps& linkAccessProps,
+                                                   bool raise_errors) const {
+  if (!exist(objName, linkAccessProps, raise_errors))
+    return false;
+
+  if (!resolved(objName, linkAccessProps, raise_errors))
+    return false;
+
+  return true;
 }
 
 template <typename Derivate>
 bool NodeTraits<Derivate>::hasObject(
     const std::string& objName, const ObjectType& objType,
-              const LinkAccessProps& linkAccessProps) const
+              const LinkAccessProps& linkAccessProps, bool raise_errors) const
 {
-  if (!exist(objName, linkAccessProps))
+  if (!existAndResolved(objName, linkAccessProps, raise_errors))
     return false;
 
   if (getObjectType(objName, linkAccessProps) != objType)

@@ -156,8 +156,26 @@ public:
              const LinkAccessProps& linkAccessProps = LinkAccessProps(),
              bool raise_errors = false) const;
 
+  ///
+  /// \brief resolved Hard links always resolved but Soft/External links
+  /// may point to unexistant objects
+  /// \param obj_name
+  /// \param linkAccessProps
+  /// \param raise_errors
+  /// \return
+  bool resolved(const std::string& obj_name,
+                const LinkAccessProps& linkAccessProps = LinkAccessProps(),
+                bool raise_errors = false) const;
+
+  ///
+  /// \brief existAndResolved invokes `exist()` and then `reoslved()`
+  bool existAndResolved(const std::string& obj_name,
+                        const LinkAccessProps& linkAccessProps = LinkAccessProps(),
+                        bool raise_errors = false) const;
+
   bool hasObject(const std::string& objName, const ObjectType& objType,
-                 const LinkAccessProps& linkAccessProps = LinkAccessProps()) const;
+                 const LinkAccessProps& linkAccessProps = LinkAccessProps(),
+                 bool raise_errors = false) const;
 
   ///
   /// \brief unlink the given dataset or group
@@ -230,6 +248,10 @@ private:
   bool _exist(const std::string& node_name,
               const LinkAccessProps& accessProps = LinkAccessProps(),
               bool raise_errors = false) const;
+
+  bool _resolved(const std::string& node_name,
+                 const LinkAccessProps& accessProps = LinkAccessProps(),
+                 bool raise_errors = false) const;
 
   // Opens an arbitrary object to obtain info
   Object _open(const std::string& node_name,

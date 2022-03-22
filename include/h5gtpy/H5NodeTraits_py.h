@@ -155,10 +155,21 @@ void NodeTraits_py(py::class_<NodeTraits<Derivate> >& py_obj) {
            py::arg_v("linkAccessProps", LinkAccessProps(), "LinkAccessProps()"),
            py::arg_v("raise_errors", false, "False"),
            "Check a dataset or group exists in the current node / group")
+      .def("resolved", &NodeTraits<Derivate>::resolved,
+           py::arg("obj_name"),
+           py::arg_v("linkAccessProps", LinkAccessProps(), "LinkAccessProps()"),
+           py::arg_v("raise_errors", false, "False"),
+           "Check a dataset or group in the current node / group may be resolved or not")
+      .def("existAndResolved", &NodeTraits<Derivate>::existAndResolved,
+           py::arg("obj_name"),
+           py::arg_v("linkAccessProps", LinkAccessProps(), "LinkAccessProps()"),
+           py::arg_v("raise_errors", false, "False"),
+           "Call 'exist()' with subsequent call to 'resolved()' if successful")
       .def("hasObject", &NodeTraits<Derivate>::hasObject,
            py::arg("objName"),
            py::arg("objectType"),
            py::arg_v("linkAccessProps", LinkAccessProps(), "LinkAccessProps()"),
+           py::arg_v("raise_errors", false, "False"),
            "Advanced version of `exist` that also checks the type of object")
       .def("unlink", &NodeTraits<Derivate>::unlink,
            py::arg("obj_name"),
