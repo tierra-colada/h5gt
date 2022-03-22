@@ -76,10 +76,11 @@ DataSet createLink_wrap1(
     const DataSet& target,
     const std::string& linkName,
     const LinkType& linkType,
+    const std::string& targetPath = "",
     const LinkCreateProps& linkCreateProps = LinkCreateProps(),
     const LinkAccessProps& linkAccessProps = LinkAccessProps(),
     const DataSetAccessProps& dsetAccessProps = DataSetAccessProps()){
-  return self.createLink(target, linkName, linkType, linkCreateProps, linkAccessProps, dsetAccessProps);
+  return self.createLink(target, linkName, linkType, targetPath, linkCreateProps, linkAccessProps, dsetAccessProps);
 }
 
 template <typename Derivate>
@@ -88,10 +89,11 @@ DataType createLink_wrap2(
     const DataType& target,
     const std::string& linkName,
     const LinkType& linkType,
+    const std::string& targetPath = "",
     const LinkCreateProps& linkCreateProps = LinkCreateProps(),
     const LinkAccessProps& linkAccessProps = LinkAccessProps(),
     const DataTypeAccessProps& dtypeAccessProps = DataTypeAccessProps()){
-  return self.createLink(target, linkName, linkType, linkCreateProps, linkAccessProps, dtypeAccessProps);
+  return self.createLink(target, linkName, linkType, targetPath, linkCreateProps, linkAccessProps, dtypeAccessProps);
 }
 
 
@@ -204,12 +206,14 @@ void NodeTraits_py(py::class_<NodeTraits<Derivate> >& py_obj) {
            const File&,
            const std::string&,
            const LinkType&,
+           const std::string&,
            const LinkCreateProps&,
            const LinkAccessProps&,
            const GroupAccessProps&>(&NodeTraits<Derivate>::template createLink<File>),
            py::arg("file"),// "target object",
            py::arg("linkName"),// "name for a new link",
            py::arg("linkType"),
+           py::arg_v("targetPath", std::string(), "str()"),
            py::arg_v("linkCreateProps", LinkCreateProps(), "LinkCreateProps()"),
            py::arg_v("linkAccesProps", LinkAccessProps(), "LinkAccessProps()"),
            py::arg_v("groupAccessProps", GroupAccessProps(), "GroupAccessProps()"),
@@ -218,12 +222,14 @@ void NodeTraits_py(py::class_<NodeTraits<Derivate> >& py_obj) {
            const Group&,
            const std::string&,
            const LinkType&,
+           const std::string&,
            const LinkCreateProps&,
            const LinkAccessProps&,
            const GroupAccessProps&>(&NodeTraits<Derivate>::template createLink<Group>),
            py::arg("group"),// "target object",
            py::arg("linkName"),// "name for a new link",
            py::arg("linkType"),
+           py::arg_v("targetPath", std::string(), "str()"),
            py::arg_v("linkCreateProps", LinkCreateProps(), "LinkCreateProps()"),
            py::arg_v("linkAccesProps", LinkAccessProps(), "LinkAccessProps()"),
            py::arg_v("groupAccessProps", GroupAccessProps(), "GroupAccessProps()"),
@@ -232,6 +238,7 @@ void NodeTraits_py(py::class_<NodeTraits<Derivate> >& py_obj) {
            py::arg("dset"),// "target object",
            py::arg("linkName"),// "name for a new link",
            py::arg("linkType"),
+           py::arg_v("targetPath", std::string(), "str()"),
            py::arg_v("linkCreateProps", LinkCreateProps(), "LinkCreateProps()"),
            py::arg_v("linkAccesProps", LinkAccessProps(), "LinkAccessProps()"),
            py::arg_v("dsetAccessProps", DataSetAccessProps(), "DataSetAccessProps()"),
@@ -240,6 +247,7 @@ void NodeTraits_py(py::class_<NodeTraits<Derivate> >& py_obj) {
            py::arg("dtype"),// "target object",
            py::arg("linkName"),// "name for a new link",
            py::arg("linkType"),
+           py::arg_v("targetPath", std::string(), "str()"),
            py::arg_v("linkCreateProps", LinkCreateProps(), "LinkCreateProps()"),
            py::arg_v("linkAccesProps", LinkAccessProps(), "LinkAccessProps()"),
            py::arg_v("dtypeAccessProps", DataTypeAccessProps(), "DataTypeAccessProps()"),

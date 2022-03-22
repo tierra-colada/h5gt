@@ -222,19 +222,28 @@ public:
              std::is_same<Node, File>::value |
              std::is_same<Node, Group>::value>::type* = nullptr>
   Group createLink(
-      const Node& target, const std::string& linkName, const LinkType& linkType,
+      const Node& target,
+      const std::string& linkName,
+      const LinkType& linkType,
+      const std::string& targetPath = "",
       const LinkCreateProps& linkCreateProps = LinkCreateProps(),
       const LinkAccessProps& linkAccessProps = LinkAccessProps(),
       const GroupAccessProps& groupAccessProps = GroupAccessProps());
 
   DataSet createLink(
-      const DataSet& target, const std::string& linkName, const LinkType& linkType,
+      const DataSet& target,
+      const std::string& linkName,
+      const LinkType& linkType,
+      const std::string& targetPath = "",
       const LinkCreateProps& linkCreateProps = LinkCreateProps(),
       const LinkAccessProps& linkAccessProps = LinkAccessProps(),
       const DataSetAccessProps& dsetAccessProps = DataSetAccessProps());
 
   DataType createLink(
-      const DataType& target, const std::string& linkName, const LinkType& linkType,
+      const DataType& target,
+      const std::string& linkName,
+      const LinkType& linkType,
+      const std::string& targetPath = "",
       const LinkCreateProps& linkCreateProps = LinkCreateProps(),
       const LinkAccessProps& linkAccessProps = LinkAccessProps(),
       const DataTypeAccessProps& dtypeAccessProps = DataTypeAccessProps());
@@ -262,10 +271,13 @@ private:
              const ObjectCopyProps& copyProps = ObjectCopyProps(),
              const LinkCreateProps& linkCreateProps = LinkCreateProps());
 
-
+  /// targetPath is useful to create links using relative path
   template<typename T>
   void _createLink(
-      T& target, const std::string& linkName, const LinkType& linkType,
+      T& target,
+      const std::string& linkName,
+      const LinkType& linkType,
+      std::string targetPath = "",
       const LinkCreateProps& linkCreateProps = LinkCreateProps(),
       const LinkAccessProps& linkAccessProps = LinkAccessProps());
 };

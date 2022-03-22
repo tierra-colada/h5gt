@@ -382,11 +382,12 @@ inline Group NodeTraits<Derivate>::createLink(
     const Node& target,
     const std::string& linkName,
     const LinkType& linkType,
+    const std::string& targetPath,
     const LinkCreateProps& linkCreateProps,
     const LinkAccessProps& linkAccessProps,
     const GroupAccessProps& groupAccessProps)
 {
-  _createLink(target, linkName, linkType, linkCreateProps, linkAccessProps);
+  _createLink(target, linkName, linkType, targetPath, linkCreateProps, linkAccessProps);
   return static_cast<const Derivate*>(this)->getGroup(
         linkName, groupAccessProps);
 }
@@ -396,11 +397,12 @@ inline DataSet NodeTraits<Derivate>::createLink(
     const DataSet& target,
     const std::string& linkName,
     const LinkType& linkType,
+    const std::string& targetPath,
     const LinkCreateProps& linkCreateProps,
     const LinkAccessProps& linkAccessProps,
     const DataSetAccessProps& dsetAccessProps)
 {
-  _createLink(target, linkName, linkType, linkCreateProps, linkAccessProps);
+  _createLink(target, linkName, linkType, targetPath, linkCreateProps, linkAccessProps);
   return static_cast<const Derivate*>(this)->getDataSet(linkName, dsetAccessProps);
 }
 
@@ -409,11 +411,12 @@ inline DataType NodeTraits<Derivate>::createLink(
     const DataType& target,
     const std::string& linkName,
     const LinkType& linkType,
+    const std::string& targetPath,
     const LinkCreateProps& linkCreateProps,
     const LinkAccessProps& linkAccessProps,
     const DataTypeAccessProps& dtypeAccessProps)
 {
-  _createLink(target, linkName, linkType, linkCreateProps, linkAccessProps);
+  _createLink(target, linkName, linkType, targetPath, linkCreateProps, linkAccessProps);
   return static_cast<const Derivate*>(this)->getDataType(linkName, dtypeAccessProps);
 }
 
@@ -452,28 +455,32 @@ inline void NodeTraits<Derivate>::_copy(
 template <typename Derivate>
 template <typename T>
 inline void NodeTraits<Derivate>::_createLink(
-    T& target, const std::string& linkName,
+    T& target,
+    const std::string& linkName,
     const LinkType& linkType,
+    std::string targetPath,
     const LinkCreateProps& linkCreateProps,
     const LinkAccessProps& linkAccessProps)
 {
   herr_t status = -1;
+  if (targetPath.empty())
+    targetPath = target.getPath();
 
   if (linkType == LinkType::Soft){
     status = H5Lcreate_soft(
-          target.getPath().c_str(),
+          targetPath.c_str(),
           static_cast<const Derivate*>(this)->getId(false),
           linkName.c_str(), linkCreateProps.getId(false), linkAccessProps.getId(false));
   } else if (linkType == LinkType::Hard){
     status = H5Lcreate_hard(
           target.getId(false),
-          target.getPath().c_str(),
+          targetPath.c_str(),
           static_cast<const Derivate*>(this)->getId(false),
           linkName.c_str(), linkCreateProps.getId(false), linkAccessProps.getId(false));
   } else if (linkType == LinkType::External){
     status = H5Lcreate_external(
           target.getFileName().c_str(),
-          target.getPath().c_str(),
+          targetPath.c_str(),
           static_cast<const Derivate*>(this)->getId(false),
           linkName.c_str(), linkCreateProps.getId(false), linkAccessProps.getId(false));
   }
