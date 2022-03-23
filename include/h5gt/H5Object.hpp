@@ -17,6 +17,13 @@
 #include "H5Exception.hpp"
 #include "bits/H5_definitions.hpp"
 
+//----------------------------------------------------------------//
+// H5Object.hpp H5Object_misc.hpp cant contain variables          //
+// of type H5PropertyLists as H5Object.hpp is included            //
+// by H5PropertyLists.hpp                                         //
+// You will get recursion hell if break this rule                 //
+//----------------------------------------------------------------//
+
 namespace h5gt {
 
 class LinkAccessProps;
@@ -138,12 +145,10 @@ protected:
   LinkInfo _getLinkInfo(const std::string& objPath) const;
 
   std::string _unpackSoftLink(
-      const std::string& objName,
-      const LinkAccessProps& accessProp) const;
+      const std::string& objName) const;
   std::string _unpackExternalLink(
       const std::string& objName,
-      std::string& fileName_out,
-      const LinkAccessProps& accessProp) const;
+      std::string& fileName_out) const;
 
   Object& operator=(const Object& other);
   /// When coparing objects h5gt::File must be open

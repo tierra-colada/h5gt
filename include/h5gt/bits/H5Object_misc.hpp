@@ -226,8 +226,7 @@ inline LinkInfo Object::_getLinkInfo(const std::string& objPath) const {
 }
 
 inline std::string Object::_unpackSoftLink(
-    const std::string& objName,
-    const LinkAccessProps& accessProp) const
+    const std::string& objName) const
 {
   h5gt::LinkInfo linkInfo = _getLinkInfo(objName);
   // to avoid segfault check the type of a link
@@ -240,7 +239,7 @@ inline std::string Object::_unpackSoftLink(
   size_t n = linkInfo.getSoftLinkSize();
   char str[n];
   if (H5Lget_val(getId(false), objName.c_str(),
-                 &str, n, accessProp.getId(false)) < 0){
+                 &str, n, H5P_DEFAULT) < 0){
     HDF5ErrMapper::ToException<ObjectException>(
           std::string("Unable to get path to which the link points to"));
   }
@@ -249,8 +248,7 @@ inline std::string Object::_unpackSoftLink(
 
 inline std::string Object::_unpackExternalLink(
     const std::string& objName,
-    std::string& fileName_out,
-    const LinkAccessProps& accessProp) const
+    std::string& fileName_out) const
 {
   h5gt::LinkInfo linkInfo = _getLinkInfo(objName);
   // to avoid segfault check the type of a link
@@ -263,19 +261,21 @@ inline std::string Object::_unpackExternalLink(
   size_t n = linkInfo.getSoftLinkSize();
   char str[n];
   if (H5Lget_val(getId(false), objName.c_str(),
-                 &str, n, accessProp.getId(false)) < 0){
+                 &str, n, H5P_DEFAULT) < 0){
     HDF5ErrMapper::ToException<ObjectException>(
           std::string("Unable to get path to which the link points to"));
   }
 
-  const char* objName_out;
-  unsigned *flags = 0;
-  if (H5Lunpack_elink_val(str, n, &flags, &fileName_out.c_str(), &objName_out) < 0){
+  const char* f_out;
+  const char* o_out;
+  unsigned flags = 0;
+  if (H5Lunpack_elink_val(str, n, &flags, &f_out, &o_out) < 0){
     HDF5ErrMapper::ToException<ObjectException>(
           std::string("Unable to get path to which the link points to"));
   }
 
-  return std::string(objName_out);
+  fileName_out = std::string(f_out);
+  return std::string(o_out);
 }
 
 #if (H5Lget_info_vers < 2)

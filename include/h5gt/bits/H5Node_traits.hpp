@@ -132,13 +132,20 @@ public:
 
   LinkInfo getLinkInfo(const std::string& objName) const;
 
-  std::string unpackSoftLink(const std::string& objName,
-                             const LinkAccessProps& accessProp = LinkAccessProps());
+  ///
+  /// \brief unpackSoftLink retrieve target path object path
+  /// \param objName
+  /// \return
+  ///
+  std::string unpackSoftLink(const std::string& objName);
 
-  std::string unpackExternalLink(const std::string& objName,
-                                 std::string fileName_out,
-                                 const LinkAccessProps& accessProp = LinkAccessProps());
-
+  ///
+  /// \brief unpackExternalLink retrieve target path object path and file path
+  /// \param objName
+  /// \param fileName_out
+  /// \return target object path
+  ///
+  std::string unpackExternalLink(const std::string& objName, std::string& fileName_out);
 
   ///
   /// \brief moves an object and its content within an HDF5 file.

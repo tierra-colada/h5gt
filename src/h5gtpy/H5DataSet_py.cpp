@@ -17,7 +17,6 @@ void DataSet_py(py::class_<DataSet, Object, SliceTraits<DataSet>, AnnotateTraits
       .def("getMemSpace", &DataSet::getMemSpace,
            "same as getSpace for DataSet, compatibility with Selection")
       .def("unpackSoftLink", &DataSet::unpackSoftLink,
-           py::arg_v("accessProp", LinkAccessProps(), "LinkAccessProps()"),
            "For soft link that returns path to target that"
 "link points to. Otherwise it works the same way as `getPath()`")
       .def("getParent", &DataSet::getParent,

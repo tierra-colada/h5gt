@@ -51,8 +51,8 @@ inline DataSpace DataSet::getMemSpace() const {
   return getSpace();
 }
 
-inline std::string DataSet::unpackSoftLink(const LinkAccessProps& accessProp) const{
-  return Object::_unpackSoftLink(getPath(), accessProp);
+inline std::string DataSet::unpackSoftLink() const{
+  return Object::_unpackSoftLink(getPath());
 }
 
 inline Group DataSet::getParent(const GroupAccessProps& groupAccessProps) const {

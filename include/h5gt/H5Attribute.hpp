@@ -13,7 +13,6 @@
 
 #include "H5DataSpace.hpp"
 #include "H5DataType.hpp"
-#include "H5Object.hpp"
 
 namespace h5gt {
 

@@ -40,8 +40,8 @@ public:
   /// \param accessProp
   /// \return path to the object
   ///
-  std::string unpackSoftLink(const LinkAccessProps& accessProp = LinkAccessProps()) const{
-    return Object::_unpackSoftLink(getPath(), accessProp);
+  std::string unpackSoftLink() const{
+    return Object::_unpackSoftLink(getPath());
   }
 
   Group getParent(const GroupAccessProps& groupAccessProps = GroupAccessProps()) const {

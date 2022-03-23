@@ -26,7 +26,7 @@
 #include <Eigen/Eigen>
 #endif
 
-#include "H5Object.hpp"
+#include "H5PropertyList.hpp"
 #include "bits/H5_definitions.hpp"
 
 namespace h5gt {

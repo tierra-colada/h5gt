@@ -96,6 +96,15 @@ DataType createLink_wrap2(
   return self.createLink(target, linkName, linkType, targetPath, linkCreateProps, linkAccessProps, dtypeAccessProps);
 }
 
+template <typename Derivate>
+std::tuple<std::string, std::string> unpackExternalLink(
+    NodeTraits<Derivate>& self,
+    const std::string& objName){
+  std::string fileName_out;
+  std::string objName_out = self.unpackExternalLink(objName, fileName_out);
+  return std::make_tuple(fileName_out, objName_out);
+}
+
 
 } // ext
 
@@ -147,6 +156,12 @@ void NodeTraits_py(py::class_<NodeTraits<Derivate> >& py_obj) {
            py::arg_v("linkAccessProps", LinkAccessProps(), "LinkAccessProps()"))
       .def("getLinkInfo", &NodeTraits<Derivate>::getLinkInfo,
            py::arg("objName"))
+      .def("unpackSoftLink", &NodeTraits<Derivate>::unpackSoftLink,
+           py::arg("objName"),
+           "Return target object name")
+      .def("unpackExternalLink", &ext::unpackExternalLink<Derivate>,
+           py::arg("objName"),
+           "Return target file name and object name")
       .def("rename", &NodeTraits<Derivate>::rename,
            py::arg("src_path"),
            py::arg("dest_path"),

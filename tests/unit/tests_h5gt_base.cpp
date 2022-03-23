@@ -1537,10 +1537,14 @@ TEST(H5GTBase, ExternalLink) {
   File file2("link_external_to.h5", File::ReadWrite | File::Create | File::Truncate);
   Group group2 = file2.createLink(group, "myExternalLink", LinkType::External);
 
+  std::string extFileName_out;
+  std::string extObjName_out = file2.unpackExternalLink("myExternalLink", extFileName_out);
+
   // When you get object via External link then you get original object (Hard linked object)
   // and there is nothing left from that External link
   ASSERT_EQ(group2.getLinkInfo().getLinkType(), LinkType::Hard);
-//  ASSERT_EQ(group2.getTargetPath(), "/path/to");
+  ASSERT_EQ(extFileName_out, "link_external_from.h5");
+  ASSERT_EQ(extObjName_out, "/path/to");
   ASSERT_EQ(group2.getPath(), "/path/to");
   ASSERT_FALSE(group2.getFileName().empty());
 

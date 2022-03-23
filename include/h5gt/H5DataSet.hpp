@@ -13,8 +13,6 @@
 
 #include "H5DataSpace.hpp"
 #include "H5DataType.hpp"
-#include "H5Object.hpp"
-#include "H5PropertyList.hpp"
 #include "bits/H5_definitions.hpp"
 #include "bits/H5Annotate_traits.hpp"
 #include "bits/H5Slice_traits.hpp"
@@ -65,7 +63,11 @@ public:
   ///
   DataSpace getMemSpace() const;
 
-  std::string unpackSoftLink(const LinkAccessProps& accessProp = LinkAccessProps()) const;
+  ///
+  /// \brief unpackSoftLink retrieve target path to this dataset
+  /// \return
+  ///
+  std::string unpackSoftLink() const;
 
   Group getParent(const GroupAccessProps& groupAccessProps = GroupAccessProps()) const;
 

@@ -12,7 +12,6 @@
 #include <string>
 
 #include "H5FileDriver.hpp"
-#include "H5Object.hpp"
 #include "bits/H5Annotate_traits.hpp"
 #include "bits/H5Node_traits.hpp"
 
