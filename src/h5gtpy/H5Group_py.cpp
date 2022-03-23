@@ -2,13 +2,36 @@
 
 namespace h5gtpy {
 
+namespace ext {
+
+std::string unpackSoftLink(Group& self){
+  return self.unpackSoftLink();
+}
+
+void unlink(Group& self){
+  self.unlink();
+}
+
+bool rename(Group& self, const std::string& dest_path,
+            const LinkCreateProps& linkCreateProps = LinkCreateProps(),
+            const LinkAccessProps& linkAccessProps = LinkAccessProps()){
+  return self.rename(dest_path, linkCreateProps, linkAccessProps);
+}
+
+} // ext
+
 void Group_py(py::class_<Group, Object, NodeTraits<Group>, AnnotateTraits<Group> > &py_obj){
   py_obj
       .def("getLinkInfo", &Group::getLinkInfo,
            "returns link info object")
-      .def("unpackSoftLink", &Group::unpackSoftLink,
+      .def("unpackSoftLink", &ext::unpackSoftLink,
            "For soft link that returns path to target that"
 "link points to. Otherwise it works the same way as `getPath()`")
+      .def("unlink", &ext::unlink)
+      .def("rename", &ext::rename,
+           py::arg("destPath"),
+           py::arg_v("linkCreateProps", LinkCreateProps(), "LinkCreateProps()"),
+           py::arg_v("linkAccessProps", LinkAccessProps(), "LinkAccessProps()"))
       .def("getParent", &Group::getParent,
            py::arg_v("groupAccessProps", GroupAccessProps(), "GroupAccessProps()"),
            "returns parent `Group`")

@@ -1619,6 +1619,9 @@ TEST(H5GTBase, RenameRelative) {
     dataset.read(read);
     EXPECT_EQ(number, read);
   }
+
+  group.rename("/new/group");
+  EXPECT_EQ("/new/group", group.getPath());
 }
 
 #define H5GT_CHAR_ARRAY_SIZE 50

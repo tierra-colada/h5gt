@@ -149,6 +149,7 @@ protected:
   std::string _unpackExternalLink(
       const std::string& objName,
       std::string& fileName_out) const;
+  void _unlink(const std::string& obj_name) const;
 
   Object& operator=(const Object& other);
   /// When coparing objects h5gt::File must be open

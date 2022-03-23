@@ -69,6 +69,19 @@ public:
   ///
   std::string unpackSoftLink() const;
 
+  void unlink() const;
+
+  ///
+  /// \brief rename move link within container
+  /// \param dest_path
+  /// \param linkCreateProps important as they create intermediate groups
+  /// \param linkAccessProps
+  /// \return
+  ///
+  bool rename(const std::string& dest_path,
+              const LinkCreateProps& linkCreateProps = LinkCreateProps(),
+              const LinkAccessProps& linkAccessProps = LinkAccessProps()) const;
+
   Group getParent(const GroupAccessProps& groupAccessProps = GroupAccessProps()) const;
 
   DataSetCreateProps getCreateProps() const;

@@ -19,6 +19,11 @@ void DataSet_py(py::class_<DataSet, Object, SliceTraits<DataSet>, AnnotateTraits
       .def("unpackSoftLink", &DataSet::unpackSoftLink,
            "For soft link that returns path to target that"
 "link points to. Otherwise it works the same way as `getPath()`")
+      .def("unlink", &DataSet::unlink)
+      .def("rename", &DataSet::rename,
+           py::arg("destPath"),
+           py::arg_v("linkCreateProps", LinkCreateProps(), "LinkCreateProps()"),
+           py::arg_v("linkAccessProps", LinkAccessProps(), "LinkAccessProps()"))
       .def("getParent", &DataSet::getParent,
            py::arg_v("groupAccessProps", GroupAccessProps(), "GroupAccessProps()"))
       .def("getCreateProps", &DataSet::getCreateProps)

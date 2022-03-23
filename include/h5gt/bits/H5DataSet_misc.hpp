@@ -55,6 +55,24 @@ inline std::string DataSet::unpackSoftLink() const{
   return Object::_unpackSoftLink(getPath());
 }
 
+inline void DataSet::unlink() const{
+  return Object::_unlink(getPath());
+}
+
+inline bool DataSet::rename(const std::string& dst_path,
+                            const LinkCreateProps& linkCreateProps,
+                            const LinkAccessProps& linkAccessProps) const {
+  herr_t status = H5Lmove(getId(false), getPath().c_str(),
+                          getId(false), dst_path.c_str(),
+                          linkCreateProps.getId(false), linkAccessProps.getId(false));
+  if (status < 0) {
+    HDF5ErrMapper::ToException<DataSetException>(
+          std::string("Unable to move link to \"") + dst_path + "\":");
+    return false;
+  }
+  return true;
+}
+
 inline Group DataSet::getParent(const GroupAccessProps& groupAccessProps) const {
   std::string path = getPath();
   if (path == "/")

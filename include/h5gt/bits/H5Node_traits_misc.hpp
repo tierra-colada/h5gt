@@ -331,7 +331,6 @@ inline void NodeTraits<Derivate>::unlink(const std::string& obj_name, const Link
     HDF5ErrMapper::ToException<GroupException>(
           std::string("Invalid name for unlink() "));
   }
-
 }
 
 template <typename Derivate>

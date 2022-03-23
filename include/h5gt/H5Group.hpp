@@ -27,6 +27,9 @@ public:
   // Object::getObjectType and NodeTraits<T>::getObjectType
   using Object::getObjectType;
   using NodeTraits<Group>::getObjectType;
+  using NodeTraits<Group>::unpackSoftLink;
+  using NodeTraits<Group>::unlink;
+  using NodeTraits<Group>::rename;
 
   const static ObjectType type = ObjectType::Group;
 
@@ -42,6 +45,23 @@ public:
   ///
   std::string unpackSoftLink() const{
     return Object::_unpackSoftLink(getPath());
+  }
+
+  void unlink() const{
+    return Object::_unlink(getPath());
+  }
+
+  ///
+  /// \brief rename move link within container
+  /// \param dest_path
+  /// \param linkCreateProps important as they create intermediate groups
+  /// \param linkAccessProps
+  /// \return
+  ///
+  bool rename(const std::string& dest_path,
+              const LinkCreateProps& linkCreateProps = LinkCreateProps(),
+              const LinkAccessProps& linkAccessProps = LinkAccessProps()) const{
+    return NodeTraits<Group>::rename(getPath(), dest_path, linkCreateProps, linkAccessProps);
   }
 
   Group getParent(const GroupAccessProps& groupAccessProps = GroupAccessProps()) const {

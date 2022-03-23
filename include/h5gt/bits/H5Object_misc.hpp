@@ -278,6 +278,15 @@ inline std::string Object::_unpackExternalLink(
   return std::string(o_out);
 }
 
+inline void Object::_unlink(const std::string& objName) const
+{
+  const herr_t val = H5Ldelete(getId(false), objName.c_str(), H5P_DEFAULT);
+  if (val < 0) {
+    HDF5ErrMapper::ToException<ObjectException>(
+          std::string("Invalid name for unlink() "));
+  }
+}
+
 #if (H5Lget_info_vers < 2)
 inline haddr_t ObjectInfo::getAddress() const noexcept {
   return raw_info.addr;
