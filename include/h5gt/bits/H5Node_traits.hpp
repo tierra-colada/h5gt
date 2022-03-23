@@ -130,6 +130,16 @@ public:
   /// \return the name of the object
   std::string getObjectName(size_t index, const LinkAccessProps& linkAccessProps = LinkAccessProps()) const;
 
+  LinkInfo getLinkInfo(const std::string& objName) const;
+
+  std::string unpackSoftLink(const std::string& objName,
+                             const LinkAccessProps& accessProp = LinkAccessProps());
+
+  std::string unpackExternalLink(const std::string& objName,
+                                 std::string fileName_out,
+                                 const LinkAccessProps& accessProp = LinkAccessProps());
+
+
   ///
   /// \brief moves an object and its content within an HDF5 file.
   /// \param src_path relative path of the object to current File/Group

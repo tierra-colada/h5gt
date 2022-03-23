@@ -35,7 +35,7 @@ inline DataType DataSet::getDataType() const {
 }
 
 inline LinkInfo DataSet::getLinkInfo() const {
-  return Object::getLinkInfo();
+  return Object::_getLinkInfo(getPath());
 }
 
 inline DataSpace DataSet::getSpace() const {
@@ -51,20 +51,8 @@ inline DataSpace DataSet::getMemSpace() const {
   return getSpace();
 }
 
-inline std::string DataSet::getTargetPath(
-    const LinkAccessProps& accessProp) const{
-  if (getLinkInfo().getLinkType() == LinkType::Soft){
-    char str[256];
-
-    if (H5Lget_val(getId(false), getPath().c_str(),
-                   &str, 255, accessProp.getId(false)) < 0){
-      HDF5ErrMapper::ToException<GroupException>(
-            std::string("Can't get path to which the link points to"));
-    }
-    return std::string{str};
-  }
-
-  return getPath();
+inline std::string DataSet::unpackSoftLink(const LinkAccessProps& accessProp) const{
+  return Object::_unpackSoftLink(getPath(), accessProp);
 }
 
 inline Group DataSet::getParent(const GroupAccessProps& groupAccessProps) const {

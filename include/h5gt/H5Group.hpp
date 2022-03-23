@@ -31,30 +31,17 @@ public:
   const static ObjectType type = ObjectType::Group;
 
   LinkInfo getLinkInfo() const {
-    return Object::getLinkInfo();
+    return Object::_getLinkInfo(getPath());
   }
 
   ///
-  /// \brief getTargetPath For soft link that returns path to target that
-  /// link points to. Otherwise it works the same way as `getPath()`
+  /// \brief unpackSoftLink retrieve the path where Soft link points to
+  /// \param objName
   /// \param accessProp
-  /// \return
-  std::string getTargetPath(
-      const LinkAccessProps& accessProp = LinkAccessProps()) const{
-    h5gt::LinkInfo linkInfo = getLinkInfo();
-    if (linkInfo.getLinkType() == LinkType::Soft){
-      size_t n = linkInfo.getSoftLinkSize();
-      char str[n];
-
-      if (H5Lget_val(getId(false), getPath().c_str(),
-                     &str, n, accessProp.getId(false)) < 0){
-        HDF5ErrMapper::ToException<GroupException>(
-              std::string("Can't get path to which the link points to"));
-      }
-      return std::string{str};
-    }
-
-    return getPath();
+  /// \return path to the object
+  ///
+  std::string unpackSoftLink(const LinkAccessProps& accessProp = LinkAccessProps()) const{
+    return Object::_unpackSoftLink(getPath(), accessProp);
   }
 
   Group getParent(const GroupAccessProps& groupAccessProps = GroupAccessProps()) const {

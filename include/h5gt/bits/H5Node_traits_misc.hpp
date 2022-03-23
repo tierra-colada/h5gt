@@ -169,6 +169,24 @@ inline std::string NodeTraits<Derivate>::getObjectName(size_t index, const LinkA
 }
 
 template <typename Derivate>
+inline LinkInfo NodeTraits<Derivate>::getLinkInfo(const std::string& objName) const {
+  return static_cast<const Derivate*>(this)->_getLinkInfo(objName);
+}
+
+template <typename Derivate>
+inline std::string NodeTraits<Derivate>::unpackSoftLink(const std::string& objName,
+                                                        const LinkAccessProps& accessProp){
+  return static_cast<const Derivate*>(this)->_unpackSoftLink(objName, accessProp);
+}
+
+template <typename Derivate>
+inline std::string NodeTraits<Derivate>::unpackExternalLink(const std::string& objName,
+                                                            std::string fileName_out,
+                                                            const LinkAccessProps& accessProp){
+  return static_cast<const Derivate*>(this)->_unpackExternalLink(objName, fileName_out, accessProp);
+}
+
+template <typename Derivate>
 inline bool NodeTraits<Derivate>::rename(const std::string& src_path,
                                          const std::string& dst_path,
                                          const LinkCreateProps& linkCreateProps,

@@ -213,16 +213,69 @@ inline ObjectInfo Object::getObjectInfo() const {
   return info;
 }
 
-inline LinkInfo Object::getLinkInfo() const {
+inline LinkInfo Object::_getLinkInfo(const std::string& objPath) const {
   LinkInfo info;
 #if (H5Lget_info_vers < 2)
-  if (H5Lget_info(_hid, getPath().c_str(), &info.link_info, H5P_DEFAULT) < 0) {
+  if (H5Lget_info(_hid, objPath.c_str(), &info.link_info, H5P_DEFAULT) < 0) {
 #else
-  if (H5Lget_info2(_hid, getPath().c_str(), &info.link_info, H5P_DEFAULT) < 0) {
+  if (H5Lget_info2(_hid, objPath.c_str(), &info.link_info, H5P_DEFAULT) < 0) {
 #endif
     HDF5ErrMapper::ToException<ObjectException>("Unable to obtain info for link");
   }
   return info;
+}
+
+inline std::string Object::_unpackSoftLink(
+    const std::string& objName,
+    const LinkAccessProps& accessProp) const
+{
+  h5gt::LinkInfo linkInfo = _getLinkInfo(objName);
+  // to avoid segfault check the type of a link
+  if (linkInfo.getLinkType() != LinkType::Soft){
+    HDF5ErrMapper::ToException<ObjectException>(
+          std::string("The link is not Soft"));
+    return std::string();
+  }
+
+  size_t n = linkInfo.getSoftLinkSize();
+  char str[n];
+  if (H5Lget_val(getId(false), objName.c_str(),
+                 &str, n, accessProp.getId(false)) < 0){
+    HDF5ErrMapper::ToException<ObjectException>(
+          std::string("Unable to get path to which the link points to"));
+  }
+  return std::string(str);
+}
+
+inline std::string Object::_unpackExternalLink(
+    const std::string& objName,
+    std::string& fileName_out,
+    const LinkAccessProps& accessProp) const
+{
+  h5gt::LinkInfo linkInfo = _getLinkInfo(objName);
+  // to avoid segfault check the type of a link
+  if (linkInfo.getLinkType() != LinkType::External){
+    HDF5ErrMapper::ToException<ObjectException>(
+          std::string("The link is not External"));
+    return std::string();
+  }
+
+  size_t n = linkInfo.getSoftLinkSize();
+  char str[n];
+  if (H5Lget_val(getId(false), objName.c_str(),
+                 &str, n, accessProp.getId(false)) < 0){
+    HDF5ErrMapper::ToException<ObjectException>(
+          std::string("Unable to get path to which the link points to"));
+  }
+
+  const char* objName_out;
+  unsigned *flags = 0;
+  if (H5Lunpack_elink_val(str, n, &flags, &fileName_out.c_str(), &objName_out) < 0){
+    HDF5ErrMapper::ToException<ObjectException>(
+          std::string("Unable to get path to which the link points to"));
+  }
+
+  return std::string(objName_out);
 }
 
 #if (H5Lget_info_vers < 2)

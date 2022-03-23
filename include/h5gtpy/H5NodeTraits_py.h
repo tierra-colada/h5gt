@@ -145,6 +145,8 @@ void NodeTraits_py(py::class_<NodeTraits<Derivate> >& py_obj) {
       .def("getObjectName", &NodeTraits<Derivate>::getObjectName,
            py::arg("index"),
            py::arg_v("linkAccessProps", LinkAccessProps(), "LinkAccessProps()"))
+      .def("getLinkInfo", &NodeTraits<Derivate>::getLinkInfo,
+           py::arg("objName"))
       .def("rename", &NodeTraits<Derivate>::rename,
            py::arg("src_path"),
            py::arg("dest_path"),

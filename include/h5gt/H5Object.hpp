@@ -129,10 +129,21 @@ protected:
   explicit Object(const hid_t&);
   explicit Object(const hid_t&, const ObjectType&, const bool&);
 
-  /// \brief getLinkInfo Cant't be applied to file or an exception appears.
-  /// That is why it is protected
+  ///
+  /// \brief getLinkInfo retrieve link info from an object with 'objPath'.
+  /// This object must reside in the same container as current one.
+  /// \param objPath relative path to the object
   /// \return
-  LinkInfo getLinkInfo() const;
+  ///
+  LinkInfo _getLinkInfo(const std::string& objPath) const;
+
+  std::string _unpackSoftLink(
+      const std::string& objName,
+      const LinkAccessProps& accessProp) const;
+  std::string _unpackExternalLink(
+      const std::string& objName,
+      std::string& fileName_out,
+      const LinkAccessProps& accessProp) const;
 
   Object& operator=(const Object& other);
   /// When coparing objects h5gt::File must be open

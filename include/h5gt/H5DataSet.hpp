@@ -65,14 +65,7 @@ public:
   ///
   DataSpace getMemSpace() const;
 
-  ///
-  /// \brief getTargetPath For soft link that returns path to target that
-  /// link points to. Otherwise it works the same way as `getPath()`
-  /// \param accessProp
-  /// \return
-  ///
-  std::string getTargetPath(
-      const LinkAccessProps& accessProp = LinkAccessProps()) const;
+  std::string unpackSoftLink(const LinkAccessProps& accessProp = LinkAccessProps()) const;
 
   Group getParent(const GroupAccessProps& groupAccessProps = GroupAccessProps()) const;
 

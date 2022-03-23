@@ -1450,7 +1450,7 @@ TEST(H5GTBase, SoftLink) {
 
   DataSet dset_out = file.createLink(dset, "myDsetLink", LinkType::Soft);
   ASSERT_EQ(dset_out.getLinkInfo().getLinkType(), LinkType::Soft);
-  ASSERT_EQ(dset_out.getTargetPath(), "/path/to/group/data");
+  ASSERT_EQ(dset_out.unpackSoftLink(), "/path/to/group/data");
   ASSERT_EQ(dset_out.getPath(), "/myDsetLink");
   ASSERT_EQ(dset_out.getFileName(), "link_soft.h5");
 
@@ -1494,7 +1494,6 @@ TEST(H5GTBase, HardLink) {
 
   DataSet dset_out = file.createLink(dset, "myDsetLink", LinkType::Hard);
   ASSERT_EQ(dset_out.getLinkInfo().getLinkType(), LinkType::Hard);
-  ASSERT_EQ(dset_out.getTargetPath(), "/myDsetLink");
   ASSERT_EQ(dset_out.getPath(), "/myDsetLink");
   ASSERT_EQ(dset_out.getFileName(), "link_hard.h5");
   ASSERT_EQ(dset.getObjectInfo().getHardLinkRefCount(), 2);
@@ -1541,7 +1540,7 @@ TEST(H5GTBase, ExternalLink) {
   // When you get object via External link then you get original object (Hard linked object)
   // and there is nothing left from that External link
   ASSERT_EQ(group2.getLinkInfo().getLinkType(), LinkType::Hard);
-  ASSERT_EQ(group2.getTargetPath(), "/path/to");
+//  ASSERT_EQ(group2.getTargetPath(), "/path/to");
   ASSERT_EQ(group2.getPath(), "/path/to");
   ASSERT_FALSE(group2.getFileName().empty());
 

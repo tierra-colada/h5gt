@@ -6,7 +6,7 @@ void Group_py(py::class_<Group, Object, NodeTraits<Group>, AnnotateTraits<Group>
   py_obj
       .def("getLinkInfo", &Group::getLinkInfo,
            "returns link info object")
-      .def("getTargetPath", &Group::getTargetPath,
+      .def("unpackSoftLink", &Group::unpackSoftLink,
            py::arg_v("accessProp", LinkAccessProps(), "LinkAccessProps()"),
            "For soft link that returns path to target that"
 "link points to. Otherwise it works the same way as `getPath()`")
