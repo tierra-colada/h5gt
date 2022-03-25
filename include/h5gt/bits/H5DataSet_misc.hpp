@@ -51,6 +51,15 @@ inline DataSpace DataSet::getMemSpace() const {
   return getSpace();
 }
 
+inline File DataSet::getFile() const {
+  hid_t fileId = H5Iget_file_id(_hid);
+  if (!H5Iis_valid(fileId)){
+    HDF5ErrMapper::ToException<DataSetException>(
+          std::string("File ID is invalid. Probably the object doesn't belong to any file"));
+  }
+  return File::FromId(fileId, false);
+}
+
 inline std::string DataSet::unpackSoftLink() const{
   return Object::_unpackSoftLink(getPath());
 }
@@ -85,7 +94,7 @@ inline Group DataSet::getParent(const GroupAccessProps& groupAccessProps) const 
     HDF5ErrMapper::ToException<DataSetException>(
       std::string(objName + " has no parent"));
 
-  File file = File::FromId(getFileId(true));
+  File file = getFile();
   return file.getGroup(parentPath, groupAccessProps);
 }
 

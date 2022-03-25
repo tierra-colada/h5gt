@@ -1358,47 +1358,18 @@ TEST(H5GTBase, EqualityOperator) {
   ASSERT_TRUE(dset11 != dset21);
 }
 
-TEST(H5GTBase, CheckIdFunctionality) {
-  // Retrieve file ID from objects and compare it with original
+TEST(H5GTBase, GetHolderFile) {
+  // Retrieve holder file from objects and compare it with original
   File file("getFileName.h5", File::ReadWrite | File::Create | File::Truncate);
   Group group = file.createGroup("group");
   DataSpace dataSpace = DataSpace(1);
   DataSet dataset = group.createDataSet<int>("data", dataSpace);
   Attribute attr = dataset.createAttribute<int>("attr", dataSpace);
-  std::vector<CompoundType::member_def> t_members(
-        {{"real", AtomicType<int>{}},
-         {"imag", AtomicType<int>{}}});
 
-  CompoundType t(t_members);
-
-  ASSERT_EQ(file.getId(false), file.getFileId(false)); // getFileId() uses HDF5 native functionality
-  ASSERT_EQ(file.getId(false), group.getFileId(false));
-  ASSERT_EQ(file.getId(false), dataset.getFileId(false));
-  ASSERT_EQ(file.getId(false), attr.getFileId(false));
-
-  t.commit(file, "new_type1");
-
-  ASSERT_EQ(file.getId(false), t.getFileId(false));
-
-  // Create objects from ID
-  File file2 = File::FromId(file.getId(false), true);
-  Group group2 = Group::FromId(group.getId(false), true);
-  DataSpace dataSpace2 = DataSpace::FromId(dataSpace.getId(false), true);
-  DataSet dataset2 = DataSet::FromId(dataset.getId(false), true);
-  Attribute attr2 = Attribute::FromId(attr.getId(false), true);
-  CompoundType t2 = CompoundType::FromId(t.getId(false), true);
-
-  ASSERT_TRUE(file2.isValid());
-  ASSERT_TRUE(group2.isValid());
-  ASSERT_TRUE(dataSpace2.isValid());
-  ASSERT_TRUE(dataset2.isValid());
-  ASSERT_TRUE(attr2.isValid());
-  ASSERT_TRUE(t2.isValid());
-
-  // Check reference count ID increase
-  ASSERT_EQ(file2.getIdRefCount(), 2);
-  File file3 = File::FromId(file.getId(false), true);
-  ASSERT_EQ(file3.getIdRefCount(), 3);
+  ASSERT_TRUE(file == file.getFile());
+  ASSERT_TRUE(file == group.getFile());
+  ASSERT_TRUE(file == dataset.getFile());
+  ASSERT_TRUE(file == attr.getFile());
 }
 
 TEST(H5GTBase, CopyObject) {

@@ -150,6 +150,7 @@ void NodeTraits_py(py::class_<NodeTraits<Derivate> >& py_obj) {
            py::arg("group_name"),
            py::arg_v("groupAccessProps", GroupAccessProps(), "GroupAccessProps()"),
            "return the number of leaf objects of the node / group")
+      .def("getFile", &NodeTraits<Derivate>::getFile)
       .def("getNumberObjects", &NodeTraits<Derivate>::getNumberObjects)
       .def("getObjectName", &NodeTraits<Derivate>::getObjectName,
            py::arg("index"),

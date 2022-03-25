@@ -61,6 +61,7 @@ void Attribute_py(py::class_<Attribute, Object> &py_obj){
            "return the dataspace associated with this attribute")
       .def("getMemSpace", &Attribute::getMemSpace,
            "same as getSpace for attribute, compatibility with Selection")
+      .def("getFile", &Attribute::getFile)
 
 
       // WRITE PY_TYPES

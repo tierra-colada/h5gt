@@ -90,16 +90,6 @@ public:
   ///
   hid_t getId(const bool& increaseRefCount = false) const noexcept;
 
-  ///
-  /// \brief getFileId return file's ID the object belong to
-  /// \param increaseRefCount if true - reopen file (you need to
-  /// manually decrease ref count for this ID after you are done with this ID);
-  /// false - simply create a copy of current ID (ID is valid
-  /// if file is already opened). HDF5 allow to work with object
-  /// while file is closed
-  /// \return
-  ///
-  hid_t getFileId(const bool& increaseRefCount = false) const;
   std::string getFileName() const;
 
   ///

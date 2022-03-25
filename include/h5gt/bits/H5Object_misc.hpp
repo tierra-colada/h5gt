@@ -118,9 +118,22 @@ inline bool Object::operator==(const Object& other) const {
   H5O_token_t leftToken = leftOInfo.getHardLinkToken();
   H5O_token_t rightToken = rightOInfo.getHardLinkToken();
 
-  if (H5Otoken_cmp(getFileId(false), &leftToken, &rightToken, &tokenCMP) < 0){
-    HDF5ErrMapper::ToException<DataSetException>(
+  hid_t fileId = H5Iget_file_id(_hid);
+  bool closeFileId = true;
+  if (!H5Iis_valid(fileId)){
+    closeFileId = false;
+    HDF5ErrMapper::ToException<ObjectException>(
+          std::string("File ID is invalid. Probably the object doesn't belong to any file"));
+  }
+
+  if (H5Otoken_cmp(fileId, &leftToken, &rightToken, &tokenCMP) < 0){
+    HDF5ErrMapper::ToException<ObjectException>(
           "Unable compare tokens");
+  }
+
+  // important: close opened File ID
+  if (closeFileId){
+    H5Idec_ref(fileId);
   }
 
   return !tokenCMP;
@@ -161,19 +174,6 @@ inline hid_t Object::getId(const bool& increaseRefCount) const noexcept {
     H5Iinc_ref(_hid);
 
   return _hid;
-}
-
-inline hid_t Object::getFileId(const bool& increaseRefCount) const {
-  hid_t fileId = H5Iget_file_id(_hid);
-  if (!H5Iis_valid(fileId)){
-    HDF5ErrMapper::ToException<ObjectException>(
-          std::string("File ID is invalid (probably you are trying to get file ID "
-                      "from object that doesn't belong to any file)"));
-  }
-  if (!increaseRefCount)
-    H5Idec_ref(fileId);
-
-  return fileId;
 }
 
 inline std::string Object::getFileName() const {

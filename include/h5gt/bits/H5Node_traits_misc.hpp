@@ -20,6 +20,7 @@
 #include <H5Tpublic.h>
 
 #include "../H5DataSet.hpp"
+#include "../H5File.hpp"
 #include "../H5Group.hpp"
 #include "../H5Selection.hpp"
 #include "../H5Utility.hpp"
@@ -147,6 +148,17 @@ NodeTraits<Derivate>::getGroup(const std::string& group_name,
           std::string("Unable to open the group \"") + group_name + "\":");
   }
   return group;
+}
+
+template <typename Derivate>
+inline File
+NodeTraits<Derivate>::getFile() const {
+  hid_t fileId = H5Iget_file_id(static_cast<const Derivate*>(this)->getId(false));
+  if (!H5Iis_valid(fileId)){
+    HDF5ErrMapper::ToException<GroupException>(
+          std::string("File ID is invalid. Probably the object doesn't belong to any file"));
+  }
+  return File::FromId(fileId, false);
 }
 
 template <typename Derivate>
@@ -456,14 +468,27 @@ inline void NodeTraits<Derivate>::_copy(
     const ObjectCopyProps& copyProps,
     const LinkCreateProps& linkCreateProps)
 {
+  hid_t fileId = H5Iget_file_id(obj.getId(false));
+  bool closeFileId = true;
+  if (!H5Iis_valid(fileId)){
+    closeFileId = false;
+    HDF5ErrMapper::ToException<GroupException>(
+          std::string("File ID is invalid. Probably the object doesn't belong to any file"));
+  }
+
   herr_t status = H5Ocopy(
-        obj.getFileId(false), obj.getPath().c_str(),
+        fileId, obj.getPath().c_str(),
         static_cast<const Derivate*>(this)->getId(false), newName.c_str(),
         copyProps.getId(false), linkCreateProps.getId(false));
 
   if (status < 0) {
     HDF5ErrMapper::ToException<GroupException>(
           std::string("Unable to copy object to \"") + newName + "\":");
+  }
+
+  // important: close opened File ID
+  if (closeFileId){
+    H5Idec_ref(fileId);
   }
 }
 

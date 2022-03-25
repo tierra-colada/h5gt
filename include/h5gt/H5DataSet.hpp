@@ -63,6 +63,8 @@ public:
   ///
   DataSpace getMemSpace() const;
 
+  File getFile() const;
+
   ///
   /// \brief unpackSoftLink retrieve target path to this dataset
   /// \return

@@ -42,8 +42,6 @@ void Object_py(py::class_<Object> &py_obj){
            "Usually you don't need to use it.")
       .def("getId", &Object::getId,
            py::arg_v("increaseRefCount", false, "false"))
-      .def("getFileId", &Object::getFileId,
-           py::arg_v("increaseRefCount", false, "false"))
       .def("getFileName", &Object::getFileName)
       .def("getPath", &Object::getPath)
       .def("getIdRefCount", &Object::getIdRefCount)

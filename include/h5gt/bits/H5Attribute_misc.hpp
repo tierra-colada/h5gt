@@ -54,6 +54,16 @@ inline DataSpace Attribute::getSpace() const {
 
 inline DataSpace Attribute::getMemSpace() const { return getSpace(); }
 
+inline File Attribute::getFile() const {
+  hid_t fileId = H5Iget_file_id(_hid);
+  if (!H5Iis_valid(fileId)){
+    HDF5ErrMapper::ToException<AttributeException>(
+          std::string("File ID is invalid. Probably the object doesn't belong to any file"));
+  }
+  return File::FromId(fileId, false);
+}
+
+
 template <typename T>
 inline void Attribute::read(T& array) const {
   static_assert(!std::is_const<typename std::remove_reference<T>::type>::value,

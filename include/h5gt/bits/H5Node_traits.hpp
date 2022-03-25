@@ -119,6 +119,8 @@ public:
   Group getGroup(const std::string& group_name,
                  const GroupAccessProps& groupAccessProps = GroupAccessProps()) const;
 
+  File getFile() const;
+
   ///
   /// \brief return the number of leaf objects of the node / group
   /// \return number of leaf objects
