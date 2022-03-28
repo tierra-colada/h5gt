@@ -1,3 +1,5 @@
 include h5gtpy/*
+include h5gtpy/h5gtpy/*
+include h5gtpy/tests/*
 
 ${ADD_TO_MANIFEST}
