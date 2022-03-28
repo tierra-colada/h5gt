@@ -158,6 +158,7 @@ private:
   friend class DataSet;
   friend class Attribute;
   friend class DataType;
+  friend class Selection;
 };
 
 
