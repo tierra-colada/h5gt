@@ -27,6 +27,7 @@ matrix:
           packages:
             - libhdf5-mpi-dev
             - ninja-build
+            - python3-dev
 
     # MPICH 3.1
     - os: linux
@@ -51,6 +52,7 @@ matrix:
           packages:
             - libhdf5-mpich-dev
             - ninja-build
+            - python3-dev
 
     # OpenMPI 3.1
     - os: linux
@@ -75,6 +77,7 @@ matrix:
           packages:
             - libhdf5-openmpi-dev
             - ninja-build
+            - python3-dev
 
     - os: windows
       env:
