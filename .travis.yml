@@ -27,7 +27,6 @@ matrix:
           packages:
             - libhdf5-mpi-dev
             - ninja-build
-            - python3-dev
 
     # MPICH 3.1
     - os: linux
@@ -52,7 +51,6 @@ matrix:
           packages:
             - libhdf5-mpich-dev
             - ninja-build
-            - python3-dev
 
     # OpenMPI 3.1
     - os: linux
@@ -77,7 +75,6 @@ matrix:
           packages:
             - libhdf5-openmpi-dev
             - ninja-build
-            - python3-dev
 
     - os: windows
       env:
@@ -161,6 +158,9 @@ before_script:
       gcc --version;
     elif [[ "$TRAVIS_COMPILER" == "clang" ]]; then 
       clang --version;
+    fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
+      pyenv global 3.8.10 3.9 3.9.0;
     fi
   - cmake --version
   - python --version
