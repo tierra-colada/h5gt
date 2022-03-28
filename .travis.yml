@@ -160,7 +160,7 @@ before_script:
       clang --version;
     fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
-      pyenv global 3.8.10 3.9 3.9.0;
+      pyenv global 3.9 3.9.0;
     fi
   - cmake --version
   - python --version
