@@ -237,13 +237,18 @@ inline std::string Object::_unpackSoftLink(
   }
 
   size_t n = linkInfo.getSoftLinkSize();
-  char str[n];
+  if (n < 1){
+    HDF5ErrMapper::ToException<ObjectException>(
+          std::string("Link size is too small (n < 1)"));
+    return std::string();
+  }
+  std::vector<char> v(n);
   if (H5Lget_val(getId(false), objName.c_str(),
-                 &str, n, H5P_DEFAULT) < 0){
+                 v.data(), n, H5P_DEFAULT) < 0){
     HDF5ErrMapper::ToException<ObjectException>(
           std::string("Unable to get path to which the link points to"));
   }
-  return std::string(str);
+  return std::string(v.data(), n-1);
 }
 
 inline std::string Object::_unpackExternalLink(
@@ -259,9 +264,14 @@ inline std::string Object::_unpackExternalLink(
   }
 
   size_t n = linkInfo.getSoftLinkSize();
-  char str[n];
+  if (n < 1){
+    HDF5ErrMapper::ToException<ObjectException>(
+          std::string("Link size is too small (n < 1)"));
+    return std::string();
+  }
+  std::vector<char> v(n);
   if (H5Lget_val(getId(false), objName.c_str(),
-                 &str, n, H5P_DEFAULT) < 0){
+                 v.data(), n, H5P_DEFAULT) < 0){
     HDF5ErrMapper::ToException<ObjectException>(
           std::string("Unable to get path to which the link points to"));
   }
@@ -269,7 +279,7 @@ inline std::string Object::_unpackExternalLink(
   const char* f_out;
   const char* o_out;
   unsigned flags = 0;
-  if (H5Lunpack_elink_val(str, n, &flags, &f_out, &o_out) < 0){
+  if (H5Lunpack_elink_val(v.data(), n, &flags, &f_out, &o_out) < 0){
     HDF5ErrMapper::ToException<ObjectException>(
           std::string("Unable to get path to which the link points to"));
   }
