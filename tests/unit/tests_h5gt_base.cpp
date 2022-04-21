@@ -1894,12 +1894,21 @@ TEST(H5GTBase, Enum) {
     auto dataset = file.createDataSet(DATASET_NAME1, DataSpace(1), e1);
     dataset.write(Position::FIRST);
 
+    auto attr = dataset.createAttribute("enum_attr", DataSpace(1), e1);
+    attr.write(Position::SECOND);
+
     file.flush();
 
-    Position result;
-    dataset.select(ElementSet({0})).read(result);
+    Position dset_result, attr_result;
+    dataset.select(ElementSet({0})).read(dset_result);
+    attr.read(attr_result);
 
-    EXPECT_EQ(result, Position::FIRST);
+    int dset_result_int;
+    dataset.read(dset_result_int);
+
+    EXPECT_EQ(dset_result, Position::FIRST);
+    EXPECT_EQ(attr_result, Position::SECOND);
+    EXPECT_EQ(dset_result_int, Position::FIRST);
   }
 
   {  // Scoped enum
