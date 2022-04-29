@@ -106,6 +106,10 @@ public:
   /// \return the total number of elements in the dataspace
   size_t getElementCount() const;
 
+  /// \brief getElementCountSelected
+  /// \return  the number of selected elements in the dataspace
+  size_t getElementCountSelected() const;
+
   /// \brief getMaxDimensions
   /// \return return a vector of N-element, each element is the size of the
   /// associated dataset maximum dimension

@@ -69,15 +69,23 @@ void SliceTraits_py(py::class_<SliceTraits<Derivate> >& py_obj) {
              &SliceTraits<Derivate>::select, py::const_),
            py::arg("offset"),
            py::arg("count"),
-           py::arg_v("stride", std::vector<size_t>(), "vector<size_t>()"))
-      .def("select", py::overload_cast<
-           const std::vector<size_t>&>(
-             &SliceTraits<Derivate>::select, py::const_),
-           py::arg("columns"))
+           py::arg_v("stride", std::vector<size_t>(), "list()"))
       .def("select", py::overload_cast<
            const ElementSet&>(
              &SliceTraits<Derivate>::select, py::const_),
            py::arg("elements"))
+      .def("select_rows", py::overload_cast<
+           const std::vector<size_t>&, size_t, size_t>(
+             &SliceTraits<Derivate>::select_rows, py::const_),
+           py::arg("ind"),
+           py::arg_v("offset", 0, "0"),
+           py::arg_v("count", 0, "0"))
+      .def("select_cols", py::overload_cast<
+           const std::vector<size_t>&, size_t, size_t>(
+             &SliceTraits<Derivate>::select_cols, py::const_),
+           py::arg("ind"),
+           py::arg_v("offset", 0, "0"),
+           py::arg_v("count", 0, "0"))
 
 
       // WRITE PY_TYPES

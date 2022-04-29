@@ -97,32 +97,6 @@ inline Selection SliceTraits<Derivate>::select(const std::vector<size_t>& offset
 }
 
 template <typename Derivate>
-inline Selection SliceTraits<Derivate>::select(const std::vector<size_t>& columns) const {
-  const auto& slice = static_cast<const Derivate&>(*this);
-  const DataSpace& space = slice.getSpace();
-  const DataSet& dataset = details::get_dataset(slice);
-  std::vector<size_t> dims = space.getDimensions();
-  std::vector<hsize_t> counts(dims.size());
-  std::copy(dims.begin(), dims.end(), counts.begin());
-  counts[dims.size() - 1] = 1;
-  std::vector<hsize_t> offsets(dims.size(), 0);
-
-  H5Sselect_none(space.getId(false));
-
-  for (const auto& column : columns) {
-    offsets[offsets.size() - 1] = column;
-
-    if (H5Sselect_hyperslab(space.getId(false), H5S_SELECT_OR, offsets.data(), 0,
-                            counts.data(), 0) < 0) {
-      HDF5ErrMapper::ToException<DataSpaceException>("Unable to select hyperslap");
-    }
-  }
-
-  dims[dims.size() - 1] = columns.size();
-  return Selection(DataSpace(dims), space, dataset);
-}
-
-template <typename Derivate>
 inline Selection SliceTraits<Derivate>::select(const ElementSet& elements) const {
   const auto& slice = static_cast<const Derivate&>(*this);
   const hsize_t* data = nullptr;
@@ -153,6 +127,85 @@ inline Selection SliceTraits<Derivate>::select(const ElementSet& elements) const
   return Selection(DataSpace(num_elements), space, details::get_dataset(slice));
 }
 
+
+template <typename Derivate>
+inline Selection SliceTraits<Derivate>::select_rows(
+    const std::vector<size_t>& ind, size_t offset, size_t count) const {
+  const auto& slice = static_cast<const Derivate&>(*this);
+  const DataSpace& space = slice.getSpace();
+  const DataSet& dataset = details::get_dataset(slice);
+  std::vector<size_t> dims = space.getDimensions();
+  dims[0] = ind.size();
+  std::vector<hsize_t> counts(dims.size());
+  std::copy(dims.begin(), dims.end(), counts.begin());
+  counts[0] = 1;
+  std::vector<hsize_t> offsets(dims.size(), 0);
+
+  if (offset != 0 && offsets.size() > 1){
+    offsets[1] = offset;
+    // if count is not defined by the user
+    if (count == 0)
+      count = dims[1] - offset;
+  }
+
+  if (count != 0 && counts.size() > 1){
+    counts[1] = count;
+    dims[1] = count;
+  }
+
+  H5Sselect_none(space.getId(false));
+
+  for (const auto& i : ind) {
+    offsets[0] = i;
+
+    if (H5Sselect_hyperslab(space.getId(false), H5S_SELECT_OR, offsets.data(), 0,
+                            counts.data(), 0) < 0) {
+      HDF5ErrMapper::ToException<DataSpaceException>("Unable to select hyperslap");
+    }
+  }
+
+  return Selection(DataSpace(dims), space, dataset);
+}
+
+template <typename Derivate>
+inline Selection SliceTraits<Derivate>::select_cols(
+    const std::vector<size_t>& ind, size_t offset, size_t count) const {
+  const auto& slice = static_cast<const Derivate&>(*this);
+  const DataSpace& space = slice.getSpace();
+  const DataSet& dataset = details::get_dataset(slice);
+  std::vector<size_t> dims = space.getDimensions();
+  dims[dims.size() - 1] = ind.size();
+  std::vector<hsize_t> counts(dims.size());
+  std::copy(dims.begin(), dims.end(), counts.begin());
+  counts[dims.size() - 1] = 1;
+  std::vector<hsize_t> offsets(dims.size(), 0);
+
+  if (offset != 0 && offsets.size() > 0){
+    offsets[0] = offset;
+    // if count is not defined by the user
+    if (count == 0)
+      count = dims[0] - offset;
+  }
+
+  if (count != 0 && counts.size() > 0){
+    counts[0] = count;
+    dims[0] = count;
+  }
+
+
+  H5Sselect_none(space.getId(false));
+
+  for (const auto& i : ind) {
+    offsets[offsets.size() - 1] = i;
+
+    if (H5Sselect_hyperslab(space.getId(false), H5S_SELECT_OR, offsets.data(), 0,
+                            counts.data(), 0) < 0) {
+      HDF5ErrMapper::ToException<DataSpaceException>("Unable to select hyperslap");
+    }
+  }
+
+  return Selection(DataSpace(dims), space, dataset);
+}
 
 template <typename Derivate>
 template <typename T>

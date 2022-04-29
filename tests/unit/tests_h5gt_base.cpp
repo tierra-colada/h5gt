@@ -996,7 +996,7 @@ void columnSelectionTest() {
 
   std::vector<size_t> columns{1, 3, 5};
 
-  Selection slice = dataset.select(columns);
+  Selection slice = dataset.select_cols(columns);
   T result[x_size][3];
   slice.read(result);
 
@@ -2230,6 +2230,22 @@ TEST(H5GTBase, Eigen) {
     EXPECT_THROW(
           file.getDataSet(DS_NAME + DS_NAME_FLAVOR).read(vec_out_exception),
           h5gt::DataSetException);
+  }
+
+  {
+    const std::string DS_NAME = "row_selection";
+    size_t rows = 5;
+    size_t cols = 5;
+    auto dset = file.createDataSet<int>(DS_NAME, DataSpace({rows, cols}));
+
+    std::vector<size_t> ind{0,2};
+    Eigen::MatrixXi m = Eigen::MatrixXi::Ones(2, 3);
+    dset.select_rows(ind, 1, 3).write(m);
+    file.flush();
+
+    Eigen::MatrixXi m_out(m.rows(), m.cols());
+    dset.select_rows(ind, 1, 3).read(m_out);
+    EXPECT_TRUE(m == m_out);
   }
 
 #ifdef H5GT_USE_BOOST

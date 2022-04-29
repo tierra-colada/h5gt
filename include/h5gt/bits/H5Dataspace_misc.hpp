@@ -117,6 +117,10 @@ inline size_t DataSpace::getElementCount() const {
                          std::multiplies<size_t>());
 }
 
+inline size_t DataSpace::getElementCountSelected() const {
+  return H5Sget_select_npoints(_hid);
+}
+
 inline std::vector<size_t> DataSpace::getMaxDimensions() const {
   std::vector<hsize_t> maxdims(getNumberDimensions());
   if (H5Sget_simple_extent_dims(_hid, NULL, maxdims.data()) < 0) {
