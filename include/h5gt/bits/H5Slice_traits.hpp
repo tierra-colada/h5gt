@@ -66,18 +66,16 @@ public:
   Selection select(const ElementSet& elements) const;
 
   /// \brief Select a set of rows in the first dimension of this dataset.
-  /// The row indices must be smaller than the dimension size.
-  /// IO operations are performed for increasing order indexes.
-  /// Thus 'ind' will be sorted before IO.
+  /// NOTE: Selection is done in memory layout order (be careful with chunked dsets).
+  /// Most likely the order of rows read will be mixed.
   /// \param ind row indices
   /// \param offset offset along each row (1 dim): 0-from the beginning
   /// \param count number of elements along each row (1 dim): 0-whole row starting from the offset
   Selection select_rows(const std::vector<size_t>& ind, size_t offset = 0, size_t count = 0) const;
 
   /// \brief Select a set of columns in the last dimension of this dataset.
-  /// The column indices must be smaller than the dimension size.
-  /// IO operations are performed for increasing order indexes.
-  /// Thus 'ind' will be sorted before IO.
+  /// NOTE: Selection is done in memory layout order (be careful with chunked dsets).
+  /// Most likely the order of rows read will be mixed.
   /// \param ind col indices
   /// \param offset along each column (0 dim): 0-from the beginning
   /// \param count number of elements along each column (0 dim): 0-whole column starting from the offset
