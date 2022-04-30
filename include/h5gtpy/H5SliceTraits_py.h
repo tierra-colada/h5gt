@@ -39,12 +39,12 @@ Eigen::MatrixX<T> read_eigen_raw(SliceTraits<Derivate>& self){
   if (dims.size() == 1){
     M.resize(dims[0], 1);
   } else if (dims.size() == 2){
-    M.resize(dims[0], dims[1]);
+    M.resize(dims[1], dims[0]);
   } else {
-    size_t rows = dims[0];
-    size_t cols = dims[1];
+    size_t rows = dims[1];
+    size_t cols = dims[0];
     for (size_t i = 2; i < dims.size(); i++){
-      rows *= 2;
+      cols *= 2;
     }
     M.resize(rows, cols);
   }
