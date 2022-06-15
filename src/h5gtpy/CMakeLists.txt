@@ -5,8 +5,8 @@ message("project: ${PROJECT_NAME} ${COMMON_PROJECT_VERSION}")
 set(HDF5_RUNTIME_DIRS "" CACHE PATH "hdf5 runtime is a dependency of h5gtpy")
 set(ZLIB_RUNTIME_DIRS "" CACHE PATH "zlib runtime is an optional dependency of hdf5")
 option(COPY_H5GTPY_RUNTIME_DEPS "Copy hdf5 (and maybe zlib) runtime to python site-packages
-  (otherwise it will simply add to ENV PATH to hdf5 runtime dir in `__init__.py`)" ON)
-option(RESOLVE_H5GTPY_RUNTIME_DEPS "If OFF then nothing will be done to resolve deps" OFF)
+  (otherwise it will simply add to ENV PATH to hdf5 runtime dir in `__init__.py`)" OFF)
+option(RESOLVE_H5GTPY_RUNTIME_DEPS "If OFF then nothing will be done to resolve deps" ON)
 
 include(FetchContent)
 FetchContent_Declare(

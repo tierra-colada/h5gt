@@ -6,6 +6,9 @@ cmake_policy(SET CMP0011 NEW)
 # and this policy must be set in this file or it won't work
 cmake_policy(SET CMP0012 NEW)
 
+# COMMON_PROJECT_VERSION not accessible at install step. Needded for 'setup.py.in'
+set(COMMON_PROJECT_VERSION @COMMON_PROJECT_VERSION@)
+
 #-----------------------------------------------------------------------------
 # Finding RUNTIME DEPS (i.e. hdf5.dll)
 #-----------------------------------------------------------------------------
@@ -59,14 +62,14 @@ if(@RESOLVE_H5GTPY_RUNTIME_DEPS@)
 
   list(LENGTH unres_deps unres_deps_LEN)
   if(${unres_deps_LEN} GREATER 0)
-    message(FATAL_ERROR "There are UNRESOLVED runtime dependencies.
+    message(WARNING "There are UNRESOLVED runtime dependencies.
     Try setting `HDF5_RUNTIME_DIRS, ZLIB_RUNTIME_DIRS` and rerun `cmake .` and `cmake --install .`
     (you don't have to rebuild the project)")
   endif()
 
   list(LENGTH confl_deps confl_deps_LEN)
   if(${confl_deps_LEN} GREATER 0)
-    message(FATAL_ERROR "There are CONFLICTING runtime dependencies.
+    message(WARNING "There are CONFLICTING runtime dependencies.
     Try setting `HDF5_RUNTIME_DIRS, ZLIB_RUNTIME_DIRS` and rerun `cmake .` and `cmake --install .`
     (you don't have to rebuild the project)")
   endif()
