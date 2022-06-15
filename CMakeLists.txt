@@ -7,6 +7,7 @@ if(NOT DEFINED CMAKE_CXX_STANDARD)
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+message(STATUS "Setting C++ standard - " ${CMAKE_CXX_STANDARD})
 
 cmake_policy(SET CMP0074 NEW)
 cmake_policy(SET CMP0077 NEW)
@@ -54,13 +55,12 @@ target_include_directories(h5gt INTERFACE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
-install(TARGETS h5gt DESTINATION lib EXPORT h5gt-targets)
 
 find_package(HDF5 REQUIRED)
 if(HDF5_PREFER_PARALLEL AND HDF5_IS_PARALLEL)
   target_compile_definitions(h5gt INTERFACE H5GT_PARALLEL)
 elseif(HDF5_PREFER_PARALLEL AND NOT HDF5_IS_PARALLEL)
-  message(SEND_ERROR "Parallel requested but chosen hdf5 doesnt support it")
+  message(SEND_ERROR "Parallel requested but chosen hdf5 doesn't support it")
 endif()
 
 target_link_libraries(h5gt INTERFACE ${HDF5_C_LIBRARIES})
@@ -111,18 +111,16 @@ endif()
 #-----------------------------------------------------------------------------
 # Create config files
 #-----------------------------------------------------------------------------
-set(INCLUDE_INSTALL_DIR "include/")
-set(LIB_INSTALL_DIR "lib/")
-# set(SYSCONFIG_INSTALL_DIR "etc/h5gt/")
-
+include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/h5gt-config.cmake.in"
   "${CMAKE_CURRENT_BINARY_DIR}/h5gt-config.cmake"
-  INSTALL_DESTINATION "${LIB_INSTALL_DIR}/cmake/h5gt/"
-  PATH_VARS INCLUDE_INSTALL_DIR
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/h5gt
+  PATH_VARS CMAKE_INSTALL_INCLUDEDIR
   )
 
-install(EXPORT h5gt-targets DESTINATION "${LIB_INSTALL_DIR}/cmake/h5gt/")
+install(TARGETS h5gt DESTINATION ${CMAKE_INSTALL_LIBDIR} EXPORT h5gt-targets)
+install(EXPORT h5gt-targets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/h5gt)
 
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/h5gt-config-version.cmake"
@@ -132,7 +130,7 @@ write_basic_package_version_file(
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/h5gt-config.cmake"
               "${CMAKE_CURRENT_BINARY_DIR}/h5gt-config-version.cmake"
-        DESTINATION "${LIB_INSTALL_DIR}/cmake/h5gt/"
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/h5gt
         )
 
-install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/" DESTINATION "include")
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/include" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
