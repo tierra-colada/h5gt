@@ -12,7 +12,7 @@ set(COMMON_PROJECT_VERSION @COMMON_PROJECT_VERSION@)
 #-----------------------------------------------------------------------------
 # Finding RUNTIME DEPS (i.e. hdf5.dll)
 #-----------------------------------------------------------------------------
-if(@RESOLVE_H5GTPY_RUNTIME_DEPS@)
+if(@H5GTPY_RESOLVE_RUNTIME_DEPS@)
 
   message(STATUS "Resolving h5gtpy RUNTIME dependencies...")
 
@@ -74,7 +74,7 @@ if(@RESOLVE_H5GTPY_RUNTIME_DEPS@)
     (you don't have to rebuild the project)")
   endif()
 
-endif(@RESOLVE_H5GTPY_RUNTIME_DEPS@)
+endif(@H5GTPY_RESOLVE_RUNTIME_DEPS@)
 
 #-----------------------------------------------------------------------------
 # Setting variables needed to configure in-files
@@ -107,10 +107,10 @@ set(TEST_PY_OUT_DIR "${H5GTPY_DIR}/tests")
 # Configuring in-files
 #-----------------------------------------------------------------------------
 
-if(@RESOLVE_H5GTPY_RUNTIME_DEPS@)
+if(@H5GTPY_RESOLVE_RUNTIME_DEPS@)
 
   # copy runtime deps or change __init__.py file to modify ENV PATH
-  if(@COPY_H5GTPY_RUNTIME_DEPS@)
+  if(@H5GTPY_COPY_RUNTIME_DEPS@)
     foreach(_file ${res_deps})
       message("Copying runtime dependency:\t${_file} \nto:\t${H5GTPY_DIR}")
       configure_file("${_file}" "${H5GTPY_DIR}" COPYONLY)
@@ -138,7 +138,7 @@ if not os.environ['PATH'].__contains__('${_dir}'):
     endif()
   endif()
 
-endif(@RESOLVE_H5GTPY_RUNTIME_DEPS@)
+endif(@H5GTPY_RESOLVE_RUNTIME_DEPS@)
 
 configure_file("${SETUP_PY_IN}" "${SETUP_PY_OUT}")
 configure_file("${MANIFEST_IN}" "${MANIFEST_OUT}")
