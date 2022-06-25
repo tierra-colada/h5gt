@@ -1,7 +1,9 @@
-# h5gt
-[![Build Status](https://travis-ci.com/tierra-colada/h5gt.svg?branch=main)](https://travis-ci.com/tierra-colada/h5gt)
+![h5gt](docs/logo_85x51.png?raw=true)
+ 
+[![][build-img]][build-status]
+[![][docs-dev-img]][docs-dev-status]
 
-**h5gt** is a C++ wrapper of [HDF5](https://www.hdfgroup.org/solutions/hdf5/) library based on [HighFive](https://github.com/BlueBrain/HighFive.git) project. It also includes python bindings that you can install with cmake and it is called **h5gtpy**.
+C++ wrapper of [HDF5](https://www.hdfgroup.org/solutions/hdf5/) library based on [HighFive](https://github.com/BlueBrain/HighFive.git) project. It also includes python bindings that you can install with cmake and it is called **h5gtpy**.
 
 ***h5gtpy** uses [pybind11](https://github.com/pybind/pybind11) to make python bindings and there may be some perfomance penalty when copying matrices from C++ `Eigen3` matrices to `numpy` (or `std::vector` to `py::list`). I have not done any perfomance testing.*
 
@@ -80,3 +82,9 @@ You don't need to provide stub file to PyCharm as it handles this by its own.
 
 ## Supported platforms
 Windows 10, Linux, OSX
+
+[build-img]:https://img.shields.io/travis/com/tierra-colada/h5gt?style=plastic
+[build-status]:https://app.travis-ci.com/tierra-colada/h5gt
+
+[docs-dev-img]:https://img.shields.io/badge/docs-dev-blue.svg?style=plastic
+[docs-dev-status]:https://h5gt.readthedocs.io/en/latest/?badge=latest
