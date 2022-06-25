@@ -3,11 +3,14 @@
 [![][build-img]][build-status]
 [![][docs-dev-img]][docs-dev-status]
 
-C++ wrapper of [HDF5](https://www.hdfgroup.org/solutions/hdf5/) library based on [HighFive](https://github.com/BlueBrain/HighFive.git) project. It also includes python bindings that you can install with cmake and it is called **h5gtpy**.
+C++ wrapper of [HDF5](https://www.hdfgroup.org/solutions/hdf5/) library based on [HighFive](https://github.com/BlueBrain/HighFive.git) project. It also includes python bindings **h5gtpy** that you can install with cmake.
 
-***h5gtpy** uses [pybind11](https://github.com/pybind/pybind11) to make python bindings and there may be some perfomance penalty when copying matrices from C++ `Eigen3` matrices to `numpy` (or `std::vector` to `py::list`). I have not done any perfomance testing.*
+**h5gtpy** doesn't provide `pip install` as it is inteded to be used only for projects that run on both C++ and python sides. 
 
-***This project is aimed at developers who uses C++, python and HDF5 library. If you only need python HDF5 library you should better refer to [h5py](https://github.com/h5py/h5py) project.***
+***h5gtpy** uses [pybind11](https://github.com/pybind/pybind11) to make python bindings and there may be some perfomance penalty when copying matrices from C++ `Eigen3` matrices to `numpy` (or `std::vector` to `py::list`). No perfomance testing were done.*
+
+***This project is aimed at developers who uses C++ along with python. If you only need python HDF5 API you should better refer to [h5py](https://github.com/h5py/h5py) project.
+That is why **h5gtpy** doesn't provide `pip install`***
 
 ## Building h5gt
 As **h5gt** is header only library you don't need to buid it (but of course you can do that). See `src/examples` and `tests/unit` for usage examples.
@@ -21,7 +24,7 @@ To build with python support you need:
 * specify `HDF5_RUNTIME_DIRS` containing HDF5-runtime (probably it is enough to have it in `PATH` env)
 * **build HDF5 as SHARED C library**
 
-then do something like:
+i.e. configure it with:
 
 ```cmake
 mkdir build
@@ -33,13 +36,13 @@ cmake ..
   -DEigen3_ROOT=/path/to/eigen3 
   -DHDF5_DIR=/path/to/hdf5-config.cmake 
   -DHDF5_RUNTIME_DIRS=/path/to/hdf5-runtime   
-  -DZLIB_RUNTIME_DIRS=/path/to/zlib-runtime   -DH5GTPY_COPY_RUNTIME_DEPS=ON
+  -DZLIB_RUNTIME_DIRS=/path/to/zlib-runtime
+  -DH5GTPY_COPY_RUNTIME_DEPS=OFF
 cmake --build . 
 ```
 If your HDF5 depends on ZLIB or MPI you may also need to add it.
 
-To run **h5gtpy** python must know where HDF5-runtime is. You may choose whether to copy HDF5-runtime to site-packages/h5gtpy dir or add this dir to path env.
-
+To run **h5gtpy** python must know where HDF5-runtime is. You may choose whether to copy HDF5-runtime to `site-packages/h5gtpy` dir or add this dir to path env (done automatically at installation step when `H5GTPY_COPY_RUNTIME_DEPS=OFF`).
 
 ## Installation h5gtpy
 
