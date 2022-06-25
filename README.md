@@ -12,6 +12,11 @@ C++ wrapper of [HDF5](https://www.hdfgroup.org/solutions/hdf5/) library based on
 ***This project is aimed at developers who uses C++ along with python. If you only need python HDF5 API you should better refer to [h5py](https://github.com/h5py/h5py) project.
 That is why **h5gtpy** doesn't provide `pip install`***
 
+## Documentation
+Common documentation: [h5gt.readthedocs.io](https://h5gt.readthedocs.io/)
+
+C++ API documentation: [tierra-colada.github.io/h5gt](https://tierra-colada.github.io/h5gt/)
+
 ## Building h5gt
 As **h5gt** is header only library you don't need to buid it (but of course you can do that). See `src/examples` and `tests/unit` for usage examples.
 
