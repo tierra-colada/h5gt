@@ -6,9 +6,14 @@
 Welcome to h5gt's documentation!
 ================================
 
+To see C++ API documentation please refer to `tierra-colada.github.io/h5gt/ <https://tierra-colada.github.io/h5gt/>`_
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+
+   about
+   build_instructions
+   examples
 
 
 
