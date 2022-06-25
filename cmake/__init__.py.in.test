@@ -1,5 +1,0 @@
-# to run unittest in usual way:
-# `python -m unittest discover h5gtpy.tests`
-# the folder `h5gtpy/tests` must contain this empty `__init__.py` file
-# or you will get an error:
-# `ImportError: Start directory is not importable: 'h5gtpy.tests'`

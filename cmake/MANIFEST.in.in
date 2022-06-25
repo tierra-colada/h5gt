@@ -1,5 +1,0 @@
-include h5gtpy/*
-include h5gtpy/h5gtpy/*
-include h5gtpy/tests/*
-
-${H5GTPY_ADD_TO_MANIFEST}
