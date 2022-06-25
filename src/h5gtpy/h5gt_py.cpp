@@ -207,9 +207,9 @@ PYBIND11_MODULE(_h5gt, m) {
   auto pyNodeTraits_Group = py::class_<NodeTraits<Group> >(m, "_GroupNode");
 
   // ANNOTATETRAITS -> H5Annotate_traits_py.h
-  auto pyAnotate_File = py::class_<AnnotateTraits<File> >(m, "_AnnotateFile");
-  auto pyAnotate_Group = py::class_<AnnotateTraits<Group> >(m, "_AnnotateGroup");
-  auto pyAnotate_Dset = py::class_<AnnotateTraits<DataSet> >(m, "_AnnotateDataSet");
+  auto pyAnnotate_File = py::class_<AnnotateTraits<File> >(m, "_AnnotateFile");
+  auto pyAnnotate_Group = py::class_<AnnotateTraits<Group> >(m, "_AnnotateGroup");
+  auto pyAnnotate_Dset = py::class_<AnnotateTraits<DataSet> >(m, "_AnnotateDataSet");
 
   // FILE -> H5File_py.cpp
   auto pyFile = py::class_<File, Object, NodeTraits<File>, AnnotateTraits<File> >(m, "File");
@@ -324,9 +324,9 @@ PYBIND11_MODULE(_h5gt, m) {
   NodeTraits_py(pyNodeTraits_Group);
 
   // ANNOTATETRAITS -> H5Annotate_traits_py.h
-  AnnotateTraits_py(pyAnotate_File);
-  AnnotateTraits_py(pyAnotate_Group);
-  AnnotateTraits_py(pyAnotate_Dset);
+  AnnotateTraits_py(pyAnnotate_File);
+  AnnotateTraits_py(pyAnnotate_Group);
+  AnnotateTraits_py(pyAnnotate_Dset);
 
   // FILE -> H5File_py.cpp
   File_py(pyFile);
