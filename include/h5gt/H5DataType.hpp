@@ -414,6 +414,12 @@ private:
 
 /// \brief Macro to extend datatype of h5gt
 ///
+/// The idea is simple:
+/// instantiate `inline DataType create_datatype<type>()` at compile 
+/// time so it return a `DataType` for custom `type`.
+/// If it is not instantiated then calling `create_datatype` will work
+/// with `atomic_type<type>` (not defined for custom type).
+///
 /// This macro has to be called outside of any namespace.
 ///
 /// \code{.cpp}

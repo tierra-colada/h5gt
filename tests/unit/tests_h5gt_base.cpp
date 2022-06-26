@@ -1916,6 +1916,7 @@ TEST(H5GTBase, Enum) {
     e1.commit(file, "Direction");
 
     auto dataset = file.createDataSet(DATASET_NAME2, DataSpace(5), e1);
+    // auto dataset = file.createDataSet<Direction>(DATASET_NAME2, DataSpace(5)); // also works
     std::vector<Direction> robot_moves({Direction::BACKWARD, Direction::FORWARD,
                                         Direction::FORWARD, Direction::LEFT,
                                         Direction::LEFT});
