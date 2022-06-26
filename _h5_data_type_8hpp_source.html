@@ -375,15 +375,15 @@ $(function() {
 <div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>}  <span class="comment">// namespace h5gt</span></div>
 <div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span> </div>
 <div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span> </div>
-<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span><span class="preprocessor">#define H5GT_REGISTER_TYPE(type, function)                \</span></div>
-<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span><span class="preprocessor">  template&lt;&gt;                                              \</span></div>
-<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span><span class="preprocessor">  inline h5gt::DataType h5gt::create_datatype&lt;type&gt;() {   \</span></div>
-<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span><span class="preprocessor">  return function();                                      \</span></div>
-<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span><span class="preprocessor">  }                                                       \</span></div>
-<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span><span class="preprocessor"></span> </div>
-<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span><span class="preprocessor">#include &quot;bits/H5DataType_misc.hpp&quot;</span></div>
-<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span> </div>
-<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span><span class="preprocessor">#endif </span><span class="comment">// H5DATATYPE_HPP</span></div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span><span class="preprocessor">#define H5GT_REGISTER_TYPE(type, function)                \</span></div>
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span><span class="preprocessor">  template&lt;&gt;                                              \</span></div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span><span class="preprocessor">  inline h5gt::DataType h5gt::create_datatype&lt;type&gt;() {   \</span></div>
+<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span><span class="preprocessor">  return function();                                      \</span></div>
+<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span><span class="preprocessor">  }                                                       \</span></div>
+<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span><span class="preprocessor"></span> </div>
+<div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span><span class="preprocessor">#include &quot;bits/H5DataType_misc.hpp&quot;</span></div>
+<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span> </div>
+<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span><span class="preprocessor">#endif </span><span class="comment">// H5DATATYPE_HPP</span></div>
 <div class="ttc" id="aclassh5gt_1_1_atomic_type_html"><div class="ttname"><a href="classh5gt_1_1_atomic_type.html">h5gt::AtomicType</a></div><div class="ttdoc">create an HDF5 DataType from a C++ type</div><div class="ttdef"><b>Definition:</b> H5DataType.hpp:124</div></div>
 <div class="ttc" id="aclassh5gt_1_1_attribute_html"><div class="ttname"><a href="classh5gt_1_1_attribute.html">h5gt::Attribute</a></div><div class="ttdoc">Class representing an attribute of a dataset or group.</div><div class="ttdef"><b>Definition:</b> H5Attribute.hpp:22</div></div>
 <div class="ttc" id="aclassh5gt_1_1_compound_type_html"><div class="ttname"><a href="classh5gt_1_1_compound_type.html">h5gt::CompoundType</a></div><div class="ttdoc">Create a compound HDF5 datatype.</div><div class="ttdef"><b>Definition:</b> H5DataType.hpp:143</div></div>
