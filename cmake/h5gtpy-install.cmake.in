@@ -127,12 +127,13 @@ if(@H5GTPY_RESOLVE_RUNTIME_DEPS@)
     if(WIN32 AND @Python_VERSION_MAJOR@ GREATER_EQUAL 3 AND @Python_VERSION_MINOR@ GREATER_EQUAL 8)
       foreach(_dir ${res_deps_dirs})
         set(PYTHON_INIT_PATH_VAR "${PYTHON_INIT_PATH_VAR}\n
-os.add_dll_directory('${_dir}')")
+if os.path.isdir('${_dir}'):
+  os.add_dll_directory('${_dir}')")
       endforeach()
     else()
       foreach(_dir ${res_deps_dirs})
         set(PYTHON_INIT_PATH_VAR "${PYTHON_INIT_PATH_VAR}\n
-if not os.environ['PATH'].__contains__('${_dir}'):
+if os.path.isdir('${_dir}') and not os.environ['PATH'].__contains__('${_dir}'):
   os.environ['PATH'] = '${_dir}' + os.pathsep + os.environ['PATH']")
       endforeach()
     endif()
