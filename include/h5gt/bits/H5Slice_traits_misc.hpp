@@ -75,25 +75,37 @@ inline ElementSet::ElementSet(const std::vector<std::vector<std::size_t>>& eleme
 template <typename Derivate>
 inline Selection SliceTraits<Derivate>::select(const std::vector<size_t>& offset,
                                                const std::vector<size_t>& count,
-                                               const std::vector<size_t>& stride) const {
+                                               const std::vector<size_t>& stride,
+                                               const std::vector<size_t>& block) const {
   // hsize_t type conversion
   // TODO : normalize hsize_t type in h5gt namespace
   const auto& slice = static_cast<const Derivate&>(*this);
   std::vector<hsize_t> offset_local(offset.size());
   std::vector<hsize_t> count_local(count.size());
   std::vector<hsize_t> stride_local(stride.size());
+  std::vector<hsize_t> block_local(block.size());
   std::copy(offset.begin(), offset.end(), offset_local.begin());
   std::copy(count.begin(), count.end(), count_local.begin());
   std::copy(stride.begin(), stride.end(), stride_local.begin());
+  std::copy(block.begin(), block.end(), block_local.begin());
 
   DataSpace space = slice.getSpace().clone();
   if (H5Sselect_hyperslab(space.getId(false), H5S_SELECT_SET, offset_local.data(),
                           stride.empty() ? NULL : stride_local.data(),
-                          count_local.data(), NULL) < 0) {
+                          count_local.data(), 
+                          block.empty() ? NULL : block_local.data()) < 0) {
     HDF5ErrMapper::ToException<DataSpaceException>("Unable to select hyperslap");
   }
 
-  return Selection(DataSpace(count), space, details::get_dataset(slice));
+  if (block.empty()){
+    return Selection(DataSpace(count), space, details::get_dataset(slice));
+  }
+
+  std::vector<size_t> count_block(block.size());
+  for (size_t i = 0; i < count_block.size(); i++){
+    count_block[i] = count[i]*block[i];
+  }
+  return Selection(DataSpace(count_block), space, details::get_dataset(slice));
 }
 
 template <typename Derivate>

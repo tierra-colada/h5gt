@@ -60,7 +60,8 @@ public:
   /// vector offset and count have to be from the same dimension
   Selection select(const std::vector<size_t>& offset,
                    const std::vector<size_t>& count,
-                   const std::vector<size_t>& stride = std::vector<size_t>()) const;
+                   const std::vector<size_t>& stride = std::vector<size_t>(),
+                   const std::vector<size_t>& block = std::vector<size_t>()) const;
 
   /// \brief Select a region in the current Slice/Dataset out of a list of elements.
   Selection select(const ElementSet& elements) const;

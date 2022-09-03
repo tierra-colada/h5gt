@@ -65,11 +65,13 @@ void SliceTraits_py(py::class_<SliceTraits<Derivate> >& py_obj) {
       .def("select", py::overload_cast<
            const std::vector<size_t>&,
            const std::vector<size_t>&,
+           const std::vector<size_t>&,
            const std::vector<size_t>&>(
              &SliceTraits<Derivate>::select, py::const_),
            py::arg("offset"),
            py::arg("count"),
-           py::arg_v("stride", std::vector<size_t>(), "list()"))
+           py::arg_v("stride", std::vector<size_t>(), "list()"),
+           py::arg_v("block", std::vector<size_t>(), "list()"))
       .def("select", py::overload_cast<
            const ElementSet&>(
              &SliceTraits<Derivate>::select, py::const_),
