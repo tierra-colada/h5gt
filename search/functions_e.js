@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['select_0',['select',['../classh5gt_1_1_slice_traits.html#ad8e064028e22b3c075962b7178394990',1,'h5gt::SliceTraits::select(const std::vector&lt; size_t &gt; &amp;offset, const std::vector&lt; size_t &gt; &amp;count, const std::vector&lt; size_t &gt; &amp;stride=std::vector&lt; size_t &gt;()) const'],['../classh5gt_1_1_slice_traits.html#a3bbbf287575146addefab052c786b1dc',1,'h5gt::SliceTraits::select(const ElementSet &amp;elements) const']]],
+  ['select_0',['select',['../classh5gt_1_1_slice_traits.html#ace22f9e6c4182d41d0a42d1149adaba9',1,'h5gt::SliceTraits::select(const std::vector&lt; size_t &gt; &amp;offset, const std::vector&lt; size_t &gt; &amp;count, const std::vector&lt; size_t &gt; &amp;stride=std::vector&lt; size_t &gt;(), const std::vector&lt; size_t &gt; &amp;block=std::vector&lt; size_t &gt;()) const'],['../classh5gt_1_1_slice_traits.html#a3bbbf287575146addefab052c786b1dc',1,'h5gt::SliceTraits::select(const ElementSet &amp;elements) const']]],
   ['select_5fcols_1',['select_cols',['../classh5gt_1_1_slice_traits.html#ab8cc3a771fad4995661ba23feff0446c',1,'h5gt::SliceTraits']]],
   ['select_5frows_2',['select_rows',['../classh5gt_1_1_slice_traits.html#a329edd4fc797941e51169c51dfaf4a51',1,'h5gt::SliceTraits']]],
   ['selection_3',['Selection',['../classh5gt_1_1_selection.html#af3ed694e8677cd659e20fe1eceeac2a4',1,'h5gt::Selection']]],
