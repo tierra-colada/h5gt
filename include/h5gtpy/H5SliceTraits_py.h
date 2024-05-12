@@ -41,12 +41,7 @@ Eigen::MatrixX<T> read_eigen_raw(SliceTraits<Derivate>& self){
   } else if (dims.size() == 2){
     M.resize(dims[1], dims[0]);
   } else {
-    size_t rows = dims[1];
-    size_t cols = dims[0];
-    for (size_t i = 2; i < dims.size(); i++){
-      cols *= 2;
-    }
-    M.resize(rows, cols);
+    M.resize(slice.getSpace().getElementCount(), 1);
   }
 
   slice.read(M.data(), slice.getDataType());
