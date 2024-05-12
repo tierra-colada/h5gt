@@ -22,7 +22,7 @@ var searchData=
   ['getmaxdimensions_19',['getMaxDimensions',['../classh5gt_1_1_data_space.html#adbbbb521a9eefc034b9dfe4645cc1bb8',1,'h5gt::DataSpace']]],
   ['getmembers_20',['getMembers',['../classh5gt_1_1_compound_type.html#a5529cf34bf08a5b7005c04d3564cee76',1,'h5gt::CompoundType']]],
   ['getmembertype_21',['getMemberType',['../classh5gt_1_1_compound_type.html#aab8267aa6d16f0d4ec3b7617c8f09c6d',1,'h5gt::CompoundType']]],
-  ['getmemspace_22',['getMemSpace',['../classh5gt_1_1_attribute.html#ab9b42999d9f8cee366ad7853ce73da49',1,'h5gt::Attribute::getMemSpace()'],['../classh5gt_1_1_selection.html#af7ca951a16b87f6c863b3db6a438b1c2',1,'h5gt::Selection::getMemSpace()'],['../classh5gt_1_1_data_set.html#ae9e866ca44df9a2c1e59f844918b5c7c',1,'h5gt::DataSet::getMemSpace()']]],
+  ['getmemspace_22',['getMemSpace',['../classh5gt_1_1_attribute.html#ab9b42999d9f8cee366ad7853ce73da49',1,'h5gt::Attribute::getMemSpace()'],['../classh5gt_1_1_data_set.html#ae9e866ca44df9a2c1e59f844918b5c7c',1,'h5gt::DataSet::getMemSpace()'],['../classh5gt_1_1_selection.html#af7ca951a16b87f6c863b3db6a438b1c2',1,'h5gt::Selection::getMemSpace()']]],
   ['getname_23',['getName',['../classh5gt_1_1_attribute.html#acdd9a77b34b00d8cded2e3ab65f44476',1,'h5gt::Attribute']]],
   ['getnumberattributes_24',['getNumberAttributes',['../classh5gt_1_1_annotate_traits.html#ab9ddd6f4e2014851303687285fd3f228',1,'h5gt::AnnotateTraits']]],
   ['getnumberdimensions_25',['getNumberDimensions',['../classh5gt_1_1_data_space.html#ad6c3c31b9557e96e38ff9113a69455f3',1,'h5gt::DataSpace']]],
